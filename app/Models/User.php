@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-    ];
+    ]; 
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /*
+    */
+    function departments(){
+        return $this ->hasOne(departments::class,'id','department');
+    }
+
+    function attendance(){
+        return $this ->hasOne(attendance::class,'user_id','id');
+    }
 }

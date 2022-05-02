@@ -20,6 +20,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->integer('department');
+            $table->biginteger('employee_id');
+            $table->integer('group_id');
+            $table->date('joing_date');
+            $table->integer('paid_holiday');
             $table->timestamps();
         });
     }
