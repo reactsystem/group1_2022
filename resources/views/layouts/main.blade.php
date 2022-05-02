@@ -30,12 +30,12 @@
         <div class="row" style="width: 100%">
             <div class="col-md-3 text-dark" style="height: 100vh; background-color: #BBB;">
                 <ul style="list-style: none; font-size: 18pt; font-weight: bold; cursor: pointer; margin-top: 80px;">
-                    <li class="sidebar-list<?php if(Request::is('top')){ echo ' active'; }?>"><span style="color: #888;">●</span> トップページ</li>
-                    <li class="sidebar-list<?php if(Request::is('attend')){ echo ' active'; }?>"><span style="color: #888;">●</span> 出勤・退勤入力</li>
-                    <li class="sidebar-list<?php if(Request::is('attend-manage')){ echo ' active'; }?>"><span style="color: #888;">●</span> 勤怠情報確認</li>
-                    <li class="sidebar-list<?php if(Request::is('request')){ echo ' active'; }?>"><span style="color: #888;">●</span> 各種申請</li>
-                    <li class="sidebar-list<?php if(Request::is('account')){ echo ' active'; }?>"><span style="color: #888;">●</span> ユーザー管理</li>
-                    <li class="sidebar-list<?php if(Request::is('admin')){ echo ' active'; }?>"><span style="color: #888;">●</span> 管理者CP</li>
+                    <li class="sidebar-list<?php if(Request::is('home')){ echo ' active'; }?>" onclick="href('home')"><span style="color: #888;">●</span> トップページ</li>
+                    <li class="sidebar-list<?php if(Request::is('attend')){ echo ' active'; }?>" onclick="href('attend')"><span style="color: #888;">●</span> 出勤・退勤入力</li>
+                    <li class="sidebar-list<?php if(Request::is('attend-manage')){ echo ' active'; }?>" onclick="href('attend-manage')"><span style="color: #888;">●</span> 勤怠情報確認</li>
+                    <li class="sidebar-list<?php if(Request::is('request')){ echo ' active'; }?>" onclick="href('request')"><span style="color: #888;">●</span> 各種申請</li>
+                    <li class="sidebar-list<?php if(Request::is('account')){ echo ' active'; }?>" onclick="href('account')"><span style="color: #888;">●</span> ユーザー管理</li>
+                    <li class="sidebar-list<?php if(Request::is('admin')){ echo ' active'; }?>" onclick="href('admin')"><span style="color: #888;">●</span> 管理者CP</li>
                 </ul>
             </div>
             <div class="col-md-9 bg-light" style="height: 100vh">
@@ -45,4 +45,9 @@
             </div>
         </div>
     </div>
+    <script>
+        function href(url){
+            location = url
+        }
+    </script>
 @endsection
