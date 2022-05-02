@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('user_id');
             $table->integer('mode');
             $table->string('comment');
-            $table->integer('status');
+            $table->integer('status')->default(0);
 
 
         });
