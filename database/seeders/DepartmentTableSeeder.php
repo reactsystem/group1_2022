@@ -9,7 +9,7 @@ class DepartmentTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('users')->insert(
+        DB::table('departments')->insert(
             [
                 0 => [
                     'id' => '1',
