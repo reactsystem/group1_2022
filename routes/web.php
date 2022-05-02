@@ -1,12 +1,15 @@
 <?php
 
-use App\Http\Controllers\TopPageController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Front\RequestController;
+use App\Http\Controllers\Front\TopPageController;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,7 +25,15 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/home', [TopPageController::class, 'index'])->name('home');
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/home', [TopPageController::class, 'index'])->name('home');
+    //Route::get('/attend', [AttendanceController::class, 'index'])->name('attend');
+    Route::get('/request/{id}', [RequestController::class, 'show']);
+    Route::get('/request', [RequestController::class, 'index'])->name('request');
+
+});
+
 
 Auth::routes(['register' => false]);
 

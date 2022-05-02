@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('holiday_request_categories', function (Blueprint $table) {
+        Schema::create('request_types', function (Blueprint $table) {
             $table->id();
+            $table->string("name");
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('holiday_request_categories');
+        Schema::dropIfExists('request_types');
     }
 };
