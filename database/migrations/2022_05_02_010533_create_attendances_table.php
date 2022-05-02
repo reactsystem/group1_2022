@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('attendance', function (Blueprint $table) {
+        Schema::create('attendances', function (Blueprint $table) {
             $table->increments('id');
             $table->date('date');
             $table->biginteger('user_id');
             $table->integer('mode');
             $table->string('comment');
             $table->integer('status')->default(0);
-
+            $table->timestamp('updated_at')->useCurrent()->nullable();
+            $table->timestamp('created_at')->useCurrent()->nullable();
 
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendance');
+        Schema::dropIfExists('attendances');
     }
 };
