@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('department');
             $table->biginteger('employee_id');
             $table->integer('group_id');
-            $table->date('joing_date');
+            $table->date('joined_date');
             $table->integer('paid_holiday');
             $table->timestamps();
         });

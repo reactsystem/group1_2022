@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('attendance', function (Blueprint $table) {
             $table->increments('id');
             $table->date('date');
-            $table->string('user_id');
+            $table->biginteger('user_id');
             $table->integer('mode');
             $table->string('comment');
             $table->integer('status')->default(0);
