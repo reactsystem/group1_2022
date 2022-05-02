@@ -15,4 +15,8 @@ class TopPageController
         return view('index');
     }
 
+    function acount(Request $request){
+        return view('acount');
+    }
+
 }

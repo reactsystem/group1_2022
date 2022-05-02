@@ -71,4 +71,7 @@ Route::post('/reset-password', function (Request $request) {
         : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');
 
+Route::get('/acount',[App\Http\Controllers\TopPageController::class, 'acount']);
+
+
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
