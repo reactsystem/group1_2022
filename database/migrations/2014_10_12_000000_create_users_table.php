@@ -25,7 +25,8 @@ return new class extends Migration
             $table->integer('group_id');
             $table->date('joined_date');
             $table->integer('paid_holiday');
-            $table->timestamps();
+            $table->timestamp('updated_at')->useCurrent()->nullable();
+            $table->timestamp('created_at')->useCurrent()->nullable();
         });
     }
 
