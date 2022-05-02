@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TopPageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -20,6 +21,8 @@ use Illuminate\Support\Str;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/top', [TopPageController::class, 'index']);
 
 Auth::routes();
 
