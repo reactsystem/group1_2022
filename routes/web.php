@@ -67,7 +67,7 @@ Route::post('/reset-password', function (Request $request) {
     );
 
     return $status === Password::PASSWORD_RESET
-        ? redirect('/forgot-password')->with('status', __($status))
+        ? view('auth.passwords.success')->with('status', __($status))
         : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');
 

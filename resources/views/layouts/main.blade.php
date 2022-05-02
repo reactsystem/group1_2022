@@ -29,7 +29,7 @@
     <div class="container">
         <div class="row" style="width: 100%">
             <div class="col-md-3 text-dark" style="height: 100vh; background-color: #BBB;">
-                <ul style="list-style: none; font-size: 18pt; font-weight: bold; cursor: pointer; margin-top: 80px;">
+                <ul style="list-style: none; font-size: 16pt; font-weight: bold; cursor: pointer; margin-top: 80px; padding-left: 0">
                     <li class="sidebar-list<?php if(Request::is('home')){ echo ' active'; }?>" onclick="href('home')"><span style="color: #888;">●</span> トップページ</li>
                     <li class="sidebar-list<?php if(Request::is('attend')){ echo ' active'; }?>" onclick="href('attend')"><span style="color: #888;">●</span> 出勤・退勤入力</li>
                     <li class="sidebar-list<?php if(Request::is('attend-manage')){ echo ' active'; }?>" onclick="href('attend-manage')"><span style="color: #888;">●</span> 勤怠情報確認</li>
