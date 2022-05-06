@@ -16,13 +16,6 @@ class TopPageController
     }
 
 
-    // ユーザー管理
-    function account(Request $request){
-        if(!Auth::check()){
-            return redirect('/login');
-        }
-        $user = Auth::user();
-        return view('account',['user' => $user,]);
-    }
+
 
 }

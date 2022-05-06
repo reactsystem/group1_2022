@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\TopPageController;
+use App\Http\Controllers\UserEditController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -72,7 +74,10 @@ Route::post('/reset-password', function (Request $request) {
 })->middleware('guest')->name('password.update');
 
 
-Route::get('/account',[TopPageController::class, 'account']);
+Route::get('/account',[UserEditController::class, 'account']);
+Route::get('/account/edit',[UserEditController::class, 'account_edit']);
+Route::get('/account/password_update',[UserEditController::class, 'password_update']);
+
 
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

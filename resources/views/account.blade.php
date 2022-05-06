@@ -15,7 +15,9 @@
             <td>ユーザー情報確認・編集</td>
             <td>      
             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="">
-                確認・編集
+                <form action="account/edit">
+                    <input type="submit" value="確認・編集">
+                </form>
             </button>
             </td>
         </tr>
@@ -25,7 +27,9 @@
             </td>
             <td>
             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="">
-                変更
+                <form action="account/password_update">
+                    <input type="submit" value="変更">
+                </form>
             </button>
             </td>
         </tr>    
@@ -34,25 +38,7 @@
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#sampleModal">
         ログアウト
     </button>
-    
-    <!-- モーダル・ダイアログ -->
-    <div class="modal fade" id="sampleModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-                    <h4 class="modal-title">ログアウト</h4>
-                </div>
-                <div class="modal-body">
-                    ログアウトしますか？
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-                    <button type="button" class="btn btn-primary">ボタン</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 </div>
 @endsection 
