@@ -16,8 +16,12 @@ class RequestController extends Controller
 
     function index(Request $request)
     {
-
-        $results = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name")->where('user_id', Auth::id())->where('related_id', '=', NULL)->orderByDesc('id')->paginate(10);
+        $mode = $request->mode;
+        if ($mode) {
+            $results = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name")->where('user_id', Auth::id())->where('related_id', '=', NULL)->orderByDesc('id')->paginate(10);
+        } else {
+            $results = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name")->where('user_id', Auth::id())->where('related_id', '=', NULL)->where('status', '!=', 3)->orderByDesc('id')->paginate(10);
+        }
         $related = [];
         foreach ($results as $result) {
             $relatedData = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name")->where('user_id', Auth::id())->where('related_id', '=', $result->uuid)->get();
@@ -33,7 +37,7 @@ class RequestController extends Controller
                 'date' => $dates
             ];
         }
-        return view('front.request.index', compact('results', 'related'));
+        return view('front.request.index', compact('results', 'related', 'mode'));
     }
 
     function show(Request $request)
@@ -63,7 +67,7 @@ class RequestController extends Controller
 
     function cancelRequest(Request $request)
     {
-        $result = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name")->where('user_id', Auth::id())->where('related_id', '=', NULL)->find($request->id);
+        $result = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.type as mode")->where('user_id', Auth::id())->where('related_id', '=', NULL)->find($request->id);
         if ($result == null || $result->uuid == null) {
             return redirect("/request");
         }
@@ -72,13 +76,15 @@ class RequestController extends Controller
         }
         $c1 = VariousRequest::where('related_id', '=', $result->uuid)->get();
         VariousRequest::find($result->id)->update(["status" => 3]);
-        $holidays = 1 + count($c1);
-        if ($holidays > 0) {
-            $user = Auth::user();
-            $user->paid_holiday = $user->paid_holiday + $holidays;
-            $user->save();
+        if ($result->mode == 2) {
+            $holidays = 1 + count($c1);
+            if ($holidays > 0) {
+                $user = Auth::user();
+                $user->paid_holiday = $user->paid_holiday + $holidays;
+                $user->save();
+            }
         }
-        return redirect("/request")->with('result', '申請を取り消しました。 (' . $holidays . ')');
+        return redirect("/request")->with('result', '申請を取り消しました。');
     }
 
     function createRequest(Request $request)
@@ -115,6 +121,9 @@ class RequestController extends Controller
         if ($request->type == 2) {
             $holidays = count($dates);
         }
+        if ($holidays > Auth::user()->paid_holiday) {
+            return redirect("/request")->with('error', '有給消費が残日数を超えています');
+        }
         $reason = $request->reason;
         $uuid = Str::uuid();
         foreach ($tempDate as $index => $item) {
@@ -125,6 +134,7 @@ class RequestController extends Controller
                     'type' => $type->id,
                     'date' => $item,
                     'status' => 0,
+                    'time' => $request->time,
                     'reason' => $request->reason ?? "",
                 ]);
             } else {
@@ -134,6 +144,7 @@ class RequestController extends Controller
                     'type' => $type->id,
                     'date' => $item,
                     'status' => 0,
+                    'time' => $request->time,
                     'reason' => $request->reason ?? "",
                     'related_id' => $uuid,
                 ]);

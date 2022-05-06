@@ -56,7 +56,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-md-9 bg-light" style="height: 100%">
+            <div class="col-md-9 bg-light" style="height: 100%; min-height: 100vh">
                 <div style="margin-top: 80px">
                     @yield('content')
                 </div>

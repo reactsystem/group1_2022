@@ -65,7 +65,7 @@
                     <h5 class="modal-title" id="cancelModalLabel">申請確認</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="text-center">
+                    <div class="text-center mb-3">
                         以下の内容で申請を行います。
                     </div>
                     <div id="checkForm"></div>
@@ -118,23 +118,45 @@
             let submitButton = document.getElementById('submitButton');
 
             submitButton.className = "btn btn-primary"
+            submitButton.innerText = "申請"
 
             let v1 = 0
+            const reqDates = requestDate.value.split(',')
+            let req2 = []
 
-            let message = '<b>申請する日付:</b> ' + requestDate.value + '<br>' +
+            reqDates.forEach(element => {
+                    console.log("DATE: " + element)
+                    const dateData = new Date(element)
+                    req2[req2.length] = dateData.getFullYear() + '年' + (dateData.getMonth() + 1) + '月' + (dateData.getDate()) + '日'
+                    console.log('WRITE: ' + req2[req2.length - 1])
+                }
+            );
+
+            let message = '<b>申請する日付:</b> ' + req2.join(', ') + '<br>' +
                 '<b>種別:</b> ' + types[requestType.value - 1][0] + '<br>'
-            if (requestTime.value !== "") {
-                message += '<b>時間:</b> ' + requestTime.value + '<br>'
-            } else if (types[requestType.value - 1][1] === 1) {
-                submitButton.className = "btn btn-primary disabled"
-                v1++
-                message += '<b>時間:</b> <span style="color: #FFF; background-color: #900">時間が指定されていません</span><br>'
+            if (types[requestType.value - 1][1] === 1) {
+                if (requestTime.value !== "") {
+                    message += '<b>時間:</b> ' + requestTime.value + '<br>'
+                } else if (types[requestType.value - 1][1] === 1) {
+                    submitButton.className = "btn btn-danger disabled"
+                    submitButton.innerText = "申請できません"
+                    v1++
+                    message += '<b>時間:</b> <span style="color: #FFF; background-color: #900">時間が指定されていません</span><br>'
+                }
             }
             if (types[requestType.value - 1][1] === 2) {
-                message += '<b>有給消費:</b> ' + requestDate.value.split(',').length + '日(残り{{Auth::user()->paid_holiday}}日)<br>'
+                if (reqDates.length > {{Auth::user()->paid_holiday}}) {
+                    v1++
+                    submitButton.className = "btn btn-danger disabled"
+                    submitButton.innerText = "申請できません"
+                    message += '<b>有給消費:</b> <span style="color: #FFF; background-color: #B33"> ' + reqDates.length + '日(残り{{Auth::user()->paid_holiday}}日) </span> <span style="color: #C00">&nbsp;有給消費が残日数を超えています</span><br>'
+                } else {
+                    message += '<b>有給消費:</b> ' + reqDates.length + '日(残り{{Auth::user()->paid_holiday}}日)<br>'
+                }
             }
             if (types[requestType.value - 1][1] !== 2 && requestReason.value === "") {
-                submitButton.className = "btn btn-primary disabled"
+                submitButton.className = "btn btn-danger disabled"
+                submitButton.innerText = "申請できません"
                 v1++
                 message += '<b>理由:</b> <span style="color: #FFF; background-color: #900">理由を入力してください</span><br>'
             } else if (requestReason.value !== "") {
@@ -174,6 +196,7 @@
                 workTime.style.display = "inline"
             } else {
                 workTime.style.display = "none"
+                requestTime.value = ""
             }
         };
 
@@ -200,7 +223,7 @@
         };
         new AirDatepicker('#requestDate', {
             locale: localeEs,
-            multipleDates: 10,
+            multipleDates: 30,
             onSelect({date}) {
                 timeAvailable = (date + '') !== '';
                 console.log('TIME: ' + date)

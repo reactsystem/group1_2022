@@ -23,22 +23,25 @@
         <div style="font-size: 14pt">
             <?php
             // CHECK STATUS
-            $statusText = '<span style="color: #E80">●</span> 申請中';
+            $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
             switch ($result->status) {
                 case 1:
-                    $statusText = '<span style="color: #0E0">●</span> 承認';
+                    $statusText = '<span style="color: #0E0">●</span> <strong>承認</strong>';
                     break;
                 case 2:
-                    $statusText = '<span style="color: #E00">●</span> 却下';
+                    $statusText = '<span style="color: #E00">●</span> <strong>却下</strong>';
                     break;
                 case 3:
-                    $statusText = '<span style="color: #AAA">●</span> 取消';
+                    $statusText = '<span style="color: #AAA">●</span> <strong>取消</strong>';
                     break;
             }
             ?>
             <div><strong>日時: </strong>{{implode(", ", $related['date'])}}</div>
             <div><strong>ステータス: </strong>{!! $statusText !!}</div>
             <div><strong>申請種別: </strong>{{$result->name}}</div>
+            @if($result->time != NULL)
+                <div><strong>労働時間: </strong>{{$result->time}}</div>
+            @endif
             @if($holidays != 0)
                 <div><strong>有給消費: </strong>{{$holidays}}日(残り{{Auth::user()->paid_holiday}}日)</div>
             @endif
@@ -53,14 +56,14 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="cancelModalLabel">申請取り消し</h5>
+                        <h5 class="modal-title" id="cancelModalLabel">申請取消</h5>
                     </div>
                     <div class="modal-body text-center">
                         この申請を取り消します。<br>よろしいですか?
                     </div>
                     <div class="modal-footer">
                         <div style="margin: 0 auto;">
-                            <a type="button" class="btn btn-danger" href="/request/{{$result->id}}/cancel">取り消し</a>
+                            <a type="button" class="btn btn-danger" href="/request/{{$result->id}}/cancel">取消実行</a>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
                         </div>
                     </div>

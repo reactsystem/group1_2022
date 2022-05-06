@@ -19,6 +19,7 @@ class VariousRequest extends Model
         'reason',
         'comment',
         'related_id',
+        'time',
         'updated_at',
         'created_at'
     ];

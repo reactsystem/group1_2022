@@ -22,7 +22,12 @@
                 <h2 class="fw-bold">各種申請</h2>
             </div>
             <div class="col-md-6">
-                <a class="btn btn-primary" href="/request/create" style="float: right; width: 100px">新規申請</a>
+                <a class="btn btn-primary" href="/request/create" style="float: right; margin-left: 5px; width: 100px">新規申請</a>
+                @if($mode == 1)
+                    <a class="btn btn-outline-secondary" href="/request" style="float: right;">取消済の申請を非表示</a>
+                @else
+                    <a class="btn btn-secondary" href="/request?mode=1" style="float: right;">取消済の申請を表示</a>
+                @endif
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">

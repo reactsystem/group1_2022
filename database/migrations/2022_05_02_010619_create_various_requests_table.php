@@ -23,6 +23,7 @@ return new class extends Migration
             $table->longText('reason');
             $table->longText('comment')->nullable();
             $table->string('related_id')->nullable();
+            $table->string('time')->nullable();
             $table->timestamps();
         });
     }
