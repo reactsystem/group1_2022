@@ -223,7 +223,7 @@
         };
         new AirDatepicker('#requestDate', {
             locale: localeEs,
-            multipleDates: 30,
+            multipleDates: 10,
             onSelect({date}) {
                 timeAvailable = (date + '') !== '';
                 console.log('TIME: ' + date)
