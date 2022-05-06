@@ -15,6 +15,8 @@ class TopPageController
         return view('index');
     }
 
+
+    // ユーザー管理
     function account(Request $request){
         if(!Auth::check()){
             return redirect('/login');
