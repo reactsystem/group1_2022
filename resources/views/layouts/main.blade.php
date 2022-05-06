@@ -11,19 +11,19 @@
         .sidebar-list {
             background-color: rgba(0, 0, 0, 0);
             color: #222;
-            transition-duration: 0.2s;
+            transition-duration: 0.15s;
             margin-top: 5px;
             padding-top: 2px;
             margin-bottom: 5px;
             padding-bottom: 2px;
-            border-radius: 8px;
+            border-radius: 4px;
             padding-left: 10px;
         }
 
         .sidebar-list:hover {
             background-color: #444;
             color: #fff;
-            transition-duration: 0.1s;
+            transition-duration: 0.05s;
         }
     </style>
     <div class="container">

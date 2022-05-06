@@ -114,9 +114,12 @@ class RequestController extends Controller
             return redirect("/request")->with('error', '種別が指定されていません');
         }
         $holidays = 0;
-        $time = "";
-        if (isset($request->time)) {
+        $time = NULL;
+        if (isset($request->time) && $type->type == 1) {
             $time = $request->time;
+            if ($time == null || $time == "00:00") {
+                return redirect("/request")->with('error', '労働時間が指定されていません');
+            }
         }
         if ($request->type == 2) {
             $holidays = count($dates);
