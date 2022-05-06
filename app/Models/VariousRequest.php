@@ -10,8 +10,21 @@ class VariousRequest extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'uuid',
+        'type',
+        'date',
+        'status',
+        'reason',
+        'comment',
+        'related_id',
+        'updated_at',
+        'created_at'
+    ];
+
     public function various_request(): BelongsTo
     {
-        return $this -> belongsTo(User::class,'id','user_id');
+        return $this->belongsTo(User::class, 'id', 'user_id');
     }
 }

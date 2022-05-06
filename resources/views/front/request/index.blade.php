@@ -13,6 +13,7 @@
         }
     </style>
 @endsection
+@section('pageTitle', "各種申請")
 
 @section('content')
     <div class="container">
@@ -21,8 +22,22 @@
                 <h2 class="fw-bold">各種申請</h2>
             </div>
             <div class="col-md-6">
-                <a class="btn btn-primary" href="#" style="float: right; width: 100px">新規申請</a>
+                <a class="btn btn-primary" href="/request/create" style="float: right; width: 100px">新規申請</a>
             </div>
+            @if (session('error'))
+                <div class="col-md-12 mt-3">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>エラー</strong> {{ session('error') }}
+                    </div>
+                </div>
+            @endif
+            @if (session('result'))
+                <div class="col-md-12 mt-3">
+                    <div class="alert alert-success" role="alert">
+                        {{ session('result') }}
+                    </div>
+                </div>
+            @endif
         </div>
         <hr>
         @foreach($results as $result)
@@ -42,11 +57,11 @@
                     break;
             }
             ?>
-            <div class="card card-hover" style="width: 100%; cursor: pointer"
+            <div class="card card-hover" style="width: 100%; cursor: pointer; margin-bottom: 10px"
                  onclick="href('/request/{{$result->id}}')">
                 <div class="card-body">
                     <div style="font-size: 13pt; font-weight: bold">
-                        {!! $statusText !!}<span>2022年5月2日～2022年5月6日</span>
+                        {!! $statusText !!}<span>{{ implode(", ", $related[$result->id]['date']) }}</span>
                     </div>
                     <div>
                         申請種別: {{$result->name}}

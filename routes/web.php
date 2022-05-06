@@ -29,6 +29,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', [TopPageController::class, 'index'])->name('home');
     //Route::get('/attend', [AttendanceController::class, 'index'])->name('attend');
+    Route::get('/request/create', [RequestController::class, 'createRequest']);
+    Route::post('/request/create', [RequestController::class, 'checkRequest']);
+    Route::get('/request/create/back', [RequestController::class, 'checkRequestBack']);
+    Route::get('/request/{id}/cancel', [RequestController::class, 'cancelRequest']);
     Route::get('/request/{id}', [RequestController::class, 'show']);
     Route::get('/request', [RequestController::class, 'index'])->name('request');
 
