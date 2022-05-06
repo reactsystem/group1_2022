@@ -49,7 +49,6 @@
                     <label class="form-label">申請理由</label>
                     <textarea name="reason" id="requestReason" class="form-control"
                               style="height: 50vh">{{old('reason')}}</textarea>
-                    <div class="form-text">最大500文字まで</div>
                 </div>
             </div>
         </form>
@@ -169,8 +168,8 @@
         }
 
         requestTime.onchange = function () {
-            workTimeAvailable = requestTime.value !== "";
-            console.log('WORKTIME: ' + requestTime.value)
+            workTimeAvailable = (requestTime.value !== "" && requestTime.value !== "00:00");
+            console.log('WORKTIME: ' + requestTime.value + ' / ' + workTimeAvailable)
             checkData()
         }
         requestReason.onchange = function () {
