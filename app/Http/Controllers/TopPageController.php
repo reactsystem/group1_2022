@@ -15,8 +15,12 @@ class TopPageController
         return view('index');
     }
 
-    function acount(Request $request){
-        return view('acount');
+    function account(Request $request){
+        if(!Auth::check()){
+            return redirect('/login');
+        }
+        $user = Auth::user();
+        return view('account',['user' => $user,]);
     }
 
 }
