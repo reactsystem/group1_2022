@@ -13,7 +13,7 @@ class UserEditController extends Controller
             return redirect('/login');
         }
         $user = Auth::user();
-        return view('account',['user' => $user,]);
+        return view('front/account/account',['user' => $user,]);
     }
 
     // ユーザー情報編集
@@ -22,7 +22,7 @@ class UserEditController extends Controller
             return redirect('/login');
         }
         $user = Auth::user();
-        return view('account_edit',['user' => $user,]);
+        return view('front/account/account_edit',['user' => $user,]);
     }
 
     // ユーザーパスワード変更
@@ -31,6 +31,6 @@ class UserEditController extends Controller
             return redirect('/login');
         }
         $user = Auth::user();
-        return view('password_update',['user' => $user,]);
+        return view('front/account/password_update',['user' => $user,]);
     }
 }

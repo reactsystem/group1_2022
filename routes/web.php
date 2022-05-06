@@ -26,6 +26,14 @@ Route::get('/', function () {
 
 Route::get('/home', [TopPageController::class, 'index'])->name('home');
 
+
+Route::get('/account',[UserEditController::class, 'account']);
+Route::get('/account/edit',[UserEditController::class, 'account_edit']);
+Route::get('/account/password_update',[UserEditController::class, 'password_update']);
+
+
+
+
 Auth::routes(['register' => false]);
 
 Route::post('/forgot-password', function (Request $request) {
@@ -72,12 +80,6 @@ Route::post('/reset-password', function (Request $request) {
         ? view('auth.passwords.success')->with('status', __($status))
         : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');
-
-
-Route::get('/account',[UserEditController::class, 'account']);
-Route::get('/account/edit',[UserEditController::class, 'account_edit']);
-Route::get('/account/password_update',[UserEditController::class, 'password_update']);
-
 
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
