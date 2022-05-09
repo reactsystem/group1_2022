@@ -45,9 +45,13 @@
                 </ul>
 
                 <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span id="navCurrentTime" class="nav-link text-white fw-bold"
+                              style="font-size: 1.125rem;padding-bottom: 0;padding-top: 6px;">時刻取得中</span>
+                    </li>
+                    <!-- Authentication Links -->
+                    @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -87,6 +91,22 @@
             @yield('basement')
         </main>
 </div>
+<script>
+    function updateDisplayTime() {
+        let date = new Date()
+        let years = date.getFullYear()
+        let months = date.getMonth() + 1
+        let days = date.getDate()
+        let hours = date.getHours()
+        let minutes = ('00' + date.getMinutes()).slice(-2)
+        let seconds = ('00' + date.getSeconds()).slice(-2)
+        let dayOfWeek = date.getDay()
+        let dayOfWeekArrayStr = ["日", "月", "火", "水", "木", "金", "土"][dayOfWeek]
+        document.getElementById("navCurrentTime").innerHTML = years + "/" + months + "/" + days + " (" + dayOfWeekArrayStr + ") " + hours + ":" + minutes + ":" + seconds
+    }
+
+    setInterval('updateDisplayTime()', 1000)
+</script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
