@@ -18,4 +18,7 @@ class TopPageController extends Controller
         return view('front.index');
     }
 
+
+
+
 }

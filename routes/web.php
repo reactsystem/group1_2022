@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Front\RequestController;
 use App\Http\Controllers\Front\TopPageController;
+use App\Http\Controllers\UserEditController;
+
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +39,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/request', [RequestController::class, 'index'])->name('request');
 
 });
+
+
+
+Route::get('/account',[UserEditController::class, 'account']);
+Route::get('/account/edit',[UserEditController::class, 'account_edit']);
+Route::post('/account/account_edit_done',[UserEditController::class, 'account_edit_done']);
+Route::get('/account/password_update',[UserEditController::class, 'password_update']);
+Route::patch('/account/password_update_done',[UserEditController::class, 'password_update_done']);
+
+
+
+
 
 
 Auth::routes(['register' => false]);
@@ -85,5 +99,6 @@ Route::post('/reset-password', function (Request $request) {
         ? view('auth.passwords.success')->with('status', __($status))
         : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');
+
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
