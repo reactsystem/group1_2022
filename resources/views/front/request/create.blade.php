@@ -61,7 +61,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="cancelModalLabel">申請確認</h5>
+                    <h5 class="modal-title text-center" id="cancelModalLabel">申請確認</h5>
                 </div>
                 <div class="modal-body">
                     <div class="text-center mb-3">

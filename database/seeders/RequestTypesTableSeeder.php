@@ -51,6 +51,14 @@ class RequestTypesTableSeeder extends Seeder
                     'created_at' => '2022-05-02 17:04:17',
                     'updated_at' => '2022-05-02 17:04:18',
                 ),
+            4 =>
+                array(
+                    'id' => 5,
+                    'name' => '特別休暇',
+                    'type' => 2,
+                    'created_at' => '2022-05-02 17:04:15',
+                    'updated_at' => '2022-05-02 17:04:15',
+                ),
         ));
 
 

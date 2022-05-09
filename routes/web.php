@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminTopPageController;
+use App\Http\Controllers\Front\AttendanceController;
 use App\Http\Controllers\Front\RequestController;
 use App\Http\Controllers\Front\TopPageController;
 use Illuminate\Auth\Events\PasswordReset;
@@ -28,13 +30,23 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', [TopPageController::class, 'index'])->name('home');
-    //Route::get('/attend', [AttendanceController::class, 'index'])->name('attend');
+
+    Route::get('/attend-manage', [AttendanceController::class, 'index'])->name('attend');
+
+    Route::get('/attends', [AttendanceController::class, 'index'])->name('attend');
+    Route::get('/attends/start', [AttendanceController::class, 'attend']);
+    Route::get('/attends/end', [AttendanceController::class, 'leave']);
+    Route::get('/attends/cancel', [AttendanceController::class, 'cancelLeft']);
+    Route::post('/api/v1/attends/comment/set', [AttendanceController::class, 'saveWorkMemo']);
+
     Route::get('/request/create', [RequestController::class, 'createRequest']);
     Route::post('/request/create', [RequestController::class, 'checkRequest']);
     Route::get('/request/create/back', [RequestController::class, 'checkRequestBack']);
     Route::get('/request/{id}/cancel', [RequestController::class, 'cancelRequest']);
     Route::get('/request/{id}', [RequestController::class, 'show']);
     Route::get('/request', [RequestController::class, 'index'])->name('request');
+
+    Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
 
 });
 
