@@ -4,7 +4,6 @@
     <div class="container">
         <h2 class="fw-bold">社員新規登録</h2>
         <hr>
-        <h2>社員登録</h2>
         <a href='/admin/attends' class="btn btn-primary">戻る</a>
         <form>
             <div class="mb-3">
@@ -14,7 +13,7 @@
             
             <div class="mb-3">
                 <label for="InputMemo" class="form-label">社員メモ</label>
-                <input type="text" class="form-control" id="InputMemo" value = {{$user->user_memo->text}}required>
+                <input type="text" class="form-control" id="InputMemo">
               </div>
             
               <div class="mb-3">
@@ -56,12 +55,12 @@
                 
                 <div class="mb-3">
                   <label for="InputJoined" class="form-label">入社日</label>
-                  <input type="text" class="form-control" id="InputJoined" required>
+                  <input type="text" class="form-control" id="InputJoined" placeholder ='YYYY-MM-DD' required>
                 </div>
 
                 <div class="mb-3" >
                   <label for="InputAlive" class="form-label">退社日</label>
-                  <input type="text" class="form-control" id="InputAlive" disabled>
+                  <input type="text" class="form-control" id="InputAlive" placeholder ='YYYY-MM-DD'disabled>
                 </div>
             <button type="submit" class="btn btn-primary">登録</button>
           </form>

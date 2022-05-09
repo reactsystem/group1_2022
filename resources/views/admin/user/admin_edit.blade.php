@@ -4,7 +4,6 @@
     <div class="container">
         <h2 class="fw-bold">社員情報確認・編集</h2>
         <hr>
-        <h2>社員情報確認・編集</h2>
         <a href='/admin/attends' class="btn btn-primary">戻る</a>
         <form>
             <div class="mb-3">
@@ -54,27 +53,27 @@
 
               <div class="mb-3">
                 <label for="InputPassword" class="form-label">パスワード</label>
-                <input type="password" class="form-control" id="InputPassword" value = {{$user['password']}} required>
+                <input type="password" class="form-control" id="InputPassword" disabled>
               </div>
                 
               <div class="mb-3">
                   <label for="InputEmail" class="form-label">メールアドレス</label>
-                  <input type="email" class="form-control" id="InputEMail" value = {{$user ['mail']}}required>
+                  <input type="email" class="form-control" id="InputEMail" value = "{{$user ['email']}}" required>
               </div>
                 
                 <div class="mb-3">
                   <label for="InputHoliday" class="form-label">有給休暇</label>
-                  <input type="number" class="form-control" id="InputHoliday" value = {{$user ['paid_holiday']}} required>
+                  <input type="number" class="form-control" id="InputHoliday" value = "{{$user ['paid_holiday']}}" required>
                 </div>
                 
                 <div class="mb-3">
                   <label for="InputJoined" class="form-label">入社日</label>
-                  <input type="text" class="form-control" id="InputJoined" value = {{$user ['joined_date']}} required>
+                  <input type="text" class="form-control" id="InputJoined" placeholder ='YYYY-MM-DD' value = "{{$user ['joined_date']}}" required>
                 </div>
 
                 <div class="mb-3" >
                   <label for="InputAlive" class="form-label">退社日</label>
-                  <input type="text" class="form-control" id="InputAlive"  value = {{$user ['left_date']}}>
+                  <input type="text" class="form-control" id="InputAlive"  placeholder ='YYYY-MM-DD' value = "{{$user ['left_date']}}">
                 </div>
             <button type="submit" class="btn btn-primary">確定</button>
           </form>
