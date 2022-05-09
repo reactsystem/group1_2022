@@ -14,7 +14,7 @@
             
             <div class="mb-3">
                 <label for="InputMemo" class="form-label">社員メモ</label>
-                <input type="text" class="form-control" id="InputMemo" value="{{$user_memo}}" >
+                <input type="text" class="form-control" id="InputMemo" value="{{$user->user_memo->memo}}" >
               </div>
             
               <div class="mb-3">
