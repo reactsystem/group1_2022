@@ -46,7 +46,7 @@ class User extends Authenticatable
     /*
     */
     function departments(){
-        return $this ->hasOne(departments::class,'id','department');
+        return $this ->hasOne(department::class,'id','department');
     }
 
     function attendance(){

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminTopPageController;
+use App\Http\Controllers\Admin\AdminAttendsController;
 use App\Http\Controllers\Front\AttendanceController;
 use App\Http\Controllers\Front\RequestController;
 use App\Http\Controllers\Front\TopPageController;
@@ -48,17 +49,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/request/{id}', [RequestController::class, 'show']);
     Route::get('/request', [RequestController::class, 'index'])->name('request');
 
+    Route::get('/account',[UserEditController::class, 'account']);
+    Route::get('/account/edit',[UserEditController::class, 'account_edit']);
+    Route::post('/account/account_edit_done',[UserEditController::class, 'account_edit_done']);
+    Route::get('/account/password_update',[UserEditController::class, 'password_update']);
+    Route::patch('/account/password_update_done',[UserEditController::class, 'password_update_done']);
+
+
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
+
+    // admin社員管理
+    Route::get('/admin/attends',[AdminAttendsController::class, 'admin_attends']);
 
 });
 
-
-
-Route::get('/account',[UserEditController::class, 'account']);
-Route::get('/account/edit',[UserEditController::class, 'account_edit']);
-Route::post('/account/account_edit_done',[UserEditController::class, 'account_edit_done']);
-Route::get('/account/password_update',[UserEditController::class, 'password_update']);
-Route::patch('/account/password_update_done',[UserEditController::class, 'password_update_done']);
 
 
 
