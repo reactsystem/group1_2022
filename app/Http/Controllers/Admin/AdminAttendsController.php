@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\User_memo;
 
 
 class AdminAttendsController extends Controller
@@ -22,4 +23,18 @@ class AdminAttendsController extends Controller
  
         return view('admin/user/admin_attends',$param);
     }
+
+    function admin_new(){
+
+        $departments = Department::all();
+        return view('admin/user/admin_new',['departments' => $departments]);
+    }
+    
+    function admin_edit(Request $request){
+        $user = User::find($request -> id);
+        $departments = Department::all();
+        if(empty($user_memo))$user_memo = '';
+        return view('admin/user/admin_edit',['user' => $user,'departments' => $departments,'user_memo' =>$user_memo]);
+    }
+
 }

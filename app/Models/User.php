@@ -45,11 +45,23 @@ class User extends Authenticatable
 
     /*
     */
+
+    function latest_attend($users){
+        foreach($users as $user){
+            $latest_attends[] = $user -> attendance -> created_at -> max();
+        }
+        return $latest_attends;
+    }
+
     function departments(){
         return $this ->hasOne(department::class,'id','department');
     }
 
     function attendance(){
         return $this ->hasOne(attendance::class,'user_id','id');
+    }
+
+    function user_memo(){
+        return $this ->hasOne(user_memo::class,'user_id','id');
     }
 }

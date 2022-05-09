@@ -5,7 +5,8 @@
         <h2 class="fw-bold">社員情報管理</h2>
         <hr>
         <h2>社員一覧</h2>
-        ##新規登録ボタン##
+        <a href='/admin/attends/new' class="btn btn-primary">新規登録</a>
+        
         <table class="table">
             <thead>
             <tr>
@@ -25,7 +26,19 @@
                 <td>{{$user -> name}}</td>
                 <td>{{$user -> departments -> name}}</td>
                 <td></td>
-                <td>プルダウン</td>
+                <td>            
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-Primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        操作
+                        </button>
+                        <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/admin/attends/edit?id={{$user -> id}}">社員情報確認・編集</a></li>
+
+                        <li><a class="dropdown-item" href="/admin/hogehoge?id={{$user -> id}}">社員申請確認</a></li>
+                        
+                        </ul>
+                    </div>
+                </td>
             </tr>
             @endforeach
         </tbody>
@@ -34,20 +47,3 @@
     </div>
 @endsection
 
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
