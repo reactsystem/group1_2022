@@ -29,7 +29,11 @@ Route::get('/home', [TopPageController::class, 'index'])->name('home');
 
 Route::get('/account',[UserEditController::class, 'account']);
 Route::get('/account/edit',[UserEditController::class, 'account_edit']);
+Route::post('/account/account_edit_done',[UserEditController::class, 'account_edit_done']);
 Route::get('/account/password_update',[UserEditController::class, 'password_update']);
+Route::patch('/account/password_update_done',[UserEditController::class, 'password_update_done']);
+
+
 
 
 
