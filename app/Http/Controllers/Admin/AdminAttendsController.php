@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Attendance;
 use App\Models\User_memo;
 
 
@@ -17,11 +18,16 @@ class AdminAttendsController extends Controller
         $sort = $request ->sort;
         if(empty($sort))$sort = 'id';
         $users = User::orderBy($sort,'asc')->paginate(15);
+        // 最終出勤日           
+
+
+
+
         $param =[
             'users' => $users,
             'sort' => $sort,
         ];
- 
+
         return view('admin/user/admin_attends',$param);
     }
 
