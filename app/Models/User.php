@@ -52,4 +52,8 @@ class User extends Authenticatable
     function attendance(){
         return $this ->hasOne(attendance::class,'user_id','id');
     }
+
+    function various_requests(){
+        return $this ->hasOne(various_request::class,'user_id','id');
+    }
 }
