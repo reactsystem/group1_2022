@@ -76,9 +76,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-
-});
-
 Auth::routes(['register' => false]);
 
 Route::post('/forgot-password', function (Request $request) {
