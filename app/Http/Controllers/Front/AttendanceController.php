@@ -22,7 +22,7 @@ class AttendanceController extends Controller
         $tempDate = new DateTime();
         $data = Attendance::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         $date_now = new DateTime();
-        if ($data->mode == 1) {
+        if ($data != null && $data->mode == 1) {
             $date_now = $data->updated_at;
         }
         $interval = $data->created_at->diff($date_now);
