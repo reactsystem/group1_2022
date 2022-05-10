@@ -46,11 +46,10 @@ class User extends Authenticatable
     /*
     */
 
-    function latest_attend($users){
-        foreach($users as $user){
-            $latest_attends[] = $user -> attendance -> created_at -> max();
-        }
-        return $latest_attends;
+    public function latestAttemdance()
+    {
+        // max(date) の 条件で １件取得する。
+        return $this->hasOne(attendance::class)->ofMany('date', 'max');
     }
 
     function departments(){
@@ -58,7 +57,7 @@ class User extends Authenticatable
     }
 
     function attendance(){
-        return $this ->hasOne(attendance::class,'user_id','id');
+        return $this ->hasMany(attendance::class,'user_id','id');
     }
 
     function user_memo(){

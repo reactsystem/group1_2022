@@ -17,12 +17,11 @@ class AdminAttendsController extends Controller
     function admin_attends(Request $request){
         $sort = $request ->sort;
         if(empty($sort))$sort = 'id';
-        $users = User::orderBy($sort,'asc')->paginate(15);
+        $users = User::all();
         // 最終出勤日           
 
 
-
-
+        $users->join('attendance', 'id', '=', 'user_id');
         $param =[
             'users' => $users,
             'sort' => $sort,

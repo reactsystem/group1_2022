@@ -19,15 +19,16 @@
             </tr>
         </thead>
         <tbody>
-            {{var_damp($last_attends)}}
-
+            
+        {{--<pre>{{var_dump($users)}}  </pre>--}}
+            
             @foreach($users as $user)
             <tr>
                 <th  scope="row">{{$user -> id}}</td>
                 <td>{{$user -> employee_id}}</td>
                 <td>{{$user -> name}}</td>
                 <td>{{$user -> departments -> name}}</td>
-                <td>ここに最終出勤日</td>
+                <td>{{$user -> latestAttemdance->date ?? ""}}</td>
                 <td>            
                     <div class="btn-group">
                         <button type="button" class="btn btn-Primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -44,7 +45,6 @@
             </tr>
             @endforeach
         </tbody>
-            {{$users ->appends(['sort' => $sort])->links() }}
         </table>
     </div>
 @endsection
