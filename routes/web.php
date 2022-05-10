@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminTopPageController;
+use App\Http\Controllers\Admin\AdminRequestController;
 use App\Http\Controllers\Front\AttendanceController;
 use App\Http\Controllers\Front\RequestController;
 use App\Http\Controllers\Front\TopPageController;
@@ -50,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
 
+    Route::get('/admin/request', [AdminRequestController::class, 'request']);
 });
 
 
