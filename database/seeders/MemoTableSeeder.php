@@ -18,8 +18,14 @@ class MemoTableSeeder extends Seeder
         DB::table('user_memos')->insert(
             [
                 0 => [
+                    'id' => 1,
                     'user_id' => '1',
                     'memo' => '営業のプロ,身長180cm',
+                ],
+                1 => [
+                    'id' => 2,
+                    'user_id' => '2',
+                    'memo' => '新入社員,2022',
                 ],
             ]
         );

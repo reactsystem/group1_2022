@@ -5,23 +5,87 @@
         <h2 class="fw-bold">社員新規登録</h2>
         <hr>
         <a href='/admin/attends' class="btn btn-primary">戻る</a>
-        <form>
+        <form action ='/admin/attends/add' method = 'POST'>
+          @csrf
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal">
+            登録
+          </button>
+      
+          {{--モーダル--}}
+          <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">確認</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  登録しますか？
+{{--                   <div>
+                    <p class="text-muted">名前</p>
+                    <p class="px-2" id="InputName"></p>
+                  </div>
+                  <div>
+                    <p class="text-muted">社員メモ</p>
+                    <p class="px-2" id="InputMemo"></p>
+                  </div>
+                  <div>
+                    <p class="text-muted">社員番号</p>
+                    <p class="px-2" id="InputemployeeID"></p>
+                  </div>
+                  <div>
+                    <p class="text-muted">権限</p>
+                    <p class="px-2" id='InputGroup_id'></p>
+                  </div>
+                  <div>
+                    <p class="text-muted">部署</p>
+                    <p class="px-2" id="InputDepartment"></p>
+                  </div>
+
+                  <div>
+                    <p class="text-muted">メールアドレス</p>
+                    <p class="px-2" id="InputEMail"></p>
+                  </div>
+                  <div>
+                    <p class="text-muted">有給休暇残</p>
+                    <p class="px-2"id="InputHoliday"></p>
+                  </div>
+
+                  <div>
+                    <p class="text-muted">入社日</p>
+                    <p class="px-2" id="InputJoined"></p>
+                  </div>
+
+                  <div>
+                    <p class="text-muted">退社日</p>
+                    <p class="px-2" id="InputAlive"></p>
+                  </div> --}}
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                <button type="submit" class="btn btn-primary">登録</button>
+                </div>
+            </div>
+            </div>
+          </div>
+
+
             <div class="mb-3">
               <label for="InputName" class="form-label">名前</label>
-              <input type="text" class="form-control" id="InputName" required>
+              <input type="text" class="form-control" id="InputName" name = 'name' required>
             </div>
             
             <div class="mb-3">
                 <label for="InputMemo" class="form-label">社員メモ</label>
-                <input type="text" class="form-control" id="InputMemo">
+                <input type="text" class="form-control" value = '' id="InputMemo" name='memo' >
               </div>
             
               <div class="mb-3">
                 <label for="InputemployeeID" class="form-label">社員番号</label>
-                <input type="text" class="form-control" id="InputemployeeID" required>
+                <input type="text" class="form-control" id="InputemployeeID" name='employee_id' required>
               </div>
               <div class="mb-3">
-              権限<select class="form-select" aria-label="権限" required>
+              権限<select class="form-select" aria-label="権限" name='group_id' required>
                 <option selected value="">ここから選択</option>
                 <option value="0">一般ユーザー</option>
                 <option value="1">管理者</option>
@@ -29,7 +93,7 @@
             </div>
 
             <div class="mb-3">    
-              部署<select class="form-select" aria-label="部署" required>
+              部署<select class="form-select" aria-label="部署" name='department' required>
 
                 <option selected value="">ここから選択</option>
                 @foreach($departments as $item)
@@ -40,29 +104,28 @@
 
               <div class="mb-3">
                 <label for="InputPassword" class="form-label">パスワード</label>
-                <input type="text" class="form-control" id="InputPassword" required>
+                <input type="password" class="form-control" id="InputPassword" name='password' required>
               </div>
                 
               <div class="mb-3">
                   <label for="InputEMail" class="form-label">メールアドレス</label>
-                  <input type="email" class="form-control" id="InputEMail" required>
+                  <input type="email" class="form-control" id="InputEMail" name='email' required>
               </div>
                 
                 <div class="mb-3">
                   <label for="InputHoliday" class="form-label">有給休暇</label>
-                  <input type="number" class="form-control" id="InputHoliday" required>
+                  <input type="number" class="form-control" id="InputHoliday" name='paid_holiday' required>
                 </div>
                 
                 <div class="mb-3">
                   <label for="InputJoined" class="form-label">入社日</label>
-                  <input type="text" class="form-control" id="InputJoined" placeholder ='YYYY-MM-DD' required>
+                  <input type="text" class="form-control" id="InputJoined" placeholder ='YYYY-MM-DD' name='joined_date' required>
                 </div>
 
                 <div class="mb-3" >
                   <label for="InputAlive" class="form-label">退社日</label>
-                  <input type="text" class="form-control" id="InputAlive" placeholder ='YYYY-MM-DD'disabled>
+                  <input type="text" class="form-control" id="InputAlive" placeholder ='YYYY-MM-DD' name='left_date' disabled>
                 </div>
-            <button type="submit" class="btn btn-primary">登録</button>
           </form>
 
     </div>

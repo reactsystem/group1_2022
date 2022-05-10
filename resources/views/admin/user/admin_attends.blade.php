@@ -32,7 +32,7 @@
                         操作
                         </button>
                         <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/admin/attends/edit?id={{$user -> id}}">社員情報確認・編集</a></li>
+                        <li><a class="dropdown-item" href="/admin/attends/view?id={{$user -> id}}">社員情報確認・編集</a></li>
 
                         <li><a class="dropdown-item" href="/admin/hogehoge?id={{$user -> id}}">社員申請確認</a></li>
                         
