@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,18 +48,18 @@ class User extends Authenticatable
     public function latestAttemdance()
     {
         // max(date) の 条件で １件取得する。
-        return $this->hasOne(attendance::class)->ofMany('date', 'max');
+        return $this->hasOne(Attendance::class)->ofMany('date', 'max');
     }
 
     function departments(){
-        return $this ->hasOne(department::class,'id','department');
+        return $this->hasOne(Department::class, 'id', 'department');
     }
 
     function attendance(){
-        return $this ->hasMany(attendance::class,'user_id','id');
+        return $this->hasMany(Attendance::class, 'user_id', 'id');
     }
 
     function user_memo(){
-        return $this ->hasOne(user_memo::class,'user_id','id');
+        return $this->hasOne(UserMemo::class, 'user_id', 'id');
     }
 }
