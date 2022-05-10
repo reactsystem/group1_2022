@@ -1,21 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use function bcrypt;
+use function redirect;
+use function view;
 
 class UserEditController extends Controller
 {
     // ユーザー管理
-    function account(Request $request){
-        if(!Auth::check()){
+    function account(Request $request)
+    {
+        if (!Auth::check()) {
             return redirect('/login');
         }
         $user = Auth::user();
-        return view('front/account/account',['user' => $user,]);
+        return view('front/account/account', ['user' => $user,]);
     }
 
     // ユーザー情報編集へ

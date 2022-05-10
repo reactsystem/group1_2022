@@ -91,7 +91,7 @@
             @yield('basement')
         </main>
 </div>
-<script>
+<script defer>
     function updateDisplayTime() {
         let date = new Date()
         let years = date.getFullYear()
@@ -106,6 +106,8 @@
     }
 
     setInterval('updateDisplayTime()', 1000)
+    $('[data-toggle="tooltip"]').tooltip()
+    $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

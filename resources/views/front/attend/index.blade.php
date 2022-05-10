@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
-                            {{$data->created_at->format("H:i")}}
+                            {{$data->created_at->format("G:i")}}
                         </div>
                     </div>
                 @elseif($data != null && $data->mode == 1)
@@ -53,14 +53,14 @@
                         </div>
                         <div class="col-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
-                            {{$data->created_at->format("H:i")}}
+                            {{$data->created_at->format("G:i")}}
                         </div>
                         <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
                             退勤時刻
                         </div>
                         <div class="col-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
-                            {{$data->updated_at->format("H:i")}}
+                            {{$data->updated_at->format("G:i")}}
                         </div>
                     </div>
                 @else
@@ -150,7 +150,7 @@
         </div>
     </div>
     <script>
-        let startTime = '{{$data->created_at}}'
+        let startTime = '{{$data->created_at ?? ""}}'
         const startDate = new Date(startTime)
         const currentDate = new Date()
         let diff = new Date(currentDate.getTime() - startDate.getTime() + 54000000)
@@ -168,7 +168,7 @@
         function primary() {
             if (mode === 3) {
                 let dateText = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate()
-                let diff2 = new Date(diff.getTime() - 1800000)
+                let diff2 = new Date(diff.getTime() - (baseTime * 1000))
                 const requestTime = diff2.getHours() + ':' + ('00' + diff2.getMinutes()).slice(-2)
                 primaryButton.setAttribute("disabled", "")
                 primaryButton.innerText = "申請しています"
@@ -187,7 +187,7 @@
             if (mode === 2) {
                 mode = 3
                 reason = document.getElementById('reasonTextArea').value
-                let diff2 = new Date(diff.getTime() - 1800000)
+                let diff2 = new Date(diff.getTime() - (baseTime * 1000))
                 modalHeader.innerText = "申請確認"
                 modalContext.innerHTML = '<div class="alert alert-primary" role="alert">' +
                     '以下の内容で残業申請を行います' +
@@ -204,7 +204,7 @@
                 return
             }
             if (mode === 1) {
-                let diff2 = new Date(diff.getTime() - 1800000)
+                let diff2 = new Date(diff.getTime() - (baseTime * 1000))
                 modalHeader.innerText = "残業申請"
                 modalContext.innerHTML = '<div class="mb-3">' +
                     '種別: 残業 / 申請時間: ' + diff2.getHours() + ':' + ('00' + diff2.getMinutes()).slice(-2) + ')' +
@@ -213,7 +213,16 @@
                     '<label for="exampleFormControlTextarea1" class="form-label">理由</label>' +
                     '<textarea class="form-control" id="reasonTextArea" rows="3" placeholder="理由を記入してください"></textarea>' +
                     '</div>'
-                document.getElementById('reasonTextArea').value = reason
+                primaryButton.setAttribute("disabled", "")
+                const reasonTextArea = document.getElementById('reasonTextArea')
+                reasonTextArea.value = reason
+                reasonTextArea.onchange = function () {
+                    if (reasonTextArea.value !== "") {
+                        primaryButton.removeAttribute("disabled")
+                    } else {
+                        primaryButton.setAttribute("disabled", "")
+                    }
+                }
                 primaryButton.innerText = "申請内容確認"
                 secondaryButton.innerText = "戻る"
                 mode = 2
@@ -239,10 +248,12 @@
             }
         }
 
+        let baseTime = 300
+
         function leaveModal() {
-            console.log("CURRENT: " + (diff.getTime() / 1000) + " / " + diff.getMinutes())
-            if ((diff.getTime() / 1000) > 1000) { // 27000
-                let diff2 = new Date(diff.getTime() - 1800000)
+            console.log("CURRENT: " + (diff.getTime() / 1000) + " / " + diff.getHours() + ':' + diff.getMinutes())
+            if ((diff.getTime() / 1000) > baseTime + 54000) { // 27000
+                let diff2 = new Date(diff.getTime() - (baseTime * 1000))
                 console.log('残業あり')
                 modalHeader.innerText = "退勤確認"
                 modalContext.innerHTML = '<div class="text-center mb-3">' +
@@ -254,7 +265,7 @@
                 return true
             } else {
                 console.log('残業無し')
-                href = "/attends/end"
+                location = "/attends/end"
             }
             return false
         }

@@ -3,22 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use App\Models\Department;
-use App\Models\Attendance;
-use App\Models\User_memo;
+use App\Models\User;
+use App\Models\UserMemo;
+use Illuminate\Http\Request;
 
 
 class AdminAttendsController extends Controller
 {
     // メイン画面
-    function admin_attends(Request $request){
-        $sort = $request ->sort;
-        if(empty($sort))$sort = 'id';
+    function admin_attends(Request $request)
+    {
+        $sort = $request->sort;
+        if (empty($sort)) $sort = 'id';
         $users = User::all();
-        // 最終出勤日           
+        // 最終出勤日
 
 
         $users->join('attendance', 'id', '=', 'user_id');
@@ -35,7 +34,7 @@ class AdminAttendsController extends Controller
         $departments = Department::all();
         return view('admin/user/admin_new',['departments' => $departments]);
     }
-    
+
     // ユーザー情報個別確認
     function admin_view(Request $request){
         if(empty($request -> id)){
@@ -72,12 +71,12 @@ class AdminAttendsController extends Controller
         $user->group_id=$request->group_id;
         $user->joined_date=$request->joined_date;
         $user->paid_holiday=$request->paid_holiday;
-        
+
         $user->save();
         $last_insert_id = $user->id;
 
-        $user_memo = new User_memo();
-        $user_memo -> user_id = $last_insert_id;
+        $user_memo = new UserMemo();
+        $user_memo->user_id = $last_insert_id;
         $user_memo -> memo = $request -> memo;
         $user_memo -> save();
         return redirect('/admin/attends');
@@ -94,11 +93,11 @@ class AdminAttendsController extends Controller
         $user->joined_date=$request->joined_date;
         $user->left_date=$request->left_date;
         $user->paid_holiday=$request->paid_holiday;
-        
+
         $user->save();
 
-        $user_memo = User_memo::where('user_id','=',$request->id)->first();
-        $user_memo -> memo = $request -> memo;
+        $user_memo = UserMemo::where('user_id', '=', $request->id)->first();
+        $user_memo->memo = $request->memo;
         $user_memo -> save();
         return redirect('/admin/attends');
     }

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('mode');
             $table->string('comment');
             $table->integer('status')->default(0);
+            $table->string('time')->nullable();
+            $table->timestamp('left_at')->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
             $table->timestamp('created_at')->useCurrent()->nullable();
 
