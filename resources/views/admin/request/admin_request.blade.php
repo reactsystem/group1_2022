@@ -72,7 +72,7 @@
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-        <button type="submit" class="btn btn-primary">承認</button>
+        <a herf ='/admin/request/approve?id={{$request->id}}' type='botton' class="btn btn-primary">承認</a>
         </div>
     </div>
     </div>
@@ -91,7 +91,10 @@
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-        <button type="submit" class="btn btn-danger">却下</button>
+
+        {{--submitにしないと動かない--}}
+        <a herf ='/admin/request/reject?id={{$request->id}}' type='botton' class="btn btn-danger">却下</a>
+
         </div>
     </div>
     </div>

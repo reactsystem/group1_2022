@@ -17,4 +17,19 @@ class AdminRequestController extends Controller
         $this_request = VariousRequest::find($request ->id);
         return view('admin/request/admin_detail',['this_request' => $this_request,]); 
     }
+
+    function approve(Request $request){
+        VariousRequest::find($request ->id)->update(['status' => 1]);
+        VariousRequest::where('related_id','=',$request ->uuid)->update(['status' => 1]);
+        return redirect();
+    }
+
+    function reject(Request $request){
+        VariousRequest::find($request ->id)->update(['status' => 2]);
+        VariousRequest::where('related_id','=',$request ->uuid)->update(['status' => 2]);
+        
+        // 残業戻す
+        
+        return redirect();
+    }
 }

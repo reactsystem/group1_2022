@@ -49,26 +49,31 @@
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-        <button type="submit" class="btn btn-primary">承認</button>
-        </div>
+
+        {{--submitにしないと動かない--}}
+        <a herf ='/admin/request/approve?id={{$request->id}}' type='botton' class="btn btn-primary">承認</a>
+        
     </div>
-    </div>
+</div>
+</div>
 </div>
 
 <div class="modal fade" id="Modal2" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title" id="ModalLabel">確認</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            却下しますか？
+<div class="modal-dialog">
+<div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="ModalLabel">確認</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        却下しますか？
 
-        </div>
-        <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-        <button type="submit" class="btn btn-danger">却下</button>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+
+            {{--submitにしないと動かない--}}
+    <a herf ='/admin/request/reject?id={{$request->id}}' type='botton' class="btn btn-danger">却下</a>
         </div>
     </div>
     </div>

@@ -53,6 +53,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/admin/request', [AdminRequestController::class, 'request']);
     Route::get('/admin/request/detail', [AdminRequestController::class, 'detail']);
+    Route::get('/admin/request/approve', [AdminRequestController::class, 'approve']);
+    Route::get('/admin/request/reject', [AdminRequestController::class, 'reject']);
+
+    
 
 });
 
