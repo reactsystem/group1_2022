@@ -42,7 +42,7 @@
                 </td>
                 
                 <td>    
-                <a href="#?id={{$request ->id}}" class="btn btn-secondary">詳細</a>
+                <a href="/admin/request/detail?id={{$request ->id}}" class="btn btn-secondary">詳細</a>
 
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal1">
                     承認
@@ -91,7 +91,7 @@
         </div>
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-        <button type="submit" class="btn btn-primary">却下</button>
+        <button type="submit" class="btn btn-danger">却下</button>
         </div>
     </div>
     </div>

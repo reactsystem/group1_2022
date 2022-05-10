@@ -52,6 +52,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
 
     Route::get('/admin/request', [AdminRequestController::class, 'request']);
+    Route::get('/admin/request/detail', [AdminRequestController::class, 'detail']);
+
 });
 
 
