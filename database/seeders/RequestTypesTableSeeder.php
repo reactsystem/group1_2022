@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class RequestTypesTableSeeder extends Seeder
 {
@@ -25,6 +24,7 @@ class RequestTypesTableSeeder extends Seeder
                     'id' => 1,
                     'name' => '残業',
                     'type' => 1,
+                    'color' => '#1A1',
                     'created_at' => '2022-05-02 17:04:12',
                     'updated_at' => '2022-05-02 17:04:14',
                 ),
@@ -33,6 +33,7 @@ class RequestTypesTableSeeder extends Seeder
                     'id' => 2,
                     'name' => '休暇(有給)',
                     'type' => 2,
+                    'color' => '#fcb138',
                     'created_at' => '2022-05-02 17:04:15',
                     'updated_at' => '2022-05-02 17:04:15',
                 ),
@@ -41,6 +42,7 @@ class RequestTypesTableSeeder extends Seeder
                     'id' => 3,
                     'name' => '休暇(無給)',
                     'type' => 0,
+                    'color' => '#222',
                     'created_at' => '2022-05-02 17:04:16',
                     'updated_at' => '2022-05-02 17:04:16',
                 ),
@@ -49,6 +51,7 @@ class RequestTypesTableSeeder extends Seeder
                     'id' => 4,
                     'name' => '休日出勤',
                     'type' => 1,
+                    'color' => '#fc38a1',
                     'created_at' => '2022-05-02 17:04:17',
                     'updated_at' => '2022-05-02 17:04:18',
                 ),
@@ -57,6 +60,7 @@ class RequestTypesTableSeeder extends Seeder
                     'id' => 5,
                     'name' => '特別休暇',
                     'type' => 2,
+                    'color' => '#8d38fc',
                     'created_at' => '2022-05-02 17:04:15',
                     'updated_at' => '2022-05-02 17:04:15',
                 ),
