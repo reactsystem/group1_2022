@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\CalenderUtil;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\Holiday;
 use App\Models\MonthlyReport;
 use App\Models\RequestTypes;
 use App\Models\VariousRequest;
@@ -32,6 +33,12 @@ class AttendanceManagementController extends Controller
         $cMonth = intval($tempDate->format('m'));
         $day = intval($tempDate->format('d'));
         $cDay = $day;
+
+        $joinDate = new DateTime(Auth::user()->joined_date);
+        $joinYear = intval($joinDate->format('Y'));
+        $joinMonth = intval($joinDate->format('m'));
+        $joinDay = intval($joinDate->format('d'));
+
         $likeMonth = $year . "-" . sprintf('%02d', $month) . "-";
         //echo $likeMonth." / ";
         $dataList = Attendance::where('user_id', '=', Auth::id())->where("attendances.deleted_at", "=", null)->where('date', 'LIKE', "%$likeMonth%")->get();
@@ -86,6 +93,30 @@ class AttendanceManagementController extends Controller
         foreach ($dataList as $data) {
             $attendData[$data->date] = $data;
         }
+        $holidaysData = null;
+        if ($year > $joinYear || ($year == $joinYear && $month >= $joinMonth)) {
+            $holidaysData = Holiday::where(function ($query) use ($year) {
+                $query->where('year', '=', null)
+                    ->orWhere('year', '=', $year);
+            })->where(function ($query) use ($month) {
+                $query->where('month', '=', null)
+                    ->orWhere('month', '=', $month);
+            });
+            if ($year == $joinYear && $month == $joinMonth) {
+                $holidaysData->where('day', '>=', $joinDay);
+            }
+        }
+
+
+        //$holidaysData = Holiday::where('year', null)->orWhere('year', intval($year))->where('month', null)->orWhere('month', intval($month))->get();
+
+        $holidays = [];
+
+        if ($holidaysData != null) {
+            foreach ($holidaysData->get() as $holiday) {
+                $holidays[$holiday->day][] = $holiday;
+            }
+        }
 
         $reqHtml = "";
         foreach ($requests as $request) {
@@ -134,9 +165,9 @@ class AttendanceManagementController extends Controller
             $confirmStatus = -1;
         }
         if ($mode == 1) {
-            return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq'));
+            return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays'));
         } else {
-            return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq'));
+            return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays'));
         }
     }
 

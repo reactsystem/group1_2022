@@ -1,5 +1,6 @@
 @extends('layouts.main')
-@section('pageTitle', "パスワード変更")
+
+@section('pageTitle', "ユーザー管理")
 
 @section('content')
     <div class="container">

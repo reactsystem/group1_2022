@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAttendManagementController;
 use App\Http\Controllers\Admin\AdminAttendsController;
+use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminTopPageController;
 use App\Http\Controllers\Front\AttendanceController;
 use App\Http\Controllers\Front\AttendanceManagementController;
@@ -67,7 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => ['auth', 'admin']], function () {
-    Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
+    Route::get('/admin', [AdminSettingsController::class, 'index'])->name('admin-home');
 
     /* 社員情報管理 */
     Route::get('/admin/attends', [AdminAttendsController::class, 'admin_attends']);
@@ -86,6 +87,19 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/attend-manage/delete/{id}', [AdminAttendManagementController::class, 'deleteData']);
     Route::post('/admin/attend-manage/edit/{id}', [AdminAttendManagementController::class, 'editData']);
     Route::get('/admin/attend-manage', [AdminAttendManagementController::class, 'index']);
+
+    /* システム設定 */
+    Route::get('/admin/settings', [AdminSettingsController::class, 'index']);
+
+    Route::get('/admin/settings/holiday', [AdminSettingsController::class, 'holiday']);
+    Route::get('/admin/settings/holiday/edit/{id}', [AdminSettingsController::class, 'viewHoliday']);
+    Route::post('/admin/settings/holiday/edit/{id}', [AdminSettingsController::class, 'editHoliday']);
+    Route::get('/admin/settings/holiday/new', [AdminSettingsController::class, 'newHoliday']);
+    Route::post('/admin/settings/holiday/new', [AdminSettingsController::class, 'createHoliday']);
+
+    Route::get('/admin/settings/general', [AdminSettingsController::class, 'general']);
+    Route::get('/admin/settings/general/edit', [AdminSettingsController::class, 'editGeneral']);
+    Route::post('/admin/settings/general/edit', [AdminSettingsController::class, 'updateGeneral']);
 
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
 });

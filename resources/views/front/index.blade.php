@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+@section('pageTitle', "ホーム")
+
 @section('content')
     <div class="container">
         <h3 class="fw-bold">新着通知</h3>

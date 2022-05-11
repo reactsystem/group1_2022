@@ -15,7 +15,7 @@
         }
     </style>
 @endsection
-@section('pageTitle', "勤怠情報編集")
+@section('pageTitle', "勤怠情報管理")
 
 @section('content')
     <div class="container">

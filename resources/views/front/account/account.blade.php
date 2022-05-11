@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+@section('pageTitle', "ユーザー管理")
+
 @section('content')
     <div class="container">
         <h2 class="fw-bold">ユーザー管理</h2>

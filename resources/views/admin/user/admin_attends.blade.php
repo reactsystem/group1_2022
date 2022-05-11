@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('pageTitle', "社員情報管理")
+
 @section('content')
     <div class="container">
         <div class="row">

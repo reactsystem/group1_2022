@@ -66,6 +66,17 @@
     $key = $year . '-' . sprintf("%02d", $month) . '-' . str_pad($i, 2, 0, STR_PAD_LEFT);
     $noWorkFlag = true;
     try {
+    if(array_key_exists($i, $holidays)){
+    $noWorkFlag = false;
+    foreach ($holidays[$i] as $holiday) {
+    ?>
+    <div>
+        <span style="color: #ee5822;">●</span>&nbsp;
+        <strong>{{$holiday->name}}</strong>
+    </div>
+    <?php
+    }
+    }
     $data = $attendData[$key];
     if($data->left_at != null){
     $dateData = new DateTime($data->left_at);
@@ -86,13 +97,13 @@
     $noWorkFlag = false;
     ?>
     <div>
-        <span style="color: #F22;">●</span>&nbsp;
+        <span style="color: #A11;">●</span>&nbsp;
         <strong>{{$data->created_at->format("G:i")}}-</strong>
     </div>
     <?php
     }
     } catch (Exception $ex) {
-        $noWorkFlag = true;
+
     }
     try {
         $reqHtml = $reqData[$key][1];

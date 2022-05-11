@@ -112,6 +112,53 @@
             background-color: #37F;
             color: #fff
         }
+
+        .type-scroll::-webkit-scrollbar {
+            display: block;
+            height: 6px;
+        }
+
+        .type-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .type-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.4);
+            border-right: none;
+            border-left: none;
+        }
+
+        .type-scroll::-webkit-scrollbar-track-piece:end {
+            margin-bottom: 10px;
+        }
+
+        .type-scroll::-webkit-scrollbar-track-piece:start {
+            margin-top: 10px;
+        }
+
+        .type-scroll {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            overflow-x: scroll;
+            overflow: overlay;
+            height: 50px;
+        }
+
+        .type-scroll {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            overflow: hidden;
+            height: 50px;
+            transition-duration: 0.3s;
+        }
+
+        .type-scroll:hover {
+            overflow-x: scroll;
+            overflow: overlay;
+            transition-duration: 0.05s;
+        }
     </style>
 @endsection
 @section('pageTitle', "勤怠情報確認")
@@ -140,8 +187,7 @@
                        style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
                 @endif
             </div>
-            <div class="col-md-4"
-                 style="display: flex; flex-direction: column; flex-wrap: wrap; overflow-x: scroll; overflow: overlay; height: 60px">
+            <div class="col-md-4 type-scroll">
                 @foreach($cats as $cat)
                     <div>
                         <span style="color: {{$cat->color}}">
@@ -149,6 +195,11 @@
                         </span>{{$cat->name}}&nbsp;
                     </div>
                 @endforeach
+                <div>
+                        <span style="color: #ee5822">
+                            ●
+                        </span>会社設定休日&nbsp;
+                </div>
                 <div>
                         <span style="color: #888">
                             ●
@@ -292,7 +343,9 @@
             }?>
         }
 
-        let requests = {<?php foreach ($reqData as $key => $data) {
+        let requests = {<?php
+            $found = [];
+            foreach ($reqData as $key => $data) {
                 echo "'" . $key . "': [";
                 foreach ($data[0] as $dat) {
                     echo "{date: '" . $dat->date . "',";
@@ -302,8 +355,36 @@
                     echo "reason: '" . ($dat->reason ?? "null") . "',";
                     echo "time: '" . ($dat->time ?? "null") . "'},";
                 }
+                $dayKey = preg_split("/-/", $key)[2];
+                if (array_key_exists($dayKey, $holidays)) {
+                    $found[$dayKey] = true;
+                    echo "{date: '" . $key . "',";
+                    echo "typeName: '" . $holidays[$dayKey]->name . " (会社設定休日)',";
+                    echo "typeColor: '#ee5822',";
+                    echo "status: 0,";
+                    echo "reason: '',";
+                    echo "time: ''},";
+                }
+
                 echo "],";
-            }?>
+            }
+            for ($i = 1; $i <= 31; $i++) {
+                if (!array_key_exists($i, $found) && array_key_exists($i, $holidays)) {
+                    $dxKey = $year . "-" . sprintf("%02d", $month) . "-" . sprintf("%02d", $i);
+                    echo "'" . $dxKey . "': [";
+                    $found[$i] = true;
+                    foreach ($holidays[$i] as $holiday) {
+                        echo "{date: '" . $dxKey . "',";
+                        echo "typeName: '" . $holiday->name . " (会社設定休日)',";
+                        echo "typeColor: '#ee5822',";
+                        echo "status: 0,";
+                        echo "reason: '',";
+                        echo "time: ''},";
+                    }
+                    echo "],";
+                }
+            }
+            ?>
         }
 
         function openDescModal(day) {
@@ -346,8 +427,10 @@
                 console.log(requestsData)
                 requestsData.forEach(data => {
                     const timeData = data.time.split(":")
-                    hours += parseInt(timeData[0])
-                    minutes += parseInt(timeData[1])
+                    const tempHours = parseInt(timeData[0])
+                    const tempMinutes = parseInt(timeData[1])
+                    hours += tempHours
+                    minutes += tempMinutes
                     let restHours = '0'
                     let restMinutes = '00'
                     console.log("CurrentHours: " + hours + ":" + minutes)
@@ -366,7 +449,11 @@
                         restMinutes = '15'
                         restTimeMode = 2
                     }
-                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + data.time + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
+                    let restTimeStr = restHours + `:` + restMinutes
+                    if (isNaN(tempHours) || isNaN(tempMinutes)) {
+                        restTimeStr = "--:--"
+                    }
+                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + data.time + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restTimeStr + `</h2></span></div></div>`
                     console.log(data.typeName)
                 })
             }

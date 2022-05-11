@@ -94,6 +94,44 @@
             transition-duration: 0.05s;
             box-shadow: 0 0 10px #888;
         }
+
+        .type-scroll::-webkit-scrollbar {
+            display: block;
+            height: 6px;
+        }
+
+        .type-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .type-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.4);
+            border-right: none;
+            border-left: none;
+        }
+
+        .type-scroll::-webkit-scrollbar-track-piece:end {
+            margin-bottom: 10px;
+        }
+
+        .type-scroll::-webkit-scrollbar-track-piece:start {
+            margin-top: 10px;
+        }
+
+        .type-scroll {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            overflow: hidden;
+            height: 50px;
+            transition-duration: 0.3s;
+        }
+
+        .type-scroll:hover {
+            overflow-x: scroll;
+            overflow: overlay;
+            transition-duration: 0.05s;
+        }
     </style>
 @endsection
 @section('pageTitle', "勤怠情報確認")
@@ -122,8 +160,7 @@
                        style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
                 @endif
             </div>
-            <div class="col-md-4"
-                 style="display: flex; flex-direction: column; flex-wrap: wrap; overflow-x: scroll; overflow: overlay; height: 60px">
+            <div class="col-md-4 type-scroll">
                 @foreach($cats as $cat)
                     <div>
                         <span style="color: {{$cat->color}}">
@@ -131,6 +168,11 @@
                         </span>{{$cat->name}}&nbsp;
                     </div>
                 @endforeach
+                <div>
+                        <span style="color: #ee5822">
+                            ●
+                        </span>会社設定休日&nbsp;
+                </div>
                 <div>
                         <span style="color: #888">
                             ●
@@ -180,7 +222,7 @@
                             $dateData = new DateTime($data->left_at);
                             $dateData = $dateData->format("G:i");
                             ?><span style="color: #2288EE;">●</span><?php
-                            }else{?><span style="color: #F22;">●</span><?php
+                            }else{?><span style="color: #A11;">●</span><?php
                             }
                             } catch (Exception $ex) {
                             }
@@ -329,7 +371,9 @@
             }?>
         }
 
-        let requests = {<?php foreach ($reqData as $key => $data) {
+        let requests = {<?php
+            $found = [];
+            foreach ($reqData as $key => $data) {
                 echo "'" . $key . "': [";
                 foreach ($data[0] as $dat) {
                     echo "{date: '" . $dat->date . "',";
@@ -339,8 +383,36 @@
                     echo "reason: '" . ($dat->reason ?? "null") . "',";
                     echo "time: '" . ($dat->time ?? "null") . "'},";
                 }
+                $dayKey = preg_split("/-/", $key)[2];
+                if (array_key_exists($dayKey, $holidays)) {
+                    $found[$dayKey] = true;
+                    echo "{date: '" . $key . "',";
+                    echo "typeName: '" . $holidays[$dayKey]->name . " (会社設定休日)',";
+                    echo "typeColor: '#ee5822',";
+                    echo "status: 0,";
+                    echo "reason: '',";
+                    echo "time: ''},";
+                }
+
                 echo "],";
-            }?>
+            }
+            for ($i = 1; $i <= 31; $i++) {
+                if (!array_key_exists($i, $found) && array_key_exists($i, $holidays)) {
+                    $dxKey = $year . "-" . sprintf("%02d", $month) . "-" . sprintf("%02d", $i);
+                    echo "'" . $dxKey . "': [";
+                    $found[$i] = true;
+                    foreach ($holidays[$i] as $holiday) {
+                        echo "{date: '" . $dxKey . "',";
+                        echo "typeName: '" . $holiday->name . " (会社設定休日)',";
+                        echo "typeColor: '#ee5822',";
+                        echo "status: 0,";
+                        echo "reason: '',";
+                        echo "time: ''},";
+                    }
+                    echo "],";
+                }
+            }
+            ?>
         }
 
         function openDescModal(day) {

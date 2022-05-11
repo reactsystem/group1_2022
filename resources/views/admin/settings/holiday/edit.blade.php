@@ -15,21 +15,23 @@
         }
     </style>
 @endsection
-@section('pageTitle', "勤怠情報管理")
+@section('pageTitle', "システム設定")
 
 @section('content')
     <div class="container">
         <form>
             <div class="row">
                 <div class="col-md-6">
-                    <h2 class="fw-bold">勤怠情報追加</h2>
+                    <h2 class="fw-bold">休日編集</h2>
                 </div>
                 <div class="col-md-6">
-                    <button type="button" onclick="saveAttendData()" class="btn btn-primary" style="float: right"
+                    <button type="button" onclick="saveHolidayData()" class="btn btn-primary"
+                            style="float: right; width: 150px;"
                             id="saveBtn">
                         保存
                     </button>
-                    <a href="/admin/attend-manage" class="btn btn-secondary" style="float: right; margin-right: 10px;">キャンセル</a>
+                    <a href="/admin/settings/holiday" class="btn btn-secondary"
+                       style="float: right; margin-right: 10px;">休日一覧に戻る</a>
                 </div>
                 <div class="col-md-12 mt-3" id="alert">
                 </div>
@@ -51,49 +53,32 @@
             <hr>
             <div class="row">
                 <div class="mb-3 col-md-12 col-lg-6">
-                    <label for="dateInput" class="form-label">日付</label>
-                    <input type="date" class="form-control" id="dateInput" placeholder="XXXX-XX-XX"
-                           value="{{old("dateInput")}}"
+                    <label for="dateInput" class="form-label">名称</label>
+                    <input type="text" class="form-control" id="nameInput" placeholder="名称を入力してください"
+                           value="{{$data->name}}"
                     >
                 </div>
-                <div class="mb-3 col-md-12 col-lg-6">
-                    <label for="dateInput" class="form-label">社員</label>
-                    <select class="form-select" aria-label="" id="user">
-                        @foreach($users as $user)
-                            <?php
-                            $selected = "";
-                            if ($user->id == intval(old("user"))) {
-                                $selected = "selected";
-                            }
-                            ?>
-                            <option value="{{$user->id}}" {{$selected}}>{{sprintf("%03d", $user->employee_id)}}
-                                / {{$user->name}}</option>
-                        @endforeach
-                    </select>
+                <div class="col-md-12 col-lg-6">
+                    <label for="monthInput" class="form-label">年</label>
+                    <input type="number" id="yearInput" class="form-control" placeholder="毎年"
+                           value="{{$data->year}}" min="2000" max="9999">
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <label for="monthInput" class="form-label">月</label>
+                    <input type="number" id="monthInput" class="form-control" placeholder="毎月"
+                           value="{{$data->month}}" min="1" max="12">
                 </div>
                 <div class="mb-3 col-md-12 col-lg-6">
-                    <label for="status" class="form-label">状態</label>
+                    <label for="dayInput" class="form-label">日</label>
+                    <input type="number" id="dayInput" class="form-control" placeholder="--"
+                           value="{{$data->day}}" min="1" max="31">
+                </div>
+                <div class="mb-3 col-md-12 col-lg-6">
+                    <label for="status" class="form-label">種別</label>
                     <select class="form-select" aria-label="" id="status">
-                        <option value="0" <?php echo old("status") == 0 ? "selected" : "";?>>出勤中</option>
-                        <option value="1" <?php echo old("status") == 1 ? "selected" : "";?>>退勤済み</option>
+                        <option value="0" <?php if($data->mode == 0){?>selected<?php }?>>有給</option>
+                        <option value="1" <?php if($data->mode == 1){?>selected<?php }?>>無給</option>
                     </select>
-                </div>
-                <div class="mb-3 col-md-12 col-lg-6">
-                    <label for="startTime" class="form-label">出勤時刻</label>
-                    <input type="time" class="form-control" id="startTime" placeholder="--:--" value="{{old("time")}}">
-                </div>
-                <div class="mb-3 col-md-12 col-lg-6">
-                    <label for="endTime" class="form-label">退勤時刻</label>
-                    <input type="time" class="form-control" id="endTime" placeholder="--:--" value="{{old("start")}}">
-                </div>
-                <div class="mb-3 col-md-12 col-lg-6">
-                    <label for="workTime" class="form-label">勤務時間</label>
-                    <input type="time" class="form-control" id="workTime" placeholder="--:--" value="{{old("end")}}">
-                </div>
-                <div class="mb-3 col-md-12">
-                    <label for="comment" class="form-label">勤務詳細</label>
-                    <textarea class="form-control" id="comment"
-                              placeholder="勤務詳細が記入されていません">{{old("comment")}}</textarea>
                 </div>
             </div>
         </form>
@@ -104,44 +89,53 @@
         const startDate = new Date(startTime)
         const currentDate = new Date()
         let diff = new Date(currentDate.getTime() - startDate.getTime() + 54000000)
+        let yearInput = document.getElementById("yearInput")
+        let monthInput = document.getElementById("monthInput")
 
-        function saveAttendData() {
+        function clearYear() {
+            yearInput.value = ""
+        }
+
+        function clearMonth() {
+            monthInput.value = ""
+        }
+
+        function saveHolidayData() {
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             let saveBtn = document.getElementById("saveBtn")
             let textArea = document.getElementById("textArea")
 
-            let dateInput = document.getElementById("dateInput")
-            let user = document.getElementById("user")
+            let nameInput = document.getElementById("nameInput")
+            let yearInput = document.getElementById("yearInput")
+            let monthInput = document.getElementById("monthInput")
+            let dayInput = document.getElementById("dayInput")
             let status = document.getElementById("status")
-            let startTime = document.getElementById("startTime")
-            let endTime = document.getElementById("endTime")
-            let workTime = document.getElementById("workTime")
-            let comment = document.getElementById("comment")
             let alert = document.getElementById("alert")
 
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
 
+            alert.innerHTML = ""
+
             axios
-                .post("/admin/attend-manage/new", {
-                    date: dateInput.value,
-                    user: user.value,
-                    status: status.value,
-                    start: startTime.value,
-                    end: endTime.value,
-                    work: workTime.value,
-                    comment: comment.value,
+                .post("/admin/settings/holiday/edit/{{$id}}", {
+                    name: nameInput.value,
+                    year: yearInput.value,
+                    month: monthInput.value,
+                    day: dayInput.value,
+                    mode: status.value,
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
                     console.log("Result: " + resultCode + " / " + res.data.message)
-                    if (resultCode === 0) {
+                    if (resultCode == 0) {
                         saveBtn.className = "btn btn-success"
                         saveBtn.innerText = "保存しました"
-                        await _sleep(1000)
-                        location = "/admin/attend-manage/view/" + res.data.id
-                        return
+                        alert.innerHTML = '<div class="alert alert-success" role="alert">' +
+                            '<strong>成功</strong> - 保存が完了しました。' +
+                            '</div>'
+                        await _sleep(1500)
                     } else {
                         let alertStr = '<div class="alert alert-danger" role="alert">' +
                             '<strong>エラー</strong> - ' +

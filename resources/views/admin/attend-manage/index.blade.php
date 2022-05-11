@@ -214,9 +214,5 @@
 
             jump("/admin/attend-manage/search?" + keywords.join("&"))
         }
-
-        function jump(link) {
-            location = link
-        }
     </script>
 @endsection

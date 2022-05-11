@@ -42,11 +42,11 @@
                     </li>
                     <li class="sidebar-list<?php if (Request::is('admin/requests*')) {
                         echo ' active';
-                    }?>" onclick="href('/admin/request')"><span style="color: #888;">●</span> 各種申請管理
+                    }?>" onclick="href('/admin/requests')"><span style="color: #888;">●</span> 各種申請管理
                     </li>
-                    <li class="sidebar-list<?php if (Request::is('admin/system*')) {
+                    <li class="sidebar-list<?php if (Request::is('admin/settings*')) {
                         echo ' active';
-                    }?>" onclick="href('/admin/account')"><span style="color: #888;">●</span> システム設定
+                    }?>" onclick="href('/admin/settings')"><span style="color: #888;">●</span> システム設定
                     </li>
                     <li class="sidebar-list<?php if (Request::is('home')) {
                         echo ' active';

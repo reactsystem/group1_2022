@@ -16,7 +16,7 @@ class AdminAttendManagementController
         $users = User::where('left_date', "=", null)->get();
         $data = Attendance::where("attendances.deleted_at", "=", null)->leftJoin('users', 'attendances.user_id', 'users.id')->select("attendances.*", "users.name as name")->orderByDesc('attendances.updated_at')->paginate(20);
         $title = "勤怠ログ";
-        $searchStr = "";
+        $searchStr = "<span class='text-primary'>項目をクリックして確認・編集・削除画面に移動できます</span>";
         return view('admin.attend-manage.index', compact('data', 'users', 'title', 'searchStr'));
     }
 
@@ -132,6 +132,21 @@ class AdminAttendManagementController
         $data = Attendance::find($id);
         if ($data == null || $data->deleted_at != null) {
             return response()->json(["error" => true, "code" => 20, "message" => "指定された勤怠情報が見つかりません。"]);
+        }
+        $rules = [
+            'date' => 'required',
+            'status' => 'required|numeric',
+            'start' => 'required',
+        ];
+        $messages = [
+            'date.required' => '日付が選択されていません',
+            'status.required' => '状態が選択されていません',
+            'status.numeric' => '状態を選択してください',
+            'start.required' => '出勤時刻が記入されていません',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "以下の必須項目が記入されていません", "errors" => $validator->errors()]);
         }
         try {
             $date = $request->date ?? $data->date;
