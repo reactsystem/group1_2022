@@ -12,17 +12,30 @@ class AdminRequestController extends Controller
 {
     function request(){
         $all_requests = VariousRequest::where('related_id','=',NULL)->get();
-        return view('/admin/request/admin_request',['all_requests' => $all_requests,]); 
+        $all_user= User::all();
+        return view('/admin/request/admin_request',['users' => $all_user,'all_requests' => $all_requests,]); 
     }
 
     function search(Request $request){
-        $all_requests = VariousRequest::where('related_id','=',NULL)->get();
+        $all_requests = VariousRequest::where('related_id','=',NULL);
+        $all_user= User::all();
         
+        if(isset($request->status)){
+            $all_requests -> where('status','=',$request->status);
+        }
 
-        $request_result ='ここに検索数';
-        $request->session()->put('flash_message', '検索結果:'.$request_result);
+        if(isset($request->id)){
+            $all_requests -> where('user_id','=',$request->id);
 
-        return view('/admin/request/admin_request',['all_requests' => $all_requests,]);
+        }
+
+        if(isset($request->dateInput)){
+            $all_requests -> where('date','=',$request->dateInput);
+        
+        }
+
+        $all_requests = $all_requests ->get();
+        return view('/admin/request/admin_request',['users' => $all_user,'all_requests' => $all_requests,]);
     }
 
     function detail(Request $request){
