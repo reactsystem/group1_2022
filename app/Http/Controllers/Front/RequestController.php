@@ -131,7 +131,7 @@ class RequestController extends Controller
         $reason = $request->reason;
         $uuid = Str::uuid();
         foreach ($tempDate as $index => $item) {
-            echo $request->time;
+            //echo $request->time;
             $timeStr = "";
             if ($request->time != null || $request->time != "") {
                 $time = preg_split("/:/", $request->time);

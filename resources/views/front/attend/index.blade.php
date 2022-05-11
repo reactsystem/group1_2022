@@ -248,7 +248,7 @@
             }
         }
 
-        let baseTime = 300
+        let baseTime = 27900
 
         function leaveModal() {
             console.log("CURRENT: " + (diff.getTime() / 1000) + " / " + diff.getHours() + ':' + diff.getMinutes())

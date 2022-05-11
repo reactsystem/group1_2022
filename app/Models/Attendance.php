@@ -15,7 +15,9 @@ class Attendance extends Model
         'mode',
         'comment',
         'time',
-        'left_at'
+        'left_at',
+        'deleted_at',
+        'created_at'
     ];
 
     public function user()

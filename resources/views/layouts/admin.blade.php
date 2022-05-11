@@ -13,11 +13,9 @@
             color: #222;
             transition-duration: 0.15s;
             margin-top: 5px;
-            padding-top: 2px;
             margin-bottom: 5px;
-            padding-bottom: 2px;
             border-radius: 4px;
-            padding-left: 10px;
+            padding: 2px 10px;
         }
 
         .sidebar-list:hover {
@@ -29,24 +27,24 @@
     <div class="container">
         <div class="row" style="width: 100%">
             <div class="col-md-3 text-dark" style="height: 100vh; background-color: #BBB;">
-                <ul style="list-style: none; font-size: 16pt; font-weight: bold; cursor: pointer; margin-top: 80px; padding-left: 0">
+                <ul style="list-style: none; font-size: 16pt; font-weight: bold; cursor: pointer; margin-top: 80px; padding-left: 0; position: fixed">
                     <li class="sidebar-list<?php if (Request::is('admin')) {
                         echo ' active';
                     }?>" onclick="href('/admin')"><span style="color: #888;">●</span> 管理者CPトップ
                     </li>
-                    <li class="sidebar-list<?php if (Request::is('admin-users*')) {
+                    <li class="sidebar-list<?php if (Request::is('admin/attends*')) {
                         echo ' active';
                     }?>" onclick="href('/admin/attends')"><span style="color: #888;">●</span> 社員情報管理
                     </li>
-                    <li class="sidebar-list<?php if (Request::is('admin-attend-manage*')) {
+                    <li class="sidebar-list<?php if (Request::is('admin/attend-manage*')) {
                         echo ' active';
                     }?>" onclick="href('/admin/attend-manage')"><span style="color: #888;">●</span> 勤怠情報管理
                     </li>
-                    <li class="sidebar-list<?php if (Request::is('admin-request*')) {
+                    <li class="sidebar-list<?php if (Request::is('admin/requests*')) {
                         echo ' active';
                     }?>" onclick="href('/admin/request')"><span style="color: #888;">●</span> 各種申請管理
                     </li>
-                    <li class="sidebar-list<?php if (Request::is('admin-system*')) {
+                    <li class="sidebar-list<?php if (Request::is('admin/system*')) {
                         echo ' active';
                     }?>" onclick="href('/admin/account')"><span style="color: #888;">●</span> システム設定
                     </li>

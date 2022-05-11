@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAttendManagementController;
 use App\Http\Controllers\Admin\AdminAttendsController;
 use App\Http\Controllers\Admin\AdminTopPageController;
 use App\Http\Controllers\Front\AttendanceController;
@@ -34,16 +35,19 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', [TopPageController::class, 'index'])->name('home');
 
-    Route::get('/attend-manage/confirm', [AttendanceManagementController::class, 'confirmReport']);
-    Route::get('/attend-manage/unconfirm', [AttendanceManagementController::class, 'unconfirmReport']);
-    Route::get('/attend-manage', [AttendanceManagementController::class, 'index'])->name('attend');
-
+    /* 出勤・退勤 */
     Route::get('/attends', [AttendanceController::class, 'index'])->name('attend');
     Route::get('/attends/start', [AttendanceController::class, 'attend']);
     Route::get('/attends/end', [AttendanceController::class, 'leave']);
     Route::get('/attends/cancel', [AttendanceController::class, 'cancelLeft']);
     Route::post('/api/v1/attends/comment/set', [AttendanceController::class, 'saveWorkMemo']);
 
+    /* 勤怠情報確認 */
+    Route::get('/attend-manage/confirm', [AttendanceManagementController::class, 'confirmReport']);
+    Route::get('/attend-manage/unconfirm', [AttendanceManagementController::class, 'unconfirmReport']);
+    Route::get('/attend-manage', [AttendanceManagementController::class, 'index'])->name('attend');
+
+    /* 各種申請 */
     Route::get('/request/create', [RequestController::class, 'createRequest']);
     Route::post('/request/create', [RequestController::class, 'checkRequest']);
     Route::get('/request/create/back', [RequestController::class, 'checkRequestBack']);
@@ -51,16 +55,21 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/request/{id}', [RequestController::class, 'show']);
     Route::get('/request', [RequestController::class, 'index'])->name('request');
 
-    Route::get('/account',[UserEditController::class, 'account']);
-    Route::get('/account/edit',[UserEditController::class, 'account_edit']);
-    Route::post('/account/account_edit_done',[UserEditController::class, 'account_edit_done']);
-    Route::get('/account/password_update',[UserEditController::class, 'password_update']);
-    Route::patch('/account/password_update_done',[UserEditController::class, 'password_update_done']);
+    /* ユーザー管理 */
+    Route::get('/account', [UserEditController::class, 'account']);
+    Route::get('/account/edit', [UserEditController::class, 'account_edit']);
+    Route::post('/account/account_edit_done', [UserEditController::class, 'account_edit_done']);
+    Route::get('/account/password_update', [UserEditController::class, 'password_update']);
+    Route::patch('/account/password_update_done', [UserEditController::class, 'password_update_done']);
 
+    Route::get('/test', function (Request $request) {
+    });
+});
 
+Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
 
-    // admin社員管理
+    /* 社員情報管理 */
     Route::get('/admin/attends', [AdminAttendsController::class, 'admin_attends']);
     Route::get('/admin/attends/new', [AdminAttendsController::class, 'admin_new']);
     Route::get('/admin/attends/view', [AdminAttendsController::class, 'admin_view']);
@@ -68,12 +77,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/admin/attends/add', [AdminAttendsController::class, 'add_new_user']);
     Route::post('/admin/attends/update', [AdminAttendsController::class, 'update_user']);
 
+    /* 勤怠情報管理 */
+    Route::get('/admin/attend-manage/search', [AdminAttendManagementController::class, 'search']);
+    Route::get('/admin/attend-manage/view/{id}', [AdminAttendManagementController::class, 'view']);
+    Route::get('/admin/attend-manage/edit/{id}', [AdminAttendManagementController::class, 'edit']);
+    Route::get('/admin/attend-manage/new', [AdminAttendManagementController::class, 'new']);
+    Route::post('/admin/attend-manage/new', [AdminAttendManagementController::class, 'createData']);
+    Route::get('/admin/attend-manage/delete/{id}', [AdminAttendManagementController::class, 'deleteData']);
+    Route::post('/admin/attend-manage/edit/{id}', [AdminAttendManagementController::class, 'editData']);
+    Route::get('/admin/attend-manage', [AdminAttendManagementController::class, 'index']);
+
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
-
-    Route::get('/test', function (Request $request) {
-    });
-
-
 });
 
 Auth::routes(['register' => false]);
