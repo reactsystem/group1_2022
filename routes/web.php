@@ -52,9 +52,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
 
     Route::get('/admin/request', [AdminRequestController::class, 'request']);
+    Route::post('/admin/request', [AdminRequestController::class, 'search']);
     Route::get('/admin/request/detail', [AdminRequestController::class, 'detail']);
-    Route::get('/admin/request/approve', [AdminRequestController::class, 'approve']);
-    Route::get('/admin/request/reject', [AdminRequestController::class, 'reject']);
+    Route::post('/admin/request/approve', [AdminRequestController::class, 'approve']);
+    Route::post('/admin/request/reject', [AdminRequestController::class, 'reject']);
+
 
     
 
