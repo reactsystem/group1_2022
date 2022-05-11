@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\MonthlyReport;
 use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -20,7 +21,7 @@ class AttendanceController extends Controller
     public function index(Request $request): Factory|View|Application
     {
         $tempDate = new DateTime();
-        $data = Attendance::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         $date_now = new DateTime();
         if ($data == null) {
             return view('front.attend.index', compact('request', 'data'));
@@ -42,7 +43,7 @@ class AttendanceController extends Controller
                 return redirect("/attends")->with('error', '今月の月報が確定されているため出勤できません。');
             }
         }
-        $data = Attendance::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         if ($data != null) {
             if ($data->mode == 0) {
                 return redirect("/attends")->with('error', '既に出勤しています。');
@@ -62,7 +63,7 @@ class AttendanceController extends Controller
     public function leave(Request $request): Redirector|Application|RedirectResponse
     {
         $tempDate = new DateTime();
-        $data = Attendance::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         if ($data == null) {
             return redirect("/attends")->with('error', 'まだ出勤していません。');
         }
@@ -74,6 +75,10 @@ class AttendanceController extends Controller
         $diff = $current - $before;
         $hours = intval($diff / 60 / 60);
         $minutes = sprintf('%02d', intval($diff / 60) % 60);
+        if (intval($hours . $minutes) > 745) {
+            $hours = 7;
+            $minutes = "45";
+        }
         Attendance::find($data->id)->update(['mode' => 1, 'left_at' => $tempDate, 'time' => "$hours:$minutes"]);
         return redirect("/attends")->with('result', '退勤しました。');
     }
@@ -81,7 +86,7 @@ class AttendanceController extends Controller
     public function cancelLeft(Request $request): Redirector|Application|RedirectResponse
     {
         $tempDate = new DateTime();
-        $data = Attendance::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         if ($data == null) {
             return redirect("/attends")->with('error', 'まだ出勤していません。');
         }
@@ -114,7 +119,7 @@ class AttendanceController extends Controller
                     }
                 }
                 $tempDate = new DateTime();
-                $data = Attendance::where("user_id", "=", Auth::id())->where("date", "=", $date)->orderByDesc("created_at")->first();
+                $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $date)->orderByDesc("created_at")->first();
                 if ($data == null) {
                     return response()->json(["error" => true, "code" => 21, "message" => "勤務データが見つかりません。(${date})"]);
                 }
@@ -125,7 +130,7 @@ class AttendanceController extends Controller
             }
         }
         $tempDate = new DateTime();
-        $data = Attendance::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         if ($data == null) {
             return response()->json(["error" => true, "code" => 21, "message" => "勤務データが見つかりません。"]);
         }

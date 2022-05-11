@@ -20,8 +20,8 @@ class TopPageController extends Controller
             return redirect('/login');
         }
         $tempDate = new DateTime();
-        $data = Attendance::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
-        $allData = Attendance::where("user_id", "=", Auth::id())->get();
+        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $allData = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("mode", "=", 1)->get();
         $hours = 0;
         $minutes = 0;
         $hoursReq = 0;
@@ -43,13 +43,20 @@ class TopPageController extends Controller
         }
         $interval = $data->created_at->diff($date_now);
         $createDate = new DateTime($data->created_at);
-        $hours += intval($interval->format('%h'));
-        $minutes += intval($interval->format('%i'));
+        if ($data->mode == 0) {
+            $hours += intval($interval->format('%h'));
+            $minutes += intval($interval->format('%i'));
+        }
 
         $hours += intval($minutes / 60);
         $minutes = $minutes % 60;
 
-        $allRequests = VariousRequest::where("user_id", "=", Auth::id())->get(); //->where("type", "=", 1)
+
+        $cYear = intval($tempDate->format('Y'));
+        $cMonth = intval($tempDate->format('m'));
+        $likeMonth = $cYear . "-" . sprintf('%02d', $cMonth) . "-";
+
+        $allRequests = VariousRequest::where('user_id', '=', Auth::id())->where('status', '=', 1)->where('date', 'LIKE', "%$likeMonth%")->leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.color as color")->get();
 
         foreach ($allRequests as $dat) {
             if ($dat->time == null) {

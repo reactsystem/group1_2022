@@ -31,16 +31,62 @@ class AttendanceManagementController extends Controller
         $cYear = intval($tempDate->format('Y'));
         $cMonth = intval($tempDate->format('m'));
         $day = intval($tempDate->format('d'));
+        $cDay = $day;
         $likeMonth = $year . "-" . sprintf('%02d', $month) . "-";
         //echo $likeMonth." / ";
-        $dataList = Attendance::where('user_id', '=', Auth::id())->where('date', 'LIKE', "%$likeMonth%")->get();
+        $dataList = Attendance::where('user_id', '=', Auth::id())->where("attendances.deleted_at", "=", null)->where('date', 'LIKE', "%$likeMonth%")->get();
+
+        $tempDate = new DateTime();
+        $todayData = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $hours = 0;
+        $minutes = 0;
+        $hoursReq = 0;
+        $minutesReq = 0;
+        foreach ($dataList as $dat) {
+            if ($dat->time == null || $dat->mode != 1) {
+                continue;
+            }
+            $datArray = preg_split("/:/", $dat->time);
+            $hours += intval($datArray[0]);
+            $minutes += intval($datArray[1]);
+        }
+        $date_now = new DateTime();
+        if ($todayData != null) {
+            if ($todayData->mode == 1) {
+                $date_now = $todayData->updated_at;
+            }
+            $interval = $todayData->created_at->diff($date_now);
+            $createDate = new DateTime($todayData->created_at);
+            if ($todayData->mode == 0) {
+                $hours += intval($interval->format('%h'));
+                $minutes += intval($interval->format('%i'));
+            }
+        }
+
+        $hours += intval($minutes / 60);
+        $minutes = $minutes % 60;
+        $requests = VariousRequest::where('user_id', '=', Auth::id())->where('status', '=', 1)->where('date', 'LIKE', "%$likeMonth%")->leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.color as color")->get();
+
+        //$allRequests = VariousRequest::where("user_id", "=", Auth::id())->get(); //->where("type", "=", 1)
+
+        foreach ($requests as $dat) {
+            if ($dat->time == null) {
+                continue;
+            }
+            $datArray = preg_split("/:/", $dat->time);
+            $hoursReq += intval($datArray[0]);
+            $minutesReq += intval($datArray[1]);
+        }
+
+        $hoursReq += intval($minutesReq / 60);
+        $minutesReq = $minutesReq % 60;
+
         $attendData = [];
         $reqData = [];
         foreach ($dataList as $data) {
             $attendData[$data->date] = $data;
         }
 
-        $requests = VariousRequest::where('user_id', '=', Auth::id())->where('status', '=', 1)->where('date', 'LIKE', "%$likeMonth%")->leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.color as color")->get();
         $reqHtml = "";
         foreach ($requests as $request) {
             $type = $request->type;
@@ -88,9 +134,9 @@ class AttendanceManagementController extends Controller
             $confirmStatus = -1;
         }
         if ($mode == 1) {
-            return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'confirmStatus'));
+            return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq'));
         } else {
-            return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'confirmStatus'));
+            return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq'));
         }
     }
 

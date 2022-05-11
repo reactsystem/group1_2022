@@ -24,16 +24,16 @@
         <div style="display: flex; width: 100%; gap: 10px" class="mt-3">
             @if($data != null)
                 <div style="flex: 1">
-                    <span class="text-muted">業務時間</span>
+                    <span class="text-muted">本日の勤務時間</span>
                     <div style="font-size: 40pt">{{$interval->format("%h:%I")}}</div>
                 </div>
                 <div style="flex: 1">
-                    <span class="text-muted">出勤時刻</span>
+                    <span class="text-muted">本日の出勤時刻</span>
                     <div style="font-size: 40pt">{{$data->created_at->format("G:i")}}</div>
                 </div>
             @endif
             <div style="flex: 1">
-                <span class="text-muted">今月の勤務時間</span>
+                <span class="text-muted">今月の労働時間</span>
                 <div style="font-size: 40pt">{{$hours}}:{{sprintf("%02d", $minutes)}}</div>
             </div>
             <div style="flex: 1">

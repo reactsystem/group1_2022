@@ -34,6 +34,7 @@
             border-style: solid;
             border-color: #666;
             cursor: pointer;
+            z-index: 1;
         }
 
         .calender-body2 {
@@ -69,6 +70,7 @@
             border-width: 1px;
             border-style: solid;
             border-color: #666;
+            z-index: 10;
         }
 
         .bg-gray {
@@ -77,6 +79,18 @@
 
         .bg-gray2 {
             background-color: #BBB;
+        }
+
+        .bg-green {
+            background-color: #BFB;
+        }
+
+        .bg-red {
+            background-color: #FBB;
+        }
+
+        .bg-blue {
+            background-color: #BBF;
         }
 
         .sunday {
@@ -181,109 +195,28 @@
                 </div>
             </div>
         @endif
-        <div style="display: flex">
-            <div class="calender-doy sunday">
-                日
+        <div style="display: flex; width: 100%; gap: 10px">
+            <div style="flex: 1.5; padding: 0">
+                <span class="text-muted" style="height: 40px; line-height: 40px">今月の労働時間</span>
             </div>
-            <div class="calender-doy">
-                月
+            <div style="flex: 1">
+                <strong style="font-size: 20pt">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
             </div>
-            <div class="calender-doy">
-                火
-            </div>
-            <div class="calender-doy">
-                水
-            </div>
-            <div class="calender-doy">
-                木
-            </div>
-            <div class="calender-doy">
-                金
-            </div>
-            <div class="calender-doy saturday">
-                土
-            </div>
-        </div>
-        <div style="display: flex">
-            <?php
-            $joinDate = new DateTime(Auth::user()->joined_date);
-            $joinYear = intval($joinDate->format('Y'));
-            $joinMonth = intval($joinDate->format('m'));
-            $joinDay = intval($joinDate->format('d'));
+            <div style="flex: 1">
 
-            $daysInMonth = $dt->daysInMonth;
-            $doy = date('w', strtotime(date($year . '-' . $month . '-01')));
-            $daysCount = $doy;
-            if ($doy > 0) {
-                echo str_repeat("<div class=\"calender-disabled bg-gray\"><span style=\"font-weight: bold; font-size: 12pt\"></span></div>", $doy);
-            }
-            for ($i = 1; $i <= $daysInMonth; $i++) {
-            if ($i > 1 && $daysCount % 7 == 0) {
-                echo '</div><div style="display: flex">';
-            }
-            $daysCount++;
-            $afterInt = intval($year . sprintf("%02d", $month) . sprintf("%02d", $i));
-            $beforeInt = intval($joinYear . sprintf("%02d", $joinMonth) . sprintf("%02d", $joinDay));
-            $isJoinedBeforeDay = $afterInt >= $beforeInt;
-            if ($isJoinedBeforeDay) {
-                $joinStr = "";
-                if ($year == $joinYear && $month == $joinMonth && $i == $joinDay) {
-                    $joinStr = ' / 入社日';
-                }
-                $style = "";
-                if ($confirmStatus != 0) {
-                    $style = "calender-body2 bg-gray2";
-                } else {
-                    $style = "calender-body";
-                }
-                echo '<div class="' . $style . '" onclick="openDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . $joinStr . '</div>';
-            } else {
-                echo '<div class="calender-body2 bg-gray" onclick="openDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . '</div>';
-            }
-            $key = $year . '-' . sprintf("%02d", $month) . '-' . str_pad($i, 2, 0, STR_PAD_LEFT);
-            $noWorkFlag = true;
-            try {
-            $data = $attendData[$key];
-            if($data->left_at != null){
-            $dateData = new DateTime($data->left_at);
-            $dateData = $dateData->format("G:i");
-            $noWorkFlag = false;
-            ?>
-            <div><strong>{{$data->created_at->format("G:i")}}
-                    -{{$dateData}}</strong></div>
-            <div><span style="color: #2288EE;">●</span> <strong>{{$data->time}}</strong></div>
-            <?php
-            }else{
-            $noWorkFlag = false;
-            ?>
-            <div><span style="color: #F22;">●</span> <strong>{{$data->created_at->format("G:i")}}
-                    -</strong></div>
-        <?php
-        }
-        } catch (Exception $ex) {
-            $noWorkFlag = true;
-        }
-        try {
-            $reqHtml = $reqData[$key][1];
-            $noWorkFlag = false;
-            echo $reqHtml;
-        } catch (Exception $ex) {
-        }
-        $ddoy = $daysCount % 7 - 1;
-        if ($noWorkFlag && ($year >= $joinYear && $month >= $joinMonth && $i >= $joinDay) && $ddoy > 0 && $ddoy < 6 && ($year < $cYear || ($month <= $cMonth && ($year != $cYear || $month != $cMonth || $i < $day)))) {
-            echo '<div><span style="color: #888;">●</span> <strong>欠勤</strong></div>';
-        }
-        if (!$isJoinedBeforeDay) {
-            echo '<div>---</div>';
-        }
-        ?>
-        <!-- <div><span style="color: #00EE00;">●</span> <strong>9:30-18:00</strong></div> -->
+            </div>
+            <div style="flex: 1.5; padding: 0">
+                <span class="text-muted" style="height: 40px; line-height: 40px">今月の残業時間</span>
+            </div>
+            <div style="flex: 1">
+                <strong style="font-size: 20pt">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
+            </div>
+            <div style="flex: 4">
+
+            </div>
         </div>
-        <?php }
-        if ($daysCount % 7 != 0) {
-            echo str_repeat("<div class=\"calender-disabled bg-gray\"><span style=\"font-weight: bold; font-size: 12pt\"></span></div>", 7 - ($daysCount % 7));
-        }
-        ?>
+        <hr>
+        @include('front.components.calender')
     </div>
     <!-- Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
