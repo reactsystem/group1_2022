@@ -1,7 +1,7 @@
 @extends('layouts.admin')
-
+@section('pageTitle', "申請一覧")
 @section('content')
-        @if (session('error_message'))
+    @if (session('error_message'))
         <div class="col-md-12 mt-3">
             <div class="alert alert-danger" role="alert">
                 <strong>エラー</strong> {{ session('error_message') }}
@@ -16,11 +16,34 @@
             </div>
         </div>
         @endif
+        @isset($all_requests[0])
 
-        <h2 class="fw-bold">申請一覧</h2>
-    
-        <hr>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchModal">検索</button>
+        @else
+        <div class="col-md-12 mt-3">
+            <div class="alert alert-success" role="alert">
+            申請はありません
+            </div>
+        </div>
+        @endisset
+
+    <div class="row row-cols-auto">
+        <div class="col-sm-5">
+    <h2 class="fw-bold">申請一覧</h2>
+        </div>
+        <div class="col">
+            <a href='/admin/request/create' class="btn btn-primary">追加</a>
+        </div> 
+        <div class="col">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchModal">検索</button>
+        </div>
+        <div class="col">
+            <form action ="/admin/request" method = 'post'>
+                @csrf
+                <input type="submit" class="btn btn-primary" value = 'すべて表示'>
+            </form>
+        </div>
+    </div>
+    <hr>
 
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -30,9 +53,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action ="/admin/request" method = 'post'>
+
                         @csrf
                         <div class="modal-body">    
                         <div class="row">
+
                             <div class="col-sm-12">
                                 <label for="dateInput" class="form-label">社員</label>
                             </div>
@@ -85,9 +110,7 @@
             </div>
         </div>
 
-        <a href='' class="btn btn-primary">追加</a>
 
-        
         <table class="table">
             <thead>
             <tr>
@@ -101,7 +124,7 @@
         </thead>
         <tbody>
             
-            
+
             @foreach($all_requests as $request)
             <tr>
                 @if($request -> related_id != NULL)
@@ -109,7 +132,7 @@
                         $request = $request ->pair_request();
                     @endphp
                 @endif
-                
+
                 <td>{{$request -> user -> name}}</td>
                 @if($request -> type == 1)
                 <td>{{$request -> related_request() -> count() +1}}日<br>                
@@ -127,13 +150,13 @@
                 </td>
                 <td>
                     @if($request -> status == 0)
-                    <p class="text-primary fw-bold">承認待ち</p>
+                    <span style="color: rgb(39, 39, 255)">●</span><span>承認待ち</span>
                     @elseif($request -> status == 1)
-                    <p class="text-success">承認済み</p>
+                    <span style="color: rgb(0, 184, 0)">●</span><span>承認済み</span>
                     @elseif($request -> status == 2)
-                    <p class="text-danger">却下済み</p>
+                    <span style="color: #E00">●</span><span>却下済み</span>
                     @elseif($request -> status == 3)
-                    <p class="text-muted">取り消し</p>
+                    <span style="color: #AAA">●</span><span>取消済み</span>
                     @else
                     @endif
                 </td>

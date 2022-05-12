@@ -53,6 +53,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/admin/request', [AdminRequestController::class, 'request']);
     Route::post('/admin/request', [AdminRequestController::class, 'search']);
+    Route::get('/admin/request/create', [AdminRequestController::class, 'create']);
+    Route::post('/admin/request/create', [AdminRequestController::class, 'check']);
+
     Route::get('/admin/request/detail', [AdminRequestController::class, 'detail']);
     Route::post('/admin/request/approve', [AdminRequestController::class, 'approve']);
     Route::post('/admin/request/reject', [AdminRequestController::class, 'reject']);

@@ -3,9 +3,11 @@
 @section('content')
     <div class="container">
         <h2 class="fw-bold">詳細</h2>
-        <div class = "">
+
+            {{-- 一覧に戻るボタン --}}
             <a href ="/admin/request" class = "btn btn-secondary">一覧に戻る</a>
             
+            {{-- 承認ボタン --}}
             <form action ='/admin/request/approve' method = 'post'>
                 @csrf
                 @if($this_request->status == 0) {{-- 設定待ち--}}
@@ -18,72 +20,75 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal1" disabled>承認</button>
                 @else
                 @endif
-            <input type = 'hidden' value ={{$this_request->id}} name = id>
-            <input type = 'hidden' value ={{$this_request->uuid}} name = uuid>
 
 
+                <input type = 'hidden' value ={{$this_request->id}} name = id>
+                <input type = 'hidden' value ={{$this_request->uuid}} name = uuid>
 
-            <div class="modal fade" id="Modal1" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">確認</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                {{--modal--}}
+                <div class="modal fade" id="Modal1" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">確認</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            承認しますか？
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                        <input type ='submit' class="btn btn-primary" value = '承認'>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        承認しますか？
                     </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                    <input type ='submit' class="btn btn-primary" value = '承認'>
-                    </div>
-                </div>
-                </div>
-            </div>                
+                </div>                
             </form>
             
-
+            {{-- 却下ボタン --}}
             <form action ='/admin/request/reject' method = 'post'>
-            @csrf
-                
-            @if($this_request->status == 0) {{-- 設定待ち--}}
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal2">却下</button>
+                @csrf
+                    
+                @if($this_request->status == 0) {{-- 設定待ち--}}
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal2">却下</button>
 
-            @elseif($this_request->status == 1) {{-- 承認済み--}}
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal2">却下</button>
+                @elseif($this_request->status == 1) {{-- 承認済み--}}
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal2">却下</button>
 
-            @elseif($this_request->status == 2) {{-- 却下済み--}}
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal2" disabled>却下</button>
+                @elseif($this_request->status == 2) {{-- 却下済み--}}
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal2" disabled>却下</button>
 
-            @elseif($this_request->status == 3) {{-- 取り消し済み--}}
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal2" disabled>却下</button>
+                @elseif($this_request->status == 3) {{-- 取り消し済み--}}
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#Modal2" disabled>却下</button>
 
-            @else
-            @endif
+                @else
+                @endif
 
-            <input type = 'hidden' value ={{$this_request->id}} name = id>
-            <input type = 'hidden' value ={{$this_request->uuid}} name = uuid>
+                <input type = 'hidden' value ={{$this_request->id}} name = id>
+                <input type = 'hidden' value ={{$this_request->uuid}} name = uuid>
+            
+                {{--modal--}}
+                <div class="modal fade" id="Modal2" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">確認</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            却下しますか？
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
 
-            <div class="modal fade" id="Modal2" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">確認</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <input type='submit' class="btn btn-danger" value = '却下'>
+
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        却下しますか？
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-
-                    <input type='submit' class="btn btn-danger" value = '却下'>
-
                     </div>
                 </div>
-                </div>
-            </div>
             </form>
+
         <hr>
 
             <ul>
@@ -105,21 +110,19 @@
                 
                 <li>状態：
                     @if($this_request -> status == 0)
-                    <p class="text-primary">承認待ち</p>
+                    <span style="color: rgb(5, 5, 5)">●</span><span>承認待ち</span>
                     @elseif($this_request -> status == 1)
-                    <p class="text-success">承認済み</p>
+                    <span style="color: rgb(0, 184, 0)">●</span><span>承認済み</span>
                     @elseif($this_request -> status == 2)
-                    <p class="text-danger">却下済み</p>
+                    <span style="color: #E00">●</span><span>却下済み</span>
                     @elseif($this_request -> status == 3)
-                    <p class="text-muted">取り消し</p>
+                    <span style="color: #AAA">●</span><span>取消済み</span>
                     @else
                     @endif
                 </li>
                 <div class = "reason">
                     <li>理由：{{$this_request -> reason ?? "記入なし"}}</li>
                 </div>
-                
-            </div>
             </ul>
         </tbody>
         </table>

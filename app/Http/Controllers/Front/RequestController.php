@@ -158,7 +158,7 @@ class RequestController extends Controller
             $user->paid_holiday = $user->paid_holiday - $holidays;
             $user->save();
         }
-        return redirect("/request")->with('result', '申請を行いました');
+        return redirect("/admin/request")->with('result', '申請を行いました');
         //return view('front.request.check', compact('dates', 'type', 'holidays', 'reason', 'time'));
     }
 
