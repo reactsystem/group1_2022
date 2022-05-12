@@ -58,9 +58,27 @@
                 <div>
                     <span>
                         有給・定時・休憩設定<br>
-                        <span class="text-muted">各種情報を設定します</span>
+                        <span class="text-muted">勤務時間や有給付与のタイミングを設定します</span>
                     </span>
                     <a href="/admin/settings/general" style="float: right; margin-top: -19px"
+                       class="btn btn-primary">設定</a>
+                </div>
+                <hr>
+                <div>
+                    <span>
+                        部署設定<br>
+                        <span class="text-muted">部署を管理します</span>
+                    </span>
+                    <a href="/admin/settings/department" style="float: right; margin-top: -19px"
+                       class="btn btn-primary">設定</a>
+                </div>
+                <hr>
+                <div>
+                    <span>
+                        申請種別設定<br>
+                        <span class="text-muted">各種申請の種別を管理します</span>
+                    </span>
+                    <a href="/admin/settings/request-types" style="float: right; margin-top: -19px"
                        class="btn btn-primary">設定</a>
                 </div>
             </div>
