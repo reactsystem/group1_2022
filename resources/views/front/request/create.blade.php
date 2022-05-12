@@ -26,7 +26,7 @@
                            data-language='en'
                            data-multiple-dates-separator=", "
                            placeholder="クリックして日付を選択"
-                           value="{{old('dates')}}"
+                           value="{{old('dates')}}{{$reqDate}}"
                            data-position='top left' readonly/>
                     <div class="form-text">最大10日までまとめて選択できます</div>
                 </div>
@@ -206,6 +206,12 @@
             } else {
                 proceedButton.setAttribute("disabled", "")
             }
+        }
+
+        if ('{{$reqDate}}' !== '') {
+            timeAvailable = (requestDate.value + '') !== '';
+            console.log('TIME: ' + requestDate.value)
+            checkData()
         }
 
         const localeEs = {

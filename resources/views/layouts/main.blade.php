@@ -28,8 +28,9 @@
     </style>
     <div class="container">
         <div class="row" style="width: 100%">
-            <div class="col-md-3 text-dark" style="height: 100vh; background-color: #BBB;">
-                <ul style="list-style: none; font-size: 16pt; font-weight: bold; cursor: pointer; margin-top: 80px; padding-left: 0">
+            <div class="col-lg-3 col-md-12 text-dark d-none d-sm-none d-lg-inline-block"
+                 style="height: 100vh; background-color: #BBB;">
+                <ul style="list-style: none; font-size: 16pt; font-weight: bold; cursor: pointer; margin-top: 80px; padding-left: 0; position: fixed; width: 13rem">
                     <li class="sidebar-list<?php if (Request::is('home')) {
                         echo ' active';
                     }?>" onclick="href('/home')"><span style="color: #888;">●</span> トップページ
@@ -56,7 +57,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-md-9 bg-light" style="height: 100%; min-height: 100vh">
+            <div class="col-lg-9 col-md-12 bg-light" style="height: 100%; min-height: 100vh">
                 <div style="margin-top: 80px">
                     @yield('content')
                 </div>

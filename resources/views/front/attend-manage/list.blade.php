@@ -33,20 +33,6 @@
             border-width: 1px;
             border-style: solid;
             border-color: #666;
-            cursor: pointer;
-            z-index: 1;
-        }
-
-        .calender-body2 {
-            transition-duration: 0.2s;
-            min-height: 130px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-            cursor: pointer;
         }
 
         .calender-disabled {
@@ -70,27 +56,10 @@
             border-width: 1px;
             border-style: solid;
             border-color: #666;
-            z-index: 10;
         }
 
         .bg-gray {
             background-color: #888;
-        }
-
-        .bg-gray2 {
-            background-color: #BBB;
-        }
-
-        .bg-green {
-            background-color: #BFB;
-        }
-
-        .bg-red {
-            background-color: #FBB;
-        }
-
-        .bg-blue {
-            background-color: #BBF;
         }
 
         .sunday {
@@ -112,12 +81,25 @@
             background-color: #37F;
             color: #fff
         }
+
+        .work-card {
+            height: 120px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition-duration: 0.2s;
+        }
+
+
+        .work-card:hover {
+            transition-duration: 0.05s;
+            box-shadow: 0 0 10px #888;
+        }
     </style>
 @endsection
 @section('pageTitle', "勤怠情報確認")
 
 @section('content')
-    <div class="container mb-5">
+    <div class="container">
         <div class="row">
             <div class="col-md-4" style="display: flex">
                 @if($month == 1)
@@ -170,80 +152,135 @@
                         確定解除
                     </a>
                 @else
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal"
-                            style="height: 40px">
+                    <a href="/attend-manage/confirm?year={{$year}}&month={{$month}}" class="btn btn-primary"
+                       style="height: 40px">
                         月報確定
-                    </button>
+                    </a>
                 @endif
-                <a href="/attend-manage?year={{$year}}&month={{$month}}&mode=1" class="btn btn-secondary"
+                <a href="/attend-manage?year={{$year}}&month={{$month}}&mode=0" class="btn btn-secondary"
                    style="height: 40px">
-                    リスト表示
+                    カレンダー表示
                 </a>
             </div>
         </div>
-        @if (session('error'))
-            <div class="col-md-12 mt-3">
-                <div class="alert alert-danger" role="alert">
-                    <strong>エラー</strong> {{ session('error') }}
-                </div>
-            </div>
-        @endif
-        @if (session('result'))
-            <div class="col-md-12 mt-3">
-                <div class="alert alert-success" role="alert">
-                    {{ session('result') }}
-                </div>
-            </div>
-        @endif
-        <div style="display: flex; width: 100%; gap: 10px">
-            <div style="flex: 1.5; padding: 0">
-                <span class="text-muted" style="height: 40px; line-height: 40px">今月の労働時間</span>
-            </div>
-            <div style="flex: 1">
-                <strong style="font-size: 20pt">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
-            </div>
-            <div style="flex: 1">
-
-            </div>
-            <div style="flex: 1.5; padding: 0">
-                <span class="text-muted" style="height: 40px; line-height: 40px">今月の残業時間</span>
-            </div>
-            <div style="flex: 1">
-                <strong style="font-size: 20pt">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
-            </div>
-            <div style="flex: 4">
-
-            </div>
-        </div>
         <hr>
-        @include('front.components.calender')
+        <div>
+            @if(count($attendData) == 0)
+                <div class="text-muted mt-5" style="width: 100%; text-align: center; font-size: 12pt">
+                    この月の勤務情報がありません
+                </div>
+            @endif
+            @foreach($attendData as $data)
+                <div class="card work-card"
+                     onclick="openDescModal({{$data->created_at->format('d')}})">
+                    <div class="card-header" style="font-size: 12pt; background-color: #DDD">
+                        {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span style=""><?php
+                            try {
+                            if($data->left_at != null){
+                            $dateData = new DateTime($data->left_at);
+                            $dateData = $dateData->format("G:i");
+                            ?><span style="color: #2288EE;">●</span><?php
+                            }else{?><span style="color: #F22;">●</span><?php
+                            }
+                            } catch (Exception $ex) {
+                            }
+                            try {
+                                $reqHtml = $reqData[$data->date][1];
+                                echo $reqHtml;
+                            } catch (Exception $ex) {
+                            }
+                            $leftDate = "--:--";
+                            if ($data->left_at != null) {
+                                $tempDate = new DateTime($data->left_at);
+                                $leftDate = $tempDate->format('G:i');
+                            }
+                            $diff = strtotime($data->left_at ?? $data->created_at) - strtotime($data->created_at);
+                            $diffTime = new DateTime();
+                            $diffTime->setTimestamp($diff);
+                            $diffTime->setTimeZone(new DateTimeZone('UTC'));
+                            $diffDat = preg_split("/:/", $diffTime->format("H:i"));
+                            $hours = intval($diffDat[0]);
+                            $minutes = intval($diffDat[1]);
+                            $restTime = "0:00";
+                            if (array_key_exists($data->date, $reqData)) {
+                                foreach ($reqData[$data->date][0] as $rDat) {
+                                    if ($rDat->time == null) continue;
+                                    $tempDiffDat = preg_split("/:/", $rDat->time);
+                                    $tempHours = intval($tempDiffDat[0]);
+                                    $tempMinutes = intval($tempDiffDat[1]);
+                                    $hours += $tempHours;
+                                    $minutes += $tempMinutes;
+                                    if ($minutes > 60) {
+                                        $hours++;
+                                        $minutes -= 60;
+                                    }
+                                }
+                            }
+                            if ($hours >= 8) {
+                                $hours--;
+                                $restTime = "1:00";
+                            } else if ($hours >= 6) {
+                                $restTime = "0:45";
+                                $minutes -= 45;
+                            }
+                            ?>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: flex; flex-direction: row; text-align: center">
+                            <div class="text-muted"
+                                 style="flex: 1; font-size: 12pt; height: 40px; line-height: 40px; margin-right: 10px">
+                                出勤
+                            </div>
+                            <div class="fw-bold"
+                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px;">{{$data->created_at->format('G:i')}}</div>
+                            <div class="text-muted"
+                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px; margin-left: 10px; margin-right: 10px;">
+                                ▶
+                            </div>
+                            <div class="text-muted"
+                                 style="flex: 1; font-size: 12pt; height: 40px; line-height: 40px; margin-right: 10px">
+                                退勤
+                            </div>
+                            <div class="fw-bold"
+                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px;">{{$leftDate}}</div>
+                            <div class="text-muted"
+                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px; margin-left: 15px; margin-right: 15px; margin-top: -3px;">
+                                |
+                            </div>
+                            <div class="text-muted"
+                                 style="flex: 1; font-size: 12pt; height: 40px; line-height: 40px; margin-right: 10px">
+                                勤務
+                            </div>
+                            <div class="fw-bold"
+                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px;">{{$hours.":".sprintf("%02d", $minutes)}}</div>
+                            <div class="text-muted"
+                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px; margin-left: 10px; margin-right: 10px;">
+                                ▶
+                            </div>
+                            <div class="text-muted"
+                                 style="flex: 1; font-size: 12pt; height: 40px; line-height: 40px; margin-right: 10px">
+                                休憩
+                            </div>
+                            <div class="fw-bold"
+                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px;">{{$restTime}}</div>
+                        </div>
+                    </div>
+
+                    <?php
+                    try {
+                        if ($data->left_at != null) {
+                            $dateData = new DateTime($data->left_at);
+                            $dateData = $dateData->format("G:i");
+                        }
+                    } catch (Exception $ex) {
+                    }
+                    ?>
+                </div>
+            @endforeach
+        </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">月報確定</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    月報を確定すると該当月の勤務詳細の編集、出勤が出来なくなります。<br>
-                    <span class="text-muted">月報が承認されるまでは確定を解除することができます。</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                    <a href="/attend-manage/confirm?year={{$year}}&month={{$month}}" class="btn btn-primary">
-                        月報を確定
-                    </a>
-
-                    <form id='logout-form' action={{ route('logout')}} method="POST" style="display: none;">
-                    @csrf
-
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="modal fade" id="basicModal" tabindex="-1" aria-labelledby="modalHeader" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

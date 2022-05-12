@@ -24,6 +24,7 @@ return new class extends Migration
             $table->biginteger('employee_id');
             $table->integer('group_id');
             $table->date('joined_date');
+            $table->date('left_date')->nullable();
             $table->integer('paid_holiday');
             $table->timestamp('updated_at')->useCurrent()->nullable();
             $table->timestamp('created_at')->useCurrent()->nullable();

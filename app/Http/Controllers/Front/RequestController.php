@@ -90,7 +90,8 @@ class RequestController extends Controller
     function createRequest(Request $request)
     {
         $types = RequestTypes::all();
-        return view('front.request.create', compact('types'));
+        $reqDate = $request->date;
+        return view('front.request.create', compact('types', 'reqDate'));
     }
 
     function checkRequestBack(Request $request)
@@ -130,6 +131,12 @@ class RequestController extends Controller
         $reason = $request->reason;
         $uuid = Str::uuid();
         foreach ($tempDate as $index => $item) {
+            //echo $request->time;
+            $timeStr = "";
+            if ($request->time != null || $request->time != "") {
+                $time = preg_split("/:/", $request->time);
+                $timeStr = intval($time[0]) . ":" . sprintf("%02d", intval($time[1]));
+            }
             if ($index == 0) {
                 VariousRequest::create([
                     'uuid' => $uuid,
@@ -137,7 +144,7 @@ class RequestController extends Controller
                     'type' => $type->id,
                     'date' => $item,
                     'status' => 0,
-                    'time' => $request->time,
+                    'time' => $timeStr,
                     'reason' => $request->reason ?? "",
                 ]);
             } else {
@@ -147,7 +154,7 @@ class RequestController extends Controller
                     'type' => $type->id,
                     'date' => $item,
                     'status' => 0,
-                    'time' => $request->time,
+                    'time' => $timeStr,
                     'reason' => $request->reason ?? "",
                     'related_id' => $uuid,
                 ]);

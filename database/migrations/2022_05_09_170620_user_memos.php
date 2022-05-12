@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('request_types', function (Blueprint $table) {
-            $table->id();
-            $table->string("name");
-            $table->integer("type");
-            $table->string("color")->default("#222");
+        Schema::create('user_memos', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->string('memo');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('request_types');
+        Schema::dropIfExists('user_memos');
     }
 };
