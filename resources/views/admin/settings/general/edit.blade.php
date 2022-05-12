@@ -72,120 +72,9 @@
                        value="{{substr(($data->rest_over ?? "00:15:00"), 0, 5)}}"
                 >
             </div>
-            <div class="mb-3 col-md-12">
-                <div class="card" style="width: 100%;">
-                    <div class="card-header">
-                        有給設定
-                    </div>
-                    <div class="card-body" style="height: 400px; overflow: auto">
-                        <table class="table">
-                            <tr>
-                                <th>
-                                    経過年数
-                                </th>
-                                <th>
-                                    付与日数
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">休日設定CSV</label>
+                <input class="form-control" type="file" id="holidaysConfig">
             </div>
         </div>
     </div>
@@ -207,19 +96,31 @@
             let endInput = document.getElementById("endInput")
             let restInput = document.getElementById("restInput")
             let restOverInput = document.getElementById("restOverInput")
+            let holidaysConfig = document.getElementById("holidaysConfig")
 
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
 
             alert.innerHTML = ""
 
+            console.log(holidaysConfig.files[0])
+
+            const params = new FormData();
+
+            params.append("start", startInput.value)
+            params.append("end", endInput.value)
+            params.append("rest", restInput.value)
+            params.append("rest_over", restOverInput.value)
+            params.append("paid_holiday", holidaysConfig.files[0])
+
             axios
-                .post("/admin/settings/general/edit", {
-                    start: startInput.value,
-                    end: endInput.value,
-                    rest: restInput.value,
-                    rest_over: restOverInput.value,
-                })
+                .post("/admin/settings/general/edit",
+                    params,
+                    {
+                        headers: {
+                            'content-type': 'multipart/form-data',
+                        },
+                    })
                 .then(async (res) => {
                     const resultCode = res.data.code
                     console.log("Result: " + resultCode + " / " + res.data.message)

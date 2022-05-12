@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\Configuration;
 use App\Models\MonthlyReport;
 use DateTime;
 use Illuminate\Contracts\Foundation\Application;
@@ -31,7 +32,13 @@ class AttendanceController extends Controller
         }
         $interval = $data->created_at->diff($date_now);
         $createDate = new DateTime($data->created_at);
-        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval'));
+
+        $timeRaw = Configuration::find(1)->time;
+        $timeArray = preg_split("/:/", $timeRaw);
+        $timeHours = intval($timeArray[0]);
+        $timeMinutes = intval($timeArray[1]);
+        $baseTime = ($timeHours * 60 + $timeMinutes) * 60;
+        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime'));
     }
 
     public function attend(Request $request): Redirector|Application|RedirectResponse
@@ -75,11 +82,23 @@ class AttendanceController extends Controller
         $diff = $current - $before;
         $hours = intval($diff / 60 / 60);
         $minutes = sprintf('%02d', intval($diff / 60) % 60);
-        if (intval($hours . $minutes) > 745) {
-            $hours = 7;
-            $minutes = "45";
+
+        $timeRaw = Configuration::find(1)->time;
+        $timeArray = preg_split("/:/", $timeRaw);
+        $timeHours = intval($timeArray[0]);
+        $timeMinutes = intval($timeArray[1]);
+
+        $timeInt = $timeHours * 100 + $timeMinutes;
+        $workTimeOver = intval($hours . $minutes) > $timeInt;
+        if ($workTimeOver) {
+            $hours = $timeHours;
+            $minutes = "$timeMinutes";
         }
+
         Attendance::find($data->id)->update(['mode' => 1, 'left_at' => $tempDate, 'time' => "$hours:$minutes"]);
+        if ($workTimeOver) {
+            return redirect("/attends")->with('result', '退勤しました。 勤務時間は' . $timeHours . ':' . $timeMinutes . 'に設定されました。');
+        }
         return redirect("/attends")->with('result', '退勤しました。');
     }
 

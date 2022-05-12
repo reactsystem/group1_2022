@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Configuration;
 use App\Models\Holiday;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use function view;
 
@@ -20,12 +21,21 @@ class AdminSettingsController extends Controller
     function general(Request $request)
     {
         $data = Configuration::find(1);
-        return view('admin.settings.general.index', compact('data'));
+
+        $configArray = [];
+
+        if (Storage::disk('local')->exists('config/paid_holidays.csv')) {
+            $config = Storage::disk('local')->get('config/paid_holidays.csv');
+            $config = str_replace(array("\r\n", "\r"), "\n", $config);
+            $configArray = collect(explode("\n", $config));
+        }
+        return view('admin.settings.general.index', compact('data', 'configArray'));
     }
 
     function editGeneral(Request $request)
     {
         $data = Configuration::find(1);
+
         return view('admin.settings.general.edit', compact('data'));
     }
 
@@ -70,6 +80,9 @@ class AdminSettingsController extends Controller
         if ($startTimeInt >= $endTimeInt) {
             return response()->json(["error" => true, "code" => 20, "message" => "始業時間が終業時間よりも遅く設定されています。"]);
         }
+        if (!$this->updateHolidayConfig($request)) {
+            return response()->json(["error" => true, "code" => 22, "message" => "有給設定CSVの形式が異なります。"]);
+        }
         if ($data == null) {
             Configuration::create($param);
             return response()->json(["error" => false, "code" => 0, "message" => "設定を更新しました。勤務時間は" . $diff . "です。"]);
@@ -80,6 +93,28 @@ class AdminSettingsController extends Controller
         } catch (\Exception $e) {
             return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
         }
+    }
+
+    function updateHolidayConfig(Request $request)
+    {
+        if (empty($request->paid_holiday)) {
+            return true;
+        }
+        $data = Storage::disk('local')->putFileAs('config', $request->paid_holiday, 'paid_holidays.csv');
+
+        if (Storage::disk('local')->exists('config/paid_holidays.csv')) {
+            $config = Storage::disk('local')->get('config/paid_holidays.csv');
+            $config = str_replace(array("\r\n", "\r"), "\n", $config);
+            $configArray = collect(explode("\n", $config));
+            foreach ($configArray as $index => $item) {
+                $dat = preg_split("/,/", $item);
+                if ($index == 0 && ($dat[0] != "months" || $dat[1] != "days")) {
+                    $config = Storage::disk('local')->delete('config/paid_holidays.csv');
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     function getTimeDiff($startTime, $endTime, $restSecs): string

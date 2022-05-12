@@ -73,112 +73,36 @@
                         有給設定
                     </div>
                     <div class="card-body" style="height: 400px; overflow: auto">
-                        <table class="table">
-                            <tr>
-                                <th>
-                                    経過年数
-                                </th>
-                                <th>
-                                    付与日数
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    0.5年
-                                </td>
-                                <td>
-                                    10日
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    1.5年
-                                </td>
-                                <td>
-                                    12日
-                                </td>
-                            </tr>
-                        </table>
+                        @if(count($configArray ?? []) != 0)
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        経過月数
+                                    </th>
+                                    <th>
+                                        付与日数
+                                    </th>
+                                </tr>
+                                @foreach($configArray as $index => $item)
+                                    @if($item == "")
+                                        @continue
+                                    @endif
+                                    <?php $dat = preg_split("/,/", $item);?>
+                                    @if($index != 0)
+                                        <tr>
+                                            <td>
+                                                {{$dat[0]}}ヵ月
+                                            </td>
+                                            <td>
+                                                {{$dat[1]}}日
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </table>
+                        @else
+                            <p>有給設定ファイルがインポートされていません</p>
+                        @endif
                     </div>
                 </div>
             </div>

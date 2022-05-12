@@ -12,6 +12,7 @@ class Configuration extends Model
     protected $fillable = [
         'start',
         'end',
+        'time',
         'rest',
         'rest_over',
     ];

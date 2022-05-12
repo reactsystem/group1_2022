@@ -18,7 +18,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 @if($data != null && $data->mode == 0)
                     <div class="row">
                         <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
@@ -62,12 +62,19 @@
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
                             {{$data->updated_at->format("G:i")}}
                         </div>
+                        <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
+                            労働時間
+                        </div>
+                        <div class="col-auto"
+                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
+                            {{$data->time}}
+                        </div>
                     </div>
                 @else
                     <h5 class="" style="line-height: 40px">まだ出勤していません</h5>
                 @endif
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 @if($data != null && $data->mode == 0)
                     <a class="btn btn-danger" onclick="leave()"
                        style="float: right; margin-left: 5px; width: 100px">退勤</a>
@@ -165,6 +172,8 @@
         let mode = 0
         let reason = ''
 
+        let baseTime = {{$baseTime}};
+
         function primary() {
             if (mode === 3) {
                 let dateText = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate()
@@ -248,11 +257,9 @@
             }
         }
 
-        let baseTime = 27900
-
         function leaveModal() {
             console.log("CURRENT: " + (diff.getTime() / 1000) + " / " + diff.getHours() + ':' + diff.getMinutes())
-            if ((diff.getTime() / 1000) > baseTime + 54000) { // 27000
+            if ((diff.getTime() / 1000) > baseTime + 54000) {
                 let diff2 = new Date(diff.getTime() - (baseTime * 1000))
                 console.log('残業あり')
                 modalHeader.innerText = "退勤確認"
