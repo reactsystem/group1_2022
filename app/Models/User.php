@@ -62,4 +62,8 @@ class User extends Authenticatable
     function user_memo(){
         return $this->hasOne(UserMemo::class, 'user_id', 'id');
     }
+
+    function various_requests(){
+        return $this ->hasOne(various_request::class,'user_id','id');
+    }
 }

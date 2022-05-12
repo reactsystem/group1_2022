@@ -44,7 +44,8 @@
                 </div>
                 <div class="modal-body">
                   保存しますか？
-{{--                   <div>
+{{--                   
+                  <div>
                     <p class="text-muted">名前</p>
                     <p class="px-2" id="InputName"></p>
                   </div>
@@ -82,7 +83,9 @@
                   <div>
                     <p class="text-muted">退社日</p>
                     <p class="px-2" id="InputAlive"></p>
-                  </div> --}}
+                  </div> 
+--}}
+
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
@@ -102,13 +105,13 @@
               <label for="InputName" class="form-label" >名前</label>
               <input type="text" class="form-control" value="{{$user['name']}}" id="InputName" name ='name' required>
             </div>
-
+            
             <div class="mb-3">
                 <label for="InputMemo" class="form-label">社員メモ</label>
                 <input type="text" class="form-control" id="InputMemo" value="{{$user->user_memo->memo}}" name='memo' >
               </div>
-
-            <div class="mb-3">
+              
+              <div class="mb-3">
                 <label for="InputemployeeID" class="form-label">社員番号</label>
                 <input type="text" class="form-control" value="{{$user['employee_id']}}" name='employee_id' id="InputemployeeID" required>
               </div>
@@ -128,13 +131,13 @@
                 <option value="0">一般ユーザー</option>
                 <option value="1">管理者</option>
                 @endif
-                  </select>
-              </div>
+              </select>
+            </div>
 
-            <div class="mb-3">
-                部署<select class="form-select" aria-label="部署" name='department' id="InputDepartment" required>
+            <div class="mb-3">    
+              部署<select class="form-select" aria-label="部署" name='department' id="InputDepartment" required>
 
-                    @foreach($departments as $item)
+                @foreach($departments as $item)
                 @if($item['id'] == $user['department'])
                 <option selected value = "{{$item['id']}}">{{$item['name']}}</option>
                 @else
@@ -149,17 +152,17 @@
                 <input type="password" class="form-control" id="InputPassword" name='password' disabled>
               </div>
 
-            <div class="mb-3">
+              <div class="mb-3">
                   <label for="InputEmail" class="form-label">メールアドレス</label>
                   <input type="email" class="form-control" id="InputEMail" name='email' value = "{{$user ['email']}}" required>
               </div>
-
-            <div class="mb-3">
+                
+                <div class="mb-3">
                   <label for="InputHoliday" class="form-label">有給休暇</label>
                   <input type="number" class="form-control" name='paid_holiday' id="InputHoliday" value = "{{$user ['paid_holiday']}}" required>
                 </div>
-
-            <div class="mb-3">
+                
+                <div class="mb-3">
                   <label for="InputJoined" class="form-label">入社日</label>
                   <input type="text" class="form-control" name='joined_date' id="InputJoined" placeholder ='YYYY-MM-DD' value = "{{$user ['joined_date']}}" required>
                 </div>
