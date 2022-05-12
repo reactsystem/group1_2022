@@ -40,9 +40,9 @@
                         echo ' active';
                     }?>" onclick="href('/admin/attend-manage')"><span style="color: #888;">●</span> 勤怠情報管理
                     </li>
-                    <li class="sidebar-list<?php if (Request::is('admin/requests*')) {
+                    <li class="sidebar-list<?php if (Request::is('admin/request*')) {
                         echo ' active';
-                    }?>" onclick="href('/admin/requests')"><span style="color: #888;">●</span> 各種申請管理
+                    }?>" onclick="href('/admin/request')"><span style="color: #888;">●</span> 各種申請管理
                     </li>
                     <li class="sidebar-list<?php if (Request::is('admin/settings*')) {
                         echo ' active';

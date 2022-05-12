@@ -9,7 +9,13 @@ class Department extends Model
 {
     use HasFactory;
 
-    public function user(){
-        return $this -> belongsTo(User::class,'id','department');
+
+    protected $fillable = [
+        'name',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'department');
     }
 }

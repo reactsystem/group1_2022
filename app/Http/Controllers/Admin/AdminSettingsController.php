@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Configuration;
+use App\Models\Department;
 use App\Models\Holiday;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -241,6 +242,84 @@ class AdminSettingsController extends Controller
             ];
             $data->update($param);
             return response()->json(["error" => false, "code" => 0, "message" => "休日(" . $id . ")を更新しました。"]);
+        } catch (\Exception $e) {
+            return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
+        }
+        //return view('admin.attend-manage.edit', compact('data', 'id'));
+    }
+
+    // 部署設定
+
+    function department(Request $request)
+    {
+        $data = Department::where("created_at", "!=", null)->paginate(20); // deleted_atに変更する
+        return view('admin.settings.department.index', compact('data'));
+    }
+
+    function newDepartment(Request $request)
+    {
+        return view('admin.settings.department.new');
+    }
+
+    function createDepartment(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+        ];
+        $messages = [
+            'name.required' => '名称を記入してください',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "必須項目が記入されていません", "errors" => $validator->errors()]);
+        }
+        try {
+            $name = $request->name;
+            $param = [
+                'name' => $name,
+            ];
+            $id = Department::create($param)->id;
+            return response()->json(["error" => false, "code" => 0, "message" => "休日を作成しました。", "id" => $id]);
+        } catch (\Exception $e) {
+            return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
+        }
+        //return view('admin.attend-manage.edit', compact('data', 'id'));
+    }
+
+    function viewDepartment(Request $request)
+    {
+        $id = $request->id;
+        $data = Department::find($id);
+        if ($data == null) {
+            return response()->json(["error" => true, "code" => 20, "message" => "指定された部署が見つかりません。"]);
+        }
+        return view('admin.settings.department.edit', compact('data', 'id'));
+    }
+
+    function editDepartment(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+        ];
+        $messages = [
+            'name.required' => '名称を記入してください',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "必須項目が記入されていません", "errors" => $validator->errors()]);
+        }
+        $id = $request->id;
+        $data = Department::find($id);
+        if ($data == null || $data->deleted_at != null) {
+            return response()->json(["error" => true, "code" => 20, "message" => "指定された部署が見つかりません。"]);
+        }
+        try {
+            $name = $request->name;
+            $param = [
+                'name' => $name,
+            ];
+            $data->update($param);
+            return response()->json(["error" => false, "code" => 0, "message" => "部署(" . $id . ")を更新しました。"]);
         } catch (\Exception $e) {
             return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
         }

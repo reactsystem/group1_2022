@@ -6,6 +6,9 @@
             <div class="col-md-6">
                 <h2 class="fw-bold">申請内容確認</h2>
             </div>
+            <div class="col-md-6">
+                <a href="/admin/request" class="btn btn-secondary" style="float: right">戻る</a>
+            </div>
         </div>
         <hr>
         <div>日時: <strong>{{implode(", ", $dates)}}</strong></div>

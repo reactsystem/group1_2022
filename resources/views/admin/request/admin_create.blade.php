@@ -13,18 +13,32 @@
                 <a href="/admin/request" class="btn btn-secondary" style="float: right">キャンセル</a>
             </div>
         </div>
+        @if (session('error'))
+            <div class="col-md-12 mt-3">
+                <div class="alert alert-danger" role="alert">
+                    <strong>エラー</strong> {{ session('error') }}
+                </div>
+            </div>
+        @endif
+        @if (session('result'))
+            <div class="col-md-12 mt-3">
+                <div class="alert alert-success" role="alert">
+                    {{ session('result') }}
+                </div>
+            </div>
+        @endif
         <hr>
-        <form action="/request/create" method="post" id="requestForm">
+        <form action="/admin/request/create" method="post" id="requestForm">
 
             @csrf
             <div class="row">
 
                 <div class="col-sm">
                     <label for="userInput" class="form-label">社員</label>
-                    <select class="form-select" aria-label="" id = 'requestId' name="id" required>
-                        <option value="">指定なし</option>
+                    <select class="form-select" aria-label="" id="requestId" name="user_id" required>
+                        <option value="0">指定なし</option>
                         @foreach($users as $user)
-                            <option value="{{$user->name}}">{{sprintf("%03d", $user->employee_id)}}
+                            <option value="{{$user->id}}">{{sprintf("%03d", $user->employee_id)}}
                                 / {{$user->name}}</option>
                         @endforeach
                     </select>
