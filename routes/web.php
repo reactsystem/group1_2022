@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAttendManagementController;
 use App\Http\Controllers\Admin\AdminAttendsController;
 use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminTopPageController;
+use App\Http\Controllers\Admin\AdminRequestController;
 use App\Http\Controllers\Front\AttendanceController;
 use App\Http\Controllers\Front\AttendanceManagementController;
 use App\Http\Controllers\Front\RequestController;
@@ -63,9 +64,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/account/password_update', [UserEditController::class, 'password_update']);
     Route::patch('/account/password_update_done', [UserEditController::class, 'password_update_done']);
 
-    Route::get('/test', function (Request $request) {
+
     });
-});
 
 Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin', [AdminSettingsController::class, 'index'])->name('admin-home');
@@ -88,7 +88,6 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('/admin/attend-manage/edit/{id}', [AdminAttendManagementController::class, 'editData']);
     Route::get('/admin/attend-manage', [AdminAttendManagementController::class, 'index']);
 
-    /* システム設定 */
     Route::get('/admin/settings', [AdminSettingsController::class, 'index']);
 
     Route::get('/admin/settings/holiday', [AdminSettingsController::class, 'holiday']);
@@ -100,6 +99,15 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/settings/general', [AdminSettingsController::class, 'general']);
     Route::get('/admin/settings/general/edit', [AdminSettingsController::class, 'editGeneral']);
     Route::post('/admin/settings/general/edit', [AdminSettingsController::class, 'updateGeneral']);
+
+ 
+    Route::get('/admin/request', [AdminRequestController::class, 'request']);
+    Route::post('/admin/request', [AdminRequestController::class, 'search']);
+    Route::get('/admin/request/create', [AdminRequestController::class, 'create']);
+    Route::post('/admin/request/create', [AdminRequestController::class, 'check']);
+    Route::get('/admin/request/detail', [AdminRequestController::class, 'detail']);
+    Route::post('/admin/request/approve', [AdminRequestController::class, 'approve']);
+    Route::post('/admin/request/reject', [AdminRequestController::class, 'reject']);
 
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
 });
