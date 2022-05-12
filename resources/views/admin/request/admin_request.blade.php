@@ -104,6 +104,12 @@
             
             @foreach($all_requests as $request)
             <tr>
+                @if($request -> related_id != NULL)
+                    @php
+                        $request = $request ->pair_request();
+                    @endphp
+                @endif
+                
                 <td>{{$request -> user -> name}}</td>
                 @if($request -> type == 1)
                 <td>{{$request -> related_request() -> count() +1}}日<br>                

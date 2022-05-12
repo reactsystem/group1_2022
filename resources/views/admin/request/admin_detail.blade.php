@@ -94,7 +94,15 @@
                 @else
                 <li>期間：{{$this_request -> related_request() -> count() +1}}日</li>
                 @endif
+                <li>日付：{{$this_request['date']}}
+                    @foreach($related_request as $request)
+
+                    {{' , '.$request['date']}}
+                    @endforeach
+                    
+                </li>
                 <li>種別：{{$this_request -> request_types -> name}}</li>
+                
                 <li>状態：
                     @if($this_request -> status == 0)
                     <p class="text-primary">承認待ち</p>

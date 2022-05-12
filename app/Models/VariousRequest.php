@@ -43,4 +43,10 @@ class VariousRequest extends Model
     {
         return VariousRequest::where('related_id','=',$this -> uuid)->get();   
     } 
+
+    // リクエストが子属性の場合に親のリクエストを取り出す
+    public function pair_request()
+    {
+        return VariousRequest::where('uuid','=',$this -> related_id)->first();   
+    } 
 }

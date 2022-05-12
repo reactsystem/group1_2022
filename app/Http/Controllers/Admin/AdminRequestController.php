@@ -7,17 +7,18 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\TextUI\XmlConfiguration\Variable;
 
 class AdminRequestController extends Controller
 {
     function request(){
-        $all_requests = VariousRequest::where('related_id','=',NULL)->get();
+        $all_requests = VariousRequest::whereNull('related_id')->get();
         $all_user= User::all();
         return view('/admin/request/admin_request',['users' => $all_user,'all_requests' => $all_requests,]); 
     }
 
     function search(Request $request){
-        $all_requests = VariousRequest::where('related_id','=',NULL);
+        $all_requests = new VariousRequest;
         $all_user= User::all();
         
         if(isset($request->status)){
@@ -30,17 +31,24 @@ class AdminRequestController extends Controller
         }
 
         if(isset($request->dateInput)){
-            $all_requests -> where('date','=',$request->dateInput);
-        
+            $requests = $all_requests -> where('date','=',$request->dateInput) ->get();
+            echo 'a';
+
+        }else{
+            $requests = $all_requests -> whereNull('related_id')->get();
+            echo 'b';
         }
 
-        $all_requests = $all_requests ->get();
-        return view('/admin/request/admin_request',['users' => $all_user,'all_requests' => $all_requests,]);
+
+        return view('/admin/request/admin_request',['users' => $all_user,'all_requests' => $requests,]);
     }
 
     function detail(Request $request){
         $this_request = VariousRequest::find($request ->id);
-        return view('admin/request/admin_detail',['this_request' => $this_request,]); 
+        $uuid = $this_request['uuid'];
+        $related_request = VariousRequest::where('related_id','=',$uuid)->get();
+
+        return view('admin/request/admin_detail',['this_request' => $this_request,'related_request'=>$related_request]); 
     }
 
     function approve(Request $request){
