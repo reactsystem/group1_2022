@@ -61,17 +61,18 @@
                 >
             </div>
             <div class="mb-3 col-md-12 col-lg-6">
-                <label for="startInput" class="form-label">休憩(標準)</label>
+                <label for="startInput" class="form-label">休憩時間初期値</label>
                 <input type="time" class="form-control" id="restInput" placeholder="未設定"
                        value="{{substr(($data->rest ?? "00:45:00"), 0, 5)}}"
                 >
             </div>
+            {{--
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="endInput" class="form-label">休憩(残業)</label>
                 <input type="time" class="form-control" id="restOverInput" placeholder="未設定"
                        value="{{substr(($data->rest_over ?? "00:15:00"), 0, 5)}}"
                 >
-            </div>
+            </div>  --}}
             <div class="mb-3">
                 <label for="formFile" class="form-label">休日設定CSV</label>
                 <input class="form-control" type="file" id="holidaysConfig">

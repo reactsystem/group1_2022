@@ -21,24 +21,50 @@ class AttendanceController extends Controller
 
     public function index(Request $request): Factory|View|Application
     {
-        $tempDate = new DateTime();
-        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
-        $date_now = new DateTime();
-        if ($data == null) {
-            return view('front.attend.index', compact('request', 'data'));
-        }
-        if ($data->mode == 1) {
-            $date_now = $data->updated_at;
-        }
-        $interval = $data->created_at->diff($date_now);
-        $createDate = new DateTime($data->created_at);
-
-        $timeRaw = Configuration::find(1)->time;
+        $config = Configuration::find(1);
+        $timeRaw = $config->time;
         $timeArray = preg_split("/:/", $timeRaw);
         $timeHours = intval($timeArray[0]);
         $timeMinutes = intval($timeArray[1]);
         $baseTime = ($timeHours * 60 + $timeMinutes) * 60;
-        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime'));
+
+
+        $tempDate = new DateTime();
+        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $date_now = new DateTime();
+        $interval = "";
+        $restTime = (7 * 60 + 45) * 60;
+        if ($data == null) {
+            return view('front.attend.index', compact('request', 'data', 'baseTime', 'config'));
+        } else {
+
+            $intervalTime = $data->created_at->diff($date_now);
+            if ($data->mode == 1 && $data->left_at != null) {
+                $intervalTime = $data->created_at->diff($data->left_at);
+            }
+
+            $datArray = preg_split("/:/", $intervalTime->format("%h:%I"));
+            $restData = preg_split("/:/", $data->rest ?? "00:00");
+            $wHours = $datArray[0];
+            $wMinutes = $datArray[1];
+            $rHours = intval($restData[0]);
+            $rMinutes = intval($restData[1]);
+            $xhours = max(0, $wHours - $rHours);
+            $xminutes = $wMinutes - $rMinutes;
+            if ($xminutes < 0 && $xhours != 0) {
+                $xminutes = 60 - abs($xminutes);
+                $xhours -= 1;
+            } else if ($xminutes < 0) {
+                $xminutes = 0;
+            }
+            $restTime = ($rHours * 60 + $rMinutes) * 60;
+            $interval = $xhours . ":" . sprintf("%02d", $xminutes);
+        }
+        if ($data->mode == 1) {
+            $date_now = $data->updated_at;
+        }
+        $createDate = new DateTime($data->created_at);
+        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime', 'restTime', 'config'));
     }
 
     public function attend(Request $request): Redirector|Application|RedirectResponse
@@ -83,21 +109,36 @@ class AttendanceController extends Controller
         $hours = intval($diff / 60 / 60);
         $minutes = sprintf('%02d', intval($diff / 60) % 60);
 
+        $restData = preg_split("/:/", $data->rest ?? "00:00");
+        $wHours = $hours;
+        $wMinutes = $minutes;
+        $rHours = intval($restData[0]);
+        $rMinutes = intval($restData[1]);
+        $xhours = max(0, $wHours - $rHours);
+        $xminutes = $wMinutes - $rMinutes;
+        if ($xminutes < 0 && $xhours != 0) {
+            $xminutes = 60 - abs($xminutes);
+            $xhours -= 1;
+        } else if ($xminutes < 0) {
+            $xminutes = 0;
+        }
+
+
         $timeRaw = Configuration::find(1)->time;
         $timeArray = preg_split("/:/", $timeRaw);
         $timeHours = intval($timeArray[0]);
         $timeMinutes = intval($timeArray[1]);
 
         $timeInt = $timeHours * 100 + $timeMinutes;
-        $workTimeOver = intval($hours . $minutes) > $timeInt;
+        $workTimeOver = intval($xhours . $xminutes) > $timeInt;
         if ($workTimeOver) {
-            $hours = $timeHours;
-            $minutes = "$timeMinutes";
+            //$hours = $timeHours;
+            //$minutes = "$timeMinutes";
         }
 
         Attendance::find($data->id)->update(['mode' => 1, 'left_at' => $tempDate, 'time' => "$hours:$minutes"]);
         if ($workTimeOver) {
-            return redirect("/attends")->with('result', '退勤しました。 勤務時間は' . $timeHours . ':' . $timeMinutes . 'に設定されました。');
+            return redirect("/attends")->with('result', '退勤しました。 ');
         }
         return redirect("/attends")->with('result', '退勤しました。');
     }
@@ -124,6 +165,9 @@ class AttendanceController extends Controller
         if (!isset($request->text)) {
             return response()->json(["error" => true, "code" => 20, "message" => "業務メモがありません。"]);
         }
+        if (!isset($request->rest)) {
+            return response()->json(["error" => true, "code" => 24, "message" => "休憩時間が設定されていません。"]);
+        }
         if (isset($request->date)) {
             $date = $request->date;
             try {
@@ -140,9 +184,9 @@ class AttendanceController extends Controller
                 $tempDate = new DateTime();
                 $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $date)->orderByDesc("created_at")->first();
                 if ($data == null) {
-                    return response()->json(["error" => true, "code" => 21, "message" => "勤務データが見つかりません。(${date})"]);
+                    return response()->json(["error" => true, "code" => 25, "message" => "勤務データが見つかりません。(${date})"]);
                 }
-                Attendance::find($data->id)->update(['comment' => $request->text]);
+                Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
                 return response()->json(["code" => 0, "message" => "${year}年${month}月${day}日の業務メモを更新しました。"]);
             } catch (\Exception $e) {
                 return response()->json(["error" => true, "code" => 22, "message" => "日付の形式が不正です。(${date})"]);
@@ -153,7 +197,7 @@ class AttendanceController extends Controller
         if ($data == null) {
             return response()->json(["error" => true, "code" => 21, "message" => "勤務データが見つかりません。"]);
         }
-        Attendance::find($data->id)->update(['comment' => $request->text]);
+        Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
         return response()->json(["code" => 0, "message" => "業務メモを更新しました。"]);
     }
 

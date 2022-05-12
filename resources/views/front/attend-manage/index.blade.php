@@ -309,9 +309,11 @@
                 </div>
                 <div class="modal-footer">
                     <div style="margin: 0 auto;">
-                        <button type="button" class="btn btn-primary" id="primaryButton" onclick="primary()">PRIMARY
+                        <button type="button" class="btn btn-primary" id="primaryButton"
+                                onclick="attendManagePrimary()">PRIMARY
                         </button>
-                        <button type="button" class="btn btn-secondary" id="secondaryButton" onclick="secondary()">
+                        <button type="button" class="btn btn-secondary" id="secondaryButton"
+                                onclick="attendManageSecondary()">
                             CANCEL
                         </button>
                     </div>
@@ -338,6 +340,7 @@
                 echo "status: " . $data->status . ",";
                 echo "comment: '" . ($data->comment ?? "null") . "',";
                 echo "time: '" . ($data->time ?? "null") . "',";
+                echo "rest: '" . ($data->rest ?? '00:00:00') . "',";
                 echo "start: '" . ($data->created_at ?? "null") . "',";
                 echo "end: '" . ($data->left_at ?? "null") . "'},";
             }?>
@@ -387,7 +390,7 @@
             ?>
         }
 
-        function openDescModal(day) {
+        function attendManageOpenDescModal(day) {
             currentDay = day
             modalContext.innerHTML = ""
             console.log("選択: " + day)
@@ -406,21 +409,21 @@
                 const timeData = modalData.time.split(":")
                 hours = parseInt(timeData[0])
                 minutes = parseInt(timeData[1])
-                let restHours = '0'
-                let restMinutes = '00'
-                if (hours > 8) {
-                    restTimeMode = 2
-                    restHours = '1'
-                    restMinutes = '00'
-                } else if (hours > 6) {
-                    restTimeMode = 1
-                    restHours = '0'
-                    restMinutes = '45'
+                const restData = modalData.rest.split(":")
+                let restHours = restData[0]
+                let restMinutes = restData[1]
+                hours = Math.max(0, hours - restHours)
+                minutes = minutes - restMinutes
+                if (minutes < 0 && hours !== 0) {
+                    minutes = 60 - Math.abs(minutes)
+                    hours -= 1
+                } else if (minutes < 0) {
+                    minutes = 0
                 }
                 if (modalData.time === 'null') {
                     modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #F11;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>退勤情報未入力</span><h2 class="fw-bold">勤務中</h2></span></div></div>`
                 } else {
-                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + modalData.time + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
+                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + hours + `:` + ('00' + minutes).slice(-2) + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
                 }
             }
             if (requestsData !== undefined) {
@@ -431,6 +434,8 @@
                     const tempMinutes = parseInt(timeData[1])
                     hours += tempHours
                     minutes += tempMinutes
+                    /*
+
                     let restHours = '0'
                     let restMinutes = '00'
                     console.log("CurrentHours: " + hours + ":" + minutes)
@@ -452,17 +457,30 @@
                     let restTimeStr = restHours + `:` + restMinutes
                     if (isNaN(tempHours) || isNaN(tempMinutes)) {
                         restTimeStr = "--:--"
-                    }
-                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + data.time + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restTimeStr + `</h2></span></div></div>`
+                    }*/
+                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + data.time + `</h2></span></div></div>`
                     console.log(data.typeName)
                 })
             }
+
             if (modalData !== undefined) {
                 modalContext.innerHTML += `<?php
                 if ($confirmStatus) {
-                    echo '<h6 class="mt-3 fw-bold">勤務詳細</h6><hr><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
+                    echo '<h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+            <div class="mb-3 col-md-12 col-lg-6">
+                <label for="restInput" class="form-label">休憩時間</label>
+                <input type="time" class="form-control" id="restInput" placeholder="未設定"
+                       value="`+modalData.rest+`"
+                >
+            </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
                 } else {
-                    echo '<h6 class="mt-3 fw-bold">勤務詳細</h6><hr><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px">`+modalData.comment+`</textarea><button class="btn btn-primary" id="saveBtn" style="float: right; margin-top: 7px" onclick="saveComment(\'`+keys+`\')">勤務詳細を保存</button>';
+                    echo '<h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+            <div class="mb-3 col-md-12 col-lg-6">
+                <label for="restInput" class="form-label">休憩時間</label>
+                <input type="time" class="form-control" id="restInput" placeholder="未設定"
+                       value="`+modalData.rest+`"
+                >
+            </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px">`+modalData.comment+`</textarea><button class="btn btn-primary" id="saveBtn" style="float: right; margin-top: 7px" onclick="saveComment(\'`+keys+`\')">勤務詳細を保存</button>';
                 }
                 ?>`
             }
@@ -475,13 +493,13 @@
             jQuery('#basicModal').modal("show");
         }
 
-        function primary() {
+        function attendManagePrimary() {
             if (mode === 1 && currentDay != 0) {
                 location = "/request/create?date=" + year + "-" + ('00' + month).slice(-2) + "-" + ('00' + currentDay).slice(-2)
             }
         }
 
-        function secondary() {
+        function attendManageSecondary() {
             if (mode === 1) {
                 mode = 0
                 jQuery('#basicModal').modal("hide");
@@ -493,6 +511,7 @@
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             let saveBtn = document.getElementById("saveBtn")
+            let restTime = document.getElementById("restInput")
             let textArea = document.getElementById("textArea")
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
@@ -500,6 +519,7 @@
             axios
                 .post("/api/v1/attends/comment/set", {
                     text: textArea.value,
+                    rest: restTime.value,
                     date: date
                 })
                 .then(async (res) => {

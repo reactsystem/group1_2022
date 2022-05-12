@@ -54,8 +54,21 @@ class AttendanceManagementController extends Controller
                 continue;
             }
             $datArray = preg_split("/:/", $dat->time);
-            $hours += intval($datArray[0]);
-            $minutes += intval($datArray[1]);
+            $restData = preg_split("/:/", $dat->rest);
+            $wHours = intval($datArray[0]);
+            $wMinutes = intval($datArray[1]);
+            $rHours = intval($restData[0]);
+            $rMinutes = intval($restData[1]);
+            $xhours = max(0, $wHours - $rHours);
+            $xminutes = $wMinutes - $rMinutes;
+            if ($xminutes < 0 && $xhours != 0) {
+                $xminutes = 60 - abs($xminutes);
+                $xhours -= 1;
+            } else if ($xminutes < 0) {
+                $xminutes = 0;
+            }
+            $hours += $xhours;
+            $minutes += $xminutes;
         }
         $date_now = new DateTime();
         if ($todayData != null) {

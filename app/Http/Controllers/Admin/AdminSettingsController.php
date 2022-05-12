@@ -45,17 +45,14 @@ class AdminSettingsController extends Controller
             'start' => 'date_format:H:i|required',
             'end' => 'date_format:H:i|required',
             'rest' => 'date_format:H:i|required',
-            'rest_over' => 'date_format:H:i|required',
         ];
         $messages = [
             'start.required' => '始業時刻を記入してください',
             'end.required' => '終業時刻を記入してください',
             'rest.required' => '休憩時間(標準)を記入してください',
-            'rest_over.required' => '休憩時間(残業)を記入してください',
             'start.date_format' => '始業時刻を時刻の形式で記入してください',
             'end.date_format' => '終業時刻を時刻の形式で記入してください',
             'rest.date_format' => '休憩時間(標準)を時刻の形式で記入してください',
-            'rest_over.date_format' => '休憩時間(残業)を時刻の形式で記入してください',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
@@ -75,7 +72,6 @@ class AdminSettingsController extends Controller
             'end' => $request->end,
             'time' => $diff,
             'rest' => $request->rest,
-            'rest_over' => $request->rest_over,
         ];
         if ($startTimeInt >= $endTimeInt) {
             return response()->json(["error" => true, "code" => 20, "message" => "始業時間が終業時間よりも遅く設定されています。"]);
@@ -97,7 +93,7 @@ class AdminSettingsController extends Controller
 
     function updateHolidayConfig(Request $request)
     {
-        if (empty($request->paid_holiday)) {
+        if (empty($request->paid_holiday) || !$request->hasFile('paid_holiday')) {
             return true;
         }
         $data = Storage::disk('local')->putFileAs('config', $request->paid_holiday, 'paid_holidays.csv');

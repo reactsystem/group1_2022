@@ -56,17 +56,19 @@
                        disabled>
             </div>
             <div class="mb-3 col-md-12 col-lg-6">
-                <label for="startInput" class="form-label">休憩(標準)</label>
+                <label for="startInput" class="form-label">休憩時間初期値</label>
                 <input type="time" class="form-control" id="startInput" placeholder="未設定"
                        value="{{$data->rest ?? "00:45"}}"
                        disabled>
             </div>
+            {{--
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="endInput" class="form-label">休憩(残業)</label>
                 <input type="time" class="form-control" id="endInput" placeholder="未設定"
                        value="{{$data->rest_over ?? "00:15"}}"
                        disabled>
             </div>
+            --}}
             <div class="mb-3 col-md-12">
                 <div class="card" style="width: 100%;">
                     <div class="card-header">

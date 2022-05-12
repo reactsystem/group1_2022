@@ -31,8 +31,21 @@ class TopPageController extends Controller
                 continue;
             }
             $datArray = preg_split("/:/", $dat->time);
-            $hours += intval($datArray[0]);
-            $minutes += intval($datArray[1]);
+            $restData = preg_split("/:/", $dat->rest ?? "00:00");
+            $wHours = intval($datArray[0]);
+            $wMinutes = intval($datArray[1]);
+            $rHours = intval($restData[0]);
+            $rMinutes = intval($restData[1]);
+            $xMinutes = max(0, $wHours - $rHours);
+            $xminutes = $wMinutes - $rMinutes;
+            if ($xminutes < 0 && $hours != 0) {
+                $xminutes = 60 - abs($minutes);
+                $xhours -= 1;
+            } else if ($xminutes < 0) {
+                $xminutes = 0;
+            }
+            $hours += $xMinutes;
+            $minutes += $xminutes;
         }
         $date_now = new DateTime();
         if ($data == null) {
@@ -43,9 +56,26 @@ class TopPageController extends Controller
         }
         $interval = $data->created_at->diff($date_now);
         $createDate = new DateTime($data->created_at);
+
+
         if ($data->mode == 0) {
             $hours += intval($interval->format('%h'));
             $minutes += intval($interval->format('%i'));
+        }
+
+        $datArray = preg_split("/:/", $data->time ?? "00:00");
+        $restData = preg_split("/:/", $data->rest ?? "00:00");
+        $wHours = intval($datArray[0]);
+        $wMinutes = intval($datArray[1]);
+        $rHours = intval($restData[0]);
+        $rMinutes = intval($restData[1]);
+        $xHours = max(0, $wHours - $rHours);
+        $xMinutes = $wMinutes - $rMinutes;
+        if ($xMinutes < 0 && $xHours != 0) {
+            $xMinutes = 60 - abs($xMinutes);
+            $xHours -= 1;
+        } else if ($xMinutes < 0) {
+            $xMinutes = 0;
         }
 
         $hours += intval($minutes / 60);
@@ -69,7 +99,7 @@ class TopPageController extends Controller
 
         $hoursReq += intval($minutesReq / 60);
         $minutesReq = $minutesReq % 60;
-        return view('front.index', compact('interval', 'data', 'hours', 'minutes', 'hoursReq', 'minutesReq'));
+        return view('front.index', compact('interval', 'data', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'xHours', 'xMinutes'));
     }
 
 

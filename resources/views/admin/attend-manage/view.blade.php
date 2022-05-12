@@ -90,15 +90,40 @@
                 </div>
             @endif
             <div class="mb-3 col-md-12 col-lg-6">
-                <label for="dateInput" class="form-label">勤務時間</label>
+                <label for="workInput" class="form-label">勤務時間</label>
                 <?php
                 $workTime = "--:--";
                 if ($data->time != null) {
                     $timeData = preg_split("/:/", $data->time);
+                    $restData = preg_split("/:/", $data->rest ?? "00:00");
+                    $wHours = intval($timeData[0]);
+                    $wMinutes = intval($timeData[1]);
+                    $rHours = intval($restData[0]);
+                    $rMinutes = intval($restData[1]);
+                    $xHours = max(0, $wHours - $rHours);
+                    $xMinutes = $wMinutes - $rMinutes;
+                    if ($xMinutes < 0 && $xHours != 0) {
+                        $xMinutes = 60 - abs($xMinutes);
+                        $xHours -= 1;
+                    } else if ($xMinutes < 0) {
+                        $xMinutes = 0;
+                    }
+                    $workTime = sprintf("%02d", $xHours) . ":" . sprintf("%02d", $xMinutes);
+                }
+                ?>
+                <input type="time" class="form-control" placeholder="--:--" value="{{$workTime}}"
+                       disabled>
+            </div>
+            <div class="mb-3 col-md-12 col-lg-6">
+                <label for="restTime" class="form-label">休憩時間</label>
+                <?php
+                $workTime = "--:--";
+                if ($data->rest != null) {
+                    $timeData = preg_split("/:/", $data->rest);
                     $workTime = sprintf("%02d", intval($timeData[0])) . ":" . sprintf("%02d", intval($timeData[1]));
                 }
                 ?>
-                <input type="time" class="form-control" id="dateInput" placeholder="--:--" value="{{$workTime}}"
+                <input type="time" class="form-control" id="restTime" placeholder="--:--" value="{{$workTime}}"
                        disabled>
             </div>
             <div class="mb-3 col-md-12">
