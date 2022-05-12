@@ -18,15 +18,15 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 @if($data != null && $data->mode == 0)
                     <div class="row">
                         <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
-                            勤務時間
+                            労働時間
                         </div>
                         <div class="col-auto"
-                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
-                            {{$interval->format("%h:%I")}}
+                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
+                            {{$interval}}
                         </div>
                         <div class="col-md-1">
 
@@ -35,39 +35,46 @@
                             出勤時刻
                         </div>
                         <div class="col-auto"
-                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
+                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
                             {{$data->created_at->format("G:i")}}
                         </div>
                     </div>
                 @elseif($data != null && $data->mode == 1)
                     <div class="row">
                         <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
-                            勤務時間
+                            労働時間
                         </div>
                         <div class="col-auto"
-                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
-                            {{$interval->format("%h:%I")}}
+                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
+                            {{$interval}}
                         </div>
                         <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
                             出勤時刻
                         </div>
                         <div class="col-auto"
-                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
+                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
                             {{$data->created_at->format("G:i")}}
                         </div>
                         <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
                             退勤時刻
                         </div>
                         <div class="col-auto"
-                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 32pt">
+                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
                             {{$data->updated_at->format("G:i")}}
+                        </div>
+                        <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
+                            合計時間
+                        </div>
+                        <div class="col-auto"
+                             style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
+                            {{$data->time}}
                         </div>
                     </div>
                 @else
                     <h5 class="" style="line-height: 40px">まだ出勤していません</h5>
                 @endif
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 @if($data != null && $data->mode == 0)
                     <a class="btn btn-danger" onclick="leave()"
                        style="float: right; margin-left: 5px; width: 100px">退勤</a>
@@ -95,31 +102,24 @@
             @endif
         </div>
         <hr>
-        @if($data != null && $data->mode == 0)
+        @if($data != null)
             <div class="row">
                 <div class="col-md-8">
-                    <h5 style="line-height: 40px; height: 40px;">勤務内容を入力</h5>
+                    <h5 style="line-height: 40px; height: 40px;">勤務情報</h5>
                 </div>
                 <div class="col-md-4">
                     <button class="btn btn-primary" id="saveBtn" onclick="saveComment()"
-                            style="float: right; margin-left: 5px;">勤務詳細を保存
+                            style="float: right; margin-left: 5px;">勤務情報を保存
                     </button>
                 </div>
             </div>
-            <textarea id="textArea" class="form-control" style="min-height: 70vh; width: 100%; height: 100%"
-                      placeholder="ここに勤務詳細を入力">{{$data->comment}}</textarea>
-        @elseif($data != null && $data->mode == 1
-)
-            <div class="row">
-                <div class="col-md-8">
-                    <h5 style="line-height: 40px; height: 40px;">勤務内容を入力</h5>
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-primary" id="saveBtn" onclick="saveComment()"
-                            style="float: right; margin-left: 5px;">勤務詳細を保存
-                    </button>
-                </div>
+            <div class="mb-3 col-md-12 col-lg-6">
+                <label for="restInput" class="form-label">休憩時間</label>
+                <input type="time" class="form-control" id="restInput" placeholder="未設定"
+                       value="{{substr(($data->rest ?? ($config->rest ?? "00:45:00")), 0, 5)}}"
+                >
             </div>
+            <label for="textArea" class="form-label">勤務詳細</label>
             <textarea id="textArea" class="form-control" style="min-height: 70vh; width: 100%; height: 100%"
                       placeholder="勤務内容が入力されていません">{{$data->comment}}</textarea>
         @endif
@@ -165,10 +165,13 @@
         let mode = 0
         let reason = ''
 
+        let baseTime = {{$baseTime}};
+        let restTime = {{$restTime}};
+
         function primary() {
             if (mode === 3) {
                 let dateText = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate()
-                let diff2 = new Date(diff.getTime() - (baseTime * 1000))
+                let diff2 = new Date(diff.getTime() - (baseTime * 1000) - (restTime * 1000))
                 const requestTime = diff2.getHours() + ':' + ('00' + diff2.getMinutes()).slice(-2)
                 primaryButton.setAttribute("disabled", "")
                 primaryButton.innerText = "申請しています"
@@ -187,7 +190,7 @@
             if (mode === 2) {
                 mode = 3
                 reason = document.getElementById('reasonTextArea').value
-                let diff2 = new Date(diff.getTime() - (baseTime * 1000))
+                let diff2 = new Date(diff.getTime() - (baseTime * 1000) - (restTime * 1000))
                 modalHeader.innerText = "申請確認"
                 modalContext.innerHTML = '<div class="alert alert-primary" role="alert">' +
                     '以下の内容で残業申請を行います' +
@@ -204,7 +207,7 @@
                 return
             }
             if (mode === 1) {
-                let diff2 = new Date(diff.getTime() - (baseTime * 1000))
+                let diff2 = new Date(diff.getTime() - (baseTime * 1000) - (restTime * 1000))
                 modalHeader.innerText = "残業申請"
                 modalContext.innerHTML = '<div class="mb-3">' +
                     '種別: 残業 / 申請時間: ' + diff2.getHours() + ':' + ('00' + diff2.getMinutes()).slice(-2) + ')' +
@@ -248,12 +251,10 @@
             }
         }
 
-        let baseTime = 27900
-
         function leaveModal() {
-            console.log("CURRENT: " + (diff.getTime() / 1000) + " / " + diff.getHours() + ':' + diff.getMinutes())
-            if ((diff.getTime() / 1000) > baseTime + 54000) { // 27000
-                let diff2 = new Date(diff.getTime() - (baseTime * 1000))
+            console.log("CURRENT: " + (diff.getTime() / 1000) + " (" + restTime + ") / " + diff.getHours() + ':' + diff.getMinutes())
+            if ((diff.getTime() / 1000) > baseTime + restTime + 54000 + 60) {
+                let diff2 = new Date(diff.getTime() - (baseTime * 1000) - (restTime * 1000))
                 console.log('残業あり')
                 modalHeader.innerText = "退勤確認"
                 modalContext.innerHTML = '<div class="text-center mb-3">' +
@@ -274,13 +275,15 @@
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             let saveBtn = document.getElementById("saveBtn")
+            let restInput = document.getElementById("restInput")
             let textArea = document.getElementById("textArea")
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
 
             axios
                 .post("/api/v1/attends/comment/set", {
-                    text: textArea.value
+                    text: textArea.value,
+                    rest: restInput.value
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
@@ -288,7 +291,8 @@
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success"
                         saveBtn.innerText = "保存しました"
-                        await _sleep(1500)
+                        await _sleep(1000)
+                        location = "/attends"
                     } else {
                         saveBtn.className = "btn btn-danger"
                         saveBtn.innerText = "保存失敗"

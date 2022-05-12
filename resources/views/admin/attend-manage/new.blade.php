@@ -15,7 +15,7 @@
         }
     </style>
 @endsection
-@section('pageTitle', "勤怠情報追加")
+@section('pageTitle', "勤怠情報管理")
 
 @section('content')
     <div class="container">
@@ -90,6 +90,10 @@
                     <label for="workTime" class="form-label">勤務時間</label>
                     <input type="time" class="form-control" id="workTime" placeholder="--:--" value="{{old("end")}}">
                 </div>
+                <div class="mb-3 col-md-12 col-lg-6">
+                    <label for="restTime" class="form-label">休憩時間</label>
+                    <input type="time" class="form-control" id="restTime" placeholder="--:--" value="{{old("rest")}}">
+                </div>
                 <div class="mb-3 col-md-12">
                     <label for="comment" class="form-label">勤務詳細</label>
                     <textarea class="form-control" id="comment"
@@ -117,6 +121,7 @@
             let startTime = document.getElementById("startTime")
             let endTime = document.getElementById("endTime")
             let workTime = document.getElementById("workTime")
+            let restTime = document.getElementById("restTime")
             let comment = document.getElementById("comment")
             let alert = document.getElementById("alert")
 
@@ -131,6 +136,7 @@
                     start: startTime.value,
                     end: endTime.value,
                     work: workTime.value,
+                    rest: restTime.value,
                     comment: comment.value,
                 })
                 .then(async (res) => {

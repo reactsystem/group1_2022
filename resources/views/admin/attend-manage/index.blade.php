@@ -62,7 +62,7 @@
                 <tr class="attends-row" onclick="jump('/admin/attend-manage/view/{{$dat->id}}')">
                     <td>
                         <?php
-                        $date_now = new DateTime();
+                        $date_now = new DateTime($dat->date);
                         echo $date_now->format('Y年m月d日');
                         ?>
                     </td>
@@ -82,10 +82,25 @@
                         <?php
                         $date_now = new DateTime();
                         if ($dat->mode == 1) {
-                            $date_now = $dat->updated_at;
+                            $date_now = $dat->left_at ?? $dat->updated_at;
                         }
                         $interval = $dat->created_at->diff($date_now);
-                        echo $interval->format('%h:%I');
+
+                        $datArray = preg_split("/:/", $interval->format('%h:%I'));
+                        $restData = preg_split("/:/", $dat->rest ?? "00:00");
+                        $wHours = intval($datArray[0]);
+                        $wMinutes = intval($datArray[1]);
+                        $rHours = intval($restData[0]);
+                        $rMinutes = intval($restData[1]);
+                        $xHours = max(0, $wHours - $rHours);
+                        $xMinutes = $wMinutes - $rMinutes;
+                        if ($xMinutes < 0 && $xHours != 0) {
+                            $xMinutes = 60 - abs($xMinutes);
+                            $xHours -= 1;
+                        } else if ($xMinutes < 0) {
+                            $xMinutes = 0;
+                        }
+                        echo $xHours . ":" . sprintf("%02d", $xMinutes);
                         ?>
                     </td>
                 </tr>
@@ -213,10 +228,6 @@
             console.log("URL: " + "/admin/attend-manage/search?" + keywords.join("&"))
 
             jump("/admin/attend-manage/search?" + keywords.join("&"))
-        }
-
-        function jump(link) {
-            location = link
         }
     </script>
 @endsection

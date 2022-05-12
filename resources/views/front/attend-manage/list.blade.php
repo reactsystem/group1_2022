@@ -94,6 +94,44 @@
             transition-duration: 0.05s;
             box-shadow: 0 0 10px #888;
         }
+
+        .type-scroll::-webkit-scrollbar {
+            display: block;
+            height: 6px;
+        }
+
+        .type-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .type-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.4);
+            border-right: none;
+            border-left: none;
+        }
+
+        .type-scroll::-webkit-scrollbar-track-piece:end {
+            margin-bottom: 10px;
+        }
+
+        .type-scroll::-webkit-scrollbar-track-piece:start {
+            margin-top: 10px;
+        }
+
+        .type-scroll {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            overflow: hidden;
+            height: 50px;
+            transition-duration: 0.3s;
+        }
+
+        .type-scroll:hover {
+            overflow-x: scroll;
+            overflow: overlay;
+            transition-duration: 0.05s;
+        }
     </style>
 @endsection
 @section('pageTitle', "勤怠情報確認")
@@ -122,8 +160,7 @@
                        style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
                 @endif
             </div>
-            <div class="col-md-4"
-                 style="display: flex; flex-direction: column; flex-wrap: wrap; overflow-x: scroll; overflow: overlay; height: 60px">
+            <div class="col-md-4 type-scroll">
                 @foreach($cats as $cat)
                     <div>
                         <span style="color: {{$cat->color}}">
@@ -131,6 +168,11 @@
                         </span>{{$cat->name}}&nbsp;
                     </div>
                 @endforeach
+                <div>
+                        <span style="color: #ee5822">
+                            ●
+                        </span>会社設定休日&nbsp;
+                </div>
                 <div>
                         <span style="color: #888">
                             ●
@@ -180,7 +222,7 @@
                             $dateData = new DateTime($data->left_at);
                             $dateData = $dateData->format("G:i");
                             ?><span style="color: #2288EE;">●</span><?php
-                            }else{?><span style="color: #F22;">●</span><?php
+                            }else{?><span style="color: #A11;">●</span><?php
                             }
                             } catch (Exception $ex) {
                             }
@@ -201,7 +243,22 @@
                             $diffDat = preg_split("/:/", $diffTime->format("H:i"));
                             $hours = intval($diffDat[0]);
                             $minutes = intval($diffDat[1]);
-                            $restTime = "0:00";
+
+                            $restData = preg_split("/:/", $data->rest ?? "00:00");
+                            $wHours = intval($diffDat[0]);
+                            $wMinutes = intval($diffDat[1]);
+                            $rHours = intval($restData[0]);
+                            $rMinutes = intval($restData[1]);
+                            $hours = max(0, $wHours - $rHours);
+                            $minutes = $wMinutes - $rMinutes;
+                            if ($minutes < 0 && $hours != 0) {
+                                $minutes = 60 - abs($minutes);
+                                $hours -= 1;
+                            } else if ($minutes < 0) {
+                                $minutes = 0;
+                            }
+
+                            $restTime = $rHours . ":" . sprintf("%02d", $rMinutes);
                             if (array_key_exists($data->date, $reqData)) {
                                 foreach ($reqData[$data->date][0] as $rDat) {
                                     if ($rDat->time == null) continue;
@@ -215,13 +272,6 @@
                                         $minutes -= 60;
                                     }
                                 }
-                            }
-                            if ($hours >= 8) {
-                                $hours--;
-                                $restTime = "1:00";
-                            } else if ($hours >= 6) {
-                                $restTime = "0:45";
-                                $minutes -= 45;
                             }
                             ?>
                         </span>
@@ -324,12 +374,15 @@
                 echo "status: " . $data->status . ",";
                 echo "comment: '" . ($data->comment ?? "null") . "',";
                 echo "time: '" . ($data->time ?? "null") . "',";
+                echo "rest: '" . ($data->rest ?? '00:00:00') . "',";
                 echo "start: '" . ($data->created_at ?? "null") . "',";
                 echo "end: '" . ($data->left_at ?? "null") . "'},";
             }?>
         }
 
-        let requests = {<?php foreach ($reqData as $key => $data) {
+        let requests = {<?php
+            $found = [];
+            foreach ($reqData as $key => $data) {
                 echo "'" . $key . "': [";
                 foreach ($data[0] as $dat) {
                     echo "{date: '" . $dat->date . "',";
@@ -339,8 +392,36 @@
                     echo "reason: '" . ($dat->reason ?? "null") . "',";
                     echo "time: '" . ($dat->time ?? "null") . "'},";
                 }
+                $dayKey = preg_split("/-/", $key)[2];
+                if (array_key_exists($dayKey, $holidays)) {
+                    $found[$dayKey] = true;
+                    echo "{date: '" . $key . "',";
+                    echo "typeName: '" . $holidays[$dayKey]->name . " (会社設定休日)',";
+                    echo "typeColor: '#ee5822',";
+                    echo "status: 0,";
+                    echo "reason: '',";
+                    echo "time: ''},";
+                }
+
                 echo "],";
-            }?>
+            }
+            for ($i = 1; $i <= 31; $i++) {
+                if (!array_key_exists($i, $found) && array_key_exists($i, $holidays)) {
+                    $dxKey = $year . "-" . sprintf("%02d", $month) . "-" . sprintf("%02d", $i);
+                    echo "'" . $dxKey . "': [";
+                    $found[$i] = true;
+                    foreach ($holidays[$i] as $holiday) {
+                        echo "{date: '" . $dxKey . "',";
+                        echo "typeName: '" . $holiday->name . " (会社設定休日)',";
+                        echo "typeColor: '#ee5822',";
+                        echo "status: 0,";
+                        echo "reason: '',";
+                        echo "time: ''},";
+                    }
+                    echo "],";
+                }
+            }
+            ?>
         }
 
         function openDescModal(day) {
@@ -362,29 +443,33 @@
                 const timeData = modalData.time.split(":")
                 hours = parseInt(timeData[0])
                 minutes = parseInt(timeData[1])
-                let restHours = '0'
-                let restMinutes = '00'
-                if (hours > 8) {
-                    restTimeMode = 2
-                    restHours = '1'
-                    restMinutes = '00'
-                } else if (hours > 6) {
-                    restTimeMode = 1
-                    restHours = '0'
-                    restMinutes = '45'
+                const restData = modalData.rest.split(":")
+                let restHours = restData[0]
+                let restMinutes = restData[1]
+                hours = Math.max(0, hours - restHours)
+                minutes = minutes - restMinutes
+                if (minutes < 0 && hours !== 0) {
+                    minutes = 60 - Math.abs(minutes)
+                    hours -= 1
+                } else if (minutes < 0) {
+                    minutes = 0
                 }
                 if (modalData.time === 'null') {
                     modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #F11;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>退勤情報未入力</span><h2 class="fw-bold">勤務中</h2></span></div></div>`
                 } else {
-                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + modalData.time + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
+                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + hours + `:` + ('00' + minutes).slice(-2) + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
                 }
             }
             if (requestsData !== undefined) {
                 console.log(requestsData)
                 requestsData.forEach(data => {
                     const timeData = data.time.split(":")
-                    hours += parseInt(timeData[0])
-                    minutes += parseInt(timeData[1])
+                    const tempHours = parseInt(timeData[0])
+                    const tempMinutes = parseInt(timeData[1])
+                    hours += tempHours
+                    minutes += tempMinutes
+                    /*
+
                     let restHours = '0'
                     let restMinutes = '00'
                     console.log("CurrentHours: " + hours + ":" + minutes)
@@ -403,16 +488,33 @@
                         restMinutes = '15'
                         restTimeMode = 2
                     }
-                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + data.time + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
+                    let restTimeStr = restHours + `:` + restMinutes
+                    if (isNaN(tempHours) || isNaN(tempMinutes)) {
+                        restTimeStr = "--:--"
+                    }*/
+                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + data.time + `</h2></span></div></div>`
                     console.log(data.typeName)
                 })
             }
+
             if (modalData !== undefined) {
                 modalContext.innerHTML += `<?php
                 if ($confirmStatus) {
-                    echo '<h6 class="mt-3 fw-bold">勤務詳細</h6><hr><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
+                    echo '<h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+            <div class="mb-3 col-md-12 col-lg-6">
+                <label for="restInput" class="form-label">休憩時間</label>
+                <input type="time" class="form-control" id="restInput" placeholder="未設定"
+                       value="`+modalData.rest+`"
+                >
+            </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
                 } else {
-                    echo '<h6 class="mt-3 fw-bold">勤務詳細</h6><hr><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px">`+modalData.comment+`</textarea><button class="btn btn-primary" id="saveBtn" style="float: right; margin-top: 7px" onclick="saveComment(\'`+keys+`\')">勤務詳細を保存</button>';
+                    echo '<h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+            <div class="mb-3 col-md-12 col-lg-6">
+                <label for="restInput" class="form-label">休憩時間</label>
+                <input type="time" class="form-control" id="restInput" placeholder="未設定"
+                       value="`+modalData.rest+`"
+                >
+            </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px">`+modalData.comment+`</textarea><button class="btn btn-primary" id="saveBtn" style="float: right; margin-top: 7px" onclick="saveComment(\'`+keys+`\')">勤務詳細を保存</button>';
                 }
                 ?>`
             }
@@ -443,6 +545,7 @@
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             let saveBtn = document.getElementById("saveBtn")
+            let restTime = document.getElementById("restInput")
             let textArea = document.getElementById("textArea")
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
@@ -450,6 +553,7 @@
             axios
                 .post("/api/v1/attends/comment/set", {
                     text: textArea.value,
+                    rest: restTime.value,
                     date: date
                 })
                 .then(async (res) => {

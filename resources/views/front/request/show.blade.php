@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('pageTitle', "申請確認")
+@section('pageTitle', "各種申請")
 @section('content')
     <div class="container">
         <div class="row">

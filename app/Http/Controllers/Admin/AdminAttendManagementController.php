@@ -16,7 +16,7 @@ class AdminAttendManagementController
         $users = User::where('left_date', "=", null)->get();
         $data = Attendance::where("attendances.deleted_at", "=", null)->leftJoin('users', 'attendances.user_id', 'users.id')->select("attendances.*", "users.name as name")->orderByDesc('attendances.updated_at')->paginate(20);
         $title = "勤怠ログ";
-        $searchStr = "";
+        $searchStr = "<span class='text-primary'>項目をクリックして確認・編集・削除画面に移動できます</span>";
         return view('admin.attend-manage.index', compact('data', 'users', 'title', 'searchStr'));
     }
 
@@ -96,12 +96,13 @@ class AdminAttendManagementController
             'date' => 'required',
             'status' => 'required|numeric',
             'start' => 'required',
+            'rest' => 'required',
         ];
         $messages = [
             'date.required' => '日付が選択されていません',
             'status.required' => '状態が選択されていません',
             'status.numeric' => '状態を選択してください',
-            'start.required' => '出勤時刻が記入されていません',
+            'rest.required' => '休憩時間が記入されていません',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
@@ -113,13 +114,24 @@ class AdminAttendManagementController
         if (isset($request->end) && $request->end != "") {
             $endDate = $selectedDate->format("Y-m-d " . $request->end . ":00");
         }
+        $workTime = "00:00";
+
+        if ($endDate != null) {
+            $current = strtotime($endDate);
+            $before = strtotime($startDate);
+            $diff = $current - $before;
+            $hours = intval($diff / 60 / 60);
+            $minutes = intval($diff / 60) % 60;
+            $workTime = sprintf("%02d", $hours) . ":" . sprintf("%02d", $minutes);
+        }
         $param = [
             'user_id' => $request->user,
             'date' => $selectedDate->format("Y-m-d"),
             'mode' => $request->status,
             'created_at' => $startDate,
             'left_at' => $endDate,
-            'time' => $request->work,
+            'time' => $workTime,
+            'rest' => $request->rest,
             'comment' => $request->comment ?? "",
         ];
         $id = Attendance::create($param)->id;
@@ -133,16 +145,27 @@ class AdminAttendManagementController
         if ($data == null || $data->deleted_at != null) {
             return response()->json(["error" => true, "code" => 20, "message" => "指定された勤怠情報が見つかりません。"]);
         }
+        $rules = [
+            'date' => 'required',
+            'status' => 'required|numeric',
+            'start' => 'required',
+        ];
+        $messages = [
+            'date.required' => '日付が選択されていません',
+            'status.required' => '状態が選択されていません',
+            'status.numeric' => '状態を選択してください',
+            'start.required' => '出勤時刻が記入されていません',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "以下の必須項目が記入されていません", "errors" => $validator->errors()]);
+        }
         try {
             $date = $request->date ?? $data->date;
             $status = $request->status ?? $data->mode;
             $endTime = $request->end;
-            $workTime = $request->work;
+            $restTime = $request->rest;
             $startDate = $data->created_at;
-            if ($workTime != "" && $workTime != "00:00") {
-                $workDate = new DateTime($data->created_at->format("Y-m-d ${workTime}:00"));
-                $workTime = $workDate->format("G:i");
-            }
             if (isset($request->start)) {
                 $startTime = $request->start;
                 $startDate = new DateTime($data->created_at->format("Y-m-d ${startTime}:00"));
@@ -157,12 +180,25 @@ class AdminAttendManagementController
             } else {
                 $endDate = $data->left_at;
             }
+
+            $workTime = "00:00";
+
+            if ($endDate != null) {
+                $current = strtotime($endDate->format("Y-m-d ${endTime}:00"));
+                $before = strtotime($data->created_at->format("Y-m-d ${startTime}:00"));
+                $diff = $current - $before;
+                $hours = intval($diff / 60 / 60);
+                $minutes = intval($diff / 60) % 60;
+                $workTime = sprintf("%02d", $hours) . ":" . sprintf("%02d", $minutes);
+            }
+
             $param = [
                 'date' => $date,
                 'mode' => $status,
                 'created_at' => $startDate,
                 'left_at' => $endDate,
                 'time' => $workTime,
+                'rest' => $restTime,
             ];
             $data->update($param);
             return response()->json(["error" => false, "code" => 0, "message" => "勤怠情報(" . $id . ")を更新しました。"]);

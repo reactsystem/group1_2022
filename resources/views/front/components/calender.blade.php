@@ -59,18 +59,43 @@
         } else {
             $style = "calender-body";
         }
-        echo '<div class="' . $style . '" onclick="openDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . $joinStr . '</div>';
+        echo '<div class="' . $style . '" onclick="attendManageOpenDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . $joinStr . '</div>';
     } else {
-        echo '<div class="calender-body2 bg-gray" onclick="openDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . '</div>';
+        echo '<div class="calender-body2 bg-gray" onclick="attendManageOpenDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . '</div>';
     }
     $key = $year . '-' . sprintf("%02d", $month) . '-' . str_pad($i, 2, 0, STR_PAD_LEFT);
     $noWorkFlag = true;
     try {
+    if(array_key_exists($i, $holidays)){
+    $noWorkFlag = false;
+    foreach ($holidays[$i] as $holiday) {
+    ?>
+    <div>
+        <span style="color: #ee5822;">●</span>&nbsp;
+        <strong>{{$holiday->name}}</strong>
+    </div>
+    <?php
+    }
+    }
     $data = $attendData[$key];
     if($data->left_at != null){
     $dateData = new DateTime($data->left_at);
     $dateData = $dateData->format("G:i");
     $noWorkFlag = false;
+    $workData = preg_split("/:/", $data->time);
+    $restData = preg_split("/:/", $data->rest);
+    $wHours = intval($workData[0]);
+    $wMinutes = intval($workData[1]);
+    $rHours = intval($restData[0]);
+    $rMinutes = intval($restData[1]);
+    $hours = max(0, $wHours - $rHours);
+    $minutes = $wMinutes - $rMinutes;
+    if ($minutes < 0 && $hours != 0) {
+        $minutes = 60 - abs($minutes);
+        $hours -= 1;
+    } else if ($minutes < 0) {
+        $minutes = 0;
+    }
     ?>
     <div>
         <strong>
@@ -79,20 +104,20 @@
     </div>
     <div>
         <span style="color: #2288EE;">●</span>&nbsp;
-        <strong>{{$data->time}}</strong>
+        <strong>{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
     </div>
     <?php
     }else{
     $noWorkFlag = false;
     ?>
     <div>
-        <span style="color: #F22;">●</span>&nbsp;
+        <span style="color: #A11;">●</span>&nbsp;
         <strong>{{$data->created_at->format("G:i")}}-</strong>
     </div>
     <?php
     }
     } catch (Exception $ex) {
-        $noWorkFlag = true;
+
     }
     try {
         $reqHtml = $reqData[$key][1];

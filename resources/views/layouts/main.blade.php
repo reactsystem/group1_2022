@@ -51,10 +51,12 @@
                         echo ' active';
                     }?>" onclick="href('/account')"><span style="color: #888;">●</span> ユーザー管理
                     </li>
-                    <li class="sidebar-list<?php if (Request::is('admin')) {
-                        echo ' active';
-                    }?>" onclick="href('/admin')"><span style="color: #888;">●</span> 管理者CP
-                    </li>
+                    @if(Auth::user()->group_id == 1)
+                        <li class="sidebar-list<?php if (Request::is('admin')) {
+                            echo ' active';
+                        }?>" onclick="href('/admin')"><span style="color: #888;">●</span> 管理者CP
+                        </li>
+                    @endif
                 </ul>
             </div>
             <div class="col-lg-9 col-md-12 bg-light" style="height: 100%; min-height: 100vh">

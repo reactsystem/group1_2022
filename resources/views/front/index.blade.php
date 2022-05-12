@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+@section('pageTitle', "ホーム")
+
 @section('content')
     <div class="container">
         <h3 class="fw-bold">新着通知</h3>
@@ -24,8 +26,8 @@
         <div style="display: flex; width: 100%; gap: 10px" class="mt-3">
             @if($data != null)
                 <div style="flex: 1">
-                    <span class="text-muted">本日の勤務時間</span>
-                    <div style="font-size: 40pt">{{$interval->format("%h:%I")}}</div>
+                    <span class="text-muted">本日の勤務時間(未確定)</span>
+                    <div style="font-size: 40pt">{{$xHours}}:{{sprintf("%02d", $xMinutes)}}</div>
                 </div>
                 <div style="flex: 1">
                     <span class="text-muted">本日の出勤時刻</span>

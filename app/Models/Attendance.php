@@ -15,6 +15,7 @@ class Attendance extends Model
         'mode',
         'comment',
         'time',
+        'rest',
         'left_at',
         'deleted_at',
         'created_at'
