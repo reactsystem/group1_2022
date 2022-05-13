@@ -112,41 +112,42 @@
 
 
         <hr>
+        <?php
+        // CHECK STATUS
+        $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
+        switch ($this_request->status) {
+            case 1:
+                $statusText = '<span style="color: #0E0">●</span> <strong>承認</strong>';
+                break;
+            case 2:
+                $statusText = '<span style="color: #E00">●</span> <strong>却下</strong>';
+                break;
+            case 3:
+                $statusText = '<span style="color: #AAA">●</span> <strong>取消</strong>';
+                break;
+        }
+        ?>
+        <div><strong>社員名: </strong>{{$this_request->user->employee_id}} / {{$this_request->user->name}}</div>
+        @if($this_request -> type == 1)
+            <div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}
+                日({{$this_request -> time ?? "記入なし"}})
+            </div>
+        @else
+            <div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}日</div>
+        @endif
+        <div><strong>日付：</strong>{{$this_request['date']}}
+            @foreach($related_request as $request)
 
-        <ul>
-            <li>名前：{{$this_request -> user -> name}}/社員番号({{$this_request ->id}})</li>
-
-            @if($this_request -> type == 1)
-                <li>期間：{{$this_request -> related_request() -> count() +1}}日({{$this_request -> time ?? "記入なし"}})</li>
-            @else
-                <li>期間：{{$this_request -> related_request() -> count() +1}}日</li>
-                @endif
-                <li>日付：{{$this_request['date']}}
-                    @foreach($related_request as $request)
-
-                    {{' , '.$request['date']}}
-                    @endforeach
-
-                </li>
-                <li>種別：{{$this_request -> request_types -> name}}</li>
-
-            <li>状態：
-                    @if($this_request -> status == 0)
-                    <span style="color: rgb(5, 5, 5)">●</span><span>承認待ち</span>
-                    @elseif($this_request -> status == 1)
-                    <span style="color: rgb(0, 184, 0)">●</span><span>承認済み</span>
-                    @elseif($this_request -> status == 2)
-                    <span style="color: #E00">●</span><span>却下済み</span>
-                    @elseif($this_request -> status == 3)
-                    <span style="color: #AAA">●</span><span>取消済み</span>
-                    @else
-                    @endif
-                </li>
-                <div class = "reason">
-                    <li>理由：{{$this_request -> reason ?? "記入なし"}}</li>
-                </div>
-            </ul>
-        </tbody>
-        </table>
+                {{' , '.$request['date']}}
+            @endforeach
+        </div>
+        <div><strong>ステータス: </strong>{!! $statusText !!}</div>
+        <div><strong>申請種別: </strong>{{$this_request->request_types->name}}</div>
+        @if($this_request->time != NULL)
+            <div><strong>労働時間: </strong>{{$this_request->time}}</div>
+        @endif
+        @if($this_request->reason != "")
+            <div><strong>理由: </strong>{{$this_request->reason ?? "記入なし"}}</div>
+        @endif
     </div>
 @endsection

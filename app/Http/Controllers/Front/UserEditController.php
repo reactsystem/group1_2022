@@ -19,7 +19,7 @@ class UserEditController extends Controller
         if (!Auth::check()) {
             return redirect('/login');
         }
-        $user = Auth::user();
+        $user = User::where('users.id', Auth::id())->leftJoin("departments", "users.department", "departments.id")->select("users.*", "departments.name as dname")->first();
         return view('front/account/account', ['user' => $user,]);
     }
 
@@ -28,7 +28,7 @@ class UserEditController extends Controller
         if(!Auth::check()){
             return redirect('/login');
         }
-        $user = Auth::user();
+        $user = User::where('users.id', Auth::id())->leftJoin("departments", "users.department", "departments.id")->select("users.*", "departments.name as dname")->first();
         return view('front/account/account_edit',['user' => $user,]);
     }
 
