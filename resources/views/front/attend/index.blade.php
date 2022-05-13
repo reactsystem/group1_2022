@@ -166,7 +166,7 @@
         let reason = ''
 
         let baseTime = {{$baseTime}};
-        let restTime = {{$restTime}};
+        let restTime = {{$restTime ?? 0}};
 
         function primary() {
             if (mode === 3) {
