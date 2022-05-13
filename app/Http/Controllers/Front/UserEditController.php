@@ -58,8 +58,8 @@ class UserEditController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data,[
-            'new_password' => 'required|string|min:6|confirmed',
-            ]);
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
     }
 
     //

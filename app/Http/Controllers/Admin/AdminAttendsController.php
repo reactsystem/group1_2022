@@ -64,9 +64,9 @@ class AdminAttendsController extends Controller
 
         $user = new User();
         $user->name=$request->name;
-        $user->email=$request->email;
-        $user->password=$request->password;
-        $user->department=$request->department;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->department = $request->department;
         $user->employee_id=$request->employee_id;
         $user->group_id=$request->group_id;
         $user->joined_date=$request->joined_date;
