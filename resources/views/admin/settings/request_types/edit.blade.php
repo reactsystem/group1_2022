@@ -21,10 +21,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h2 class="fw-bold">休日編集</h2>
+                <h2 class="fw-bold">申請種別編集</h2>
             </div>
             <div class="col-md-6">
-                <button type="button" onclick="saveHolidayData()" class="btn btn-primary"
+                <button type="button" onclick="saveData()" class="btn btn-primary"
                         style="float: right; width: 150px;"
                         id="saveBtn">
                     保存
@@ -33,8 +33,8 @@
                         style="float: right; margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     削除
                 </button>
-                <a href="/admin/settings/holiday" class="btn btn-secondary"
-                   style="float: right; margin-right: 10px;">休日一覧に戻る</a>
+                <a href="/admin/settings/request-types" class="btn btn-secondary"
+                   style="float: right; margin-right: 10px;">申請種別一覧に戻る</a>
             </div>
             <div class="col-md-12 mt-3" id="alert">
             </div>
@@ -56,31 +56,18 @@
         <hr>
         <div class="row">
             <div class="mb-3 col-md-12 col-lg-6">
-                <label for="dateInput" class="form-label">名称</label>
-                <input type="text" class="form-control" id="nameInput" placeholder="名称を入力してください"
+                <label for="departmentName" class="form-label">申請種別名称</label>
+                <input type="text" class="form-control" id="requestName" placeholder="名称を入力してください"
                        value="{{$data->name}}"
                 >
             </div>
-            <div class="col-md-12 col-lg-6">
-                <label for="monthInput" class="form-label">年</label>
-                <input type="number" id="yearInput" class="form-control" placeholder="毎年"
-                       value="{{$data->year}}" min="2000" max="9999">
-            </div>
-            <div class="col-md-12 col-lg-6">
-                <label for="monthInput" class="form-label">月</label>
-                <input type="number" id="monthInput" class="form-control" placeholder="毎月"
-                       value="{{$data->month}}" min="1" max="12">
-            </div>
             <div class="mb-3 col-md-12 col-lg-6">
-                <label for="dayInput" class="form-label">日</label>
-                <input type="number" id="dayInput" class="form-control" placeholder="--"
-                       value="{{$data->day}}" min="1" max="31">
-            </div>
-            <div class="mb-3 col-md-12 col-lg-6">
-                <label for="status" class="form-label">種別</label>
-                <select class="form-select" aria-label="" id="status">
-                    <option value="0" <?php if($data->mode == 0){?>selected<?php }?>>有給</option>
-                    <option value="1" <?php if($data->mode == 1){?>selected<?php }?>>無給</option>
+                <label for="status" class="form-label">タイプ</label>
+                <select class="form-select" aria-label="" id="typeName">
+                    <option value="1" <?php if($data->type == 1){?>selected<?php }?>>時間指定</option>
+                    <option value="2" <?php if($data->type == 2){?>selected<?php }?>>有給消費(理由不要)</option>
+                    <option value="0" <?php if($data->type == 0){?>selected<?php }?>>理由必要</option>
+                    <option value="3" <?php if($data->type == 3){?>selected<?php }?>>理由不要</option>
                 </select>
             </div>
         </div>
@@ -94,44 +81,24 @@
                     <h5 class="modal-title" id="deleteModalLabel">削除確認</h5>
                 </div>
                 <div class="modal-body">
-                    休日を削除してもよろしいですか?
+                    申請種別を削除してもよろしいですか?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                    <a href="/admin/settings/holiday/delete/{{$id}}" type="button" class="btn btn-danger">削除</a>
+                    <a href="/admin/settings/request-types/delete/{{$id}}" type="button" class="btn btn-danger">削除</a>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let startTime = '{{$data->created_at ?? ""}}'
-        const startDate = new Date(startTime)
-        const currentDate = new Date()
-        let diff = new Date(currentDate.getTime() - startDate.getTime() + 54000000)
-        let yearInput = document.getElementById("yearInput")
-        let monthInput = document.getElementById("monthInput")
+        let requestName = document.getElementById("requestName")
+        let typeName = document.getElementById("typeName")
 
-        function clearYear() {
-            yearInput.value = ""
-        }
-
-        function clearMonth() {
-            monthInput.value = ""
-        }
-
-        function saveHolidayData() {
+        function saveData() {
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             let saveBtn = document.getElementById("saveBtn")
-            let textArea = document.getElementById("textArea")
-
-            let nameInput = document.getElementById("nameInput")
-            let yearInput = document.getElementById("yearInput")
-            let monthInput = document.getElementById("monthInput")
-            let dayInput = document.getElementById("dayInput")
-            let status = document.getElementById("status")
-            let alert = document.getElementById("alert")
 
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
@@ -139,12 +106,9 @@
             alert.innerHTML = ""
 
             axios
-                .post("/admin/settings/holiday/edit/{{$id}}", {
-                    name: nameInput.value,
-                    year: yearInput.value,
-                    month: monthInput.value,
-                    day: dayInput.value,
-                    mode: status.value,
+                .post("/admin/settings/request-types/edit/{{$id}}", {
+                    name: requestName.value,
+                    type: typeName.value,
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
@@ -155,7 +119,7 @@
                         alert.innerHTML = '<div class="alert alert-success" role="alert">' +
                             '<strong>成功</strong> - 保存が完了しました。' +
                             '</div>'
-                        await _sleep(1500)
+                        await _sleep(1000)
                     } else {
                         let alertStr = '<div class="alert alert-danger" role="alert">' +
                             '<strong>エラー</strong> - ' +

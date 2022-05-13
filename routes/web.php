@@ -86,6 +86,9 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('/admin/attend-manage/new', [AdminAttendManagementController::class, 'createData']);
     Route::get('/admin/attend-manage/delete/{id}', [AdminAttendManagementController::class, 'deleteData']);
     Route::post('/admin/attend-manage/edit/{id}', [AdminAttendManagementController::class, 'editData']);
+    Route::get('/admin/attend-manage/calender/{id}', [AdminAttendManagementController::class, 'showUserCalender']);
+    Route::get('/admin/attend-manage/confirm', [AdminAttendManagementController::class, 'approveReport']);
+    Route::get('/admin/attend-manage/cancel', [AdminAttendManagementController::class, 'unapproveReport']);
     Route::get('/admin/attend-manage', [AdminAttendManagementController::class, 'index']);
 
     /* システム設定 */
@@ -94,14 +97,23 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/settings/holiday', [AdminSettingsController::class, 'holiday']);
     Route::get('/admin/settings/holiday/edit/{id}', [AdminSettingsController::class, 'viewHoliday']);
     Route::post('/admin/settings/holiday/edit/{id}', [AdminSettingsController::class, 'editHoliday']);
+    Route::get('/admin/settings/holiday/delete/{id}', [AdminSettingsController::class, 'deleteHoliday']);
     Route::get('/admin/settings/holiday/new', [AdminSettingsController::class, 'newHoliday']);
     Route::post('/admin/settings/holiday/new', [AdminSettingsController::class, 'createHoliday']);
 
     Route::get('/admin/settings/department', [AdminSettingsController::class, 'department']);
     Route::get('/admin/settings/department/edit/{id}', [AdminSettingsController::class, 'viewDepartment']);
     Route::post('/admin/settings/department/edit/{id}', [AdminSettingsController::class, 'editDepartment']);
+    Route::get('/admin/settings/department/delete/{id}', [AdminSettingsController::class, 'deleteDepartment']);
     Route::get('/admin/settings/department/new', [AdminSettingsController::class, 'newDepartment']);
     Route::post('/admin/settings/department/new', [AdminSettingsController::class, 'createDepartment']);
+
+    Route::get('/admin/settings/request-types', [AdminSettingsController::class, 'requestTypes']);
+    Route::get('/admin/settings/request-types/edit/{id}', [AdminSettingsController::class, 'viewRequestType']);
+    Route::post('/admin/settings/request-types/edit/{id}', [AdminSettingsController::class, 'editRequestType']);
+    Route::get('/admin/settings/request-types/delete/{id}', [AdminSettingsController::class, 'deleteRequestType']);
+    Route::get('/admin/settings/request-types/new', [AdminSettingsController::class, 'newRequestType']);
+    Route::post('/admin/settings/request-types/new', [AdminSettingsController::class, 'createRequestType']);
 
     Route::get('/admin/settings/general', [AdminSettingsController::class, 'general']);
     Route::get('/admin/settings/general/edit', [AdminSettingsController::class, 'editGeneral']);

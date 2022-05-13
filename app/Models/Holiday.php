@@ -15,6 +15,7 @@ class Holiday extends Model
         'day',
         'mode',
         'name',
+        'deleted_at',
     ];
 
 }

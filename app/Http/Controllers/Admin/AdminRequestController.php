@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-use App\Models\RequestTypes;
+use App\Models\RequestType;
 use App\Models\User;
 use App\Models\VariousRequest;
 use DateTime;
@@ -89,8 +89,8 @@ class AdminRequestController extends Controller
 
     // 申請新規追加
     function create(Request $request){
-        $all_user= User::all();
-        $types = RequestTypes::all();
+        $all_user = User::all();
+        $types = RequestType::all();
         return view('admin/request/admin_create', ['types' => $types, 'users' => $all_user]);
     }
 
@@ -110,7 +110,7 @@ class AdminRequestController extends Controller
             if (count($dates) == 0) {
                 return redirect("/admin/request/create")->with('error', '日付が指定されていません');
             }
-            $type = RequestTypes::find($request->type);
+            $type = RequestType::find($request->type);
             if ($type == null) {
                 return redirect("/admin/request/create")->with('error', '種別が指定されていません');
             }

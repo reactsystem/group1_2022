@@ -9,9 +9,9 @@ class Department extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'name',
+        'deleted_at',
     ];
 
     public function user()
