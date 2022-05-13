@@ -15,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AttendanceController extends Controller
 {
@@ -172,6 +173,20 @@ class AttendanceController extends Controller
         if (isset($request->user) && Auth::user()->group_id == 1) {
             $userId = $request->user;
         }
+        $rules = [
+            'text' => 'required|max:2000|min:1',
+            'rest' => 'required',
+        ];
+        $messages = [
+            'rest.required' => '休憩時間を入力してください',
+            'text.required' => '業務詳細を記入してください',
+            'text.min' => '業務詳細は1文字以上で入力してください',
+            'text.max' => '業務詳細は2,000文字以下で入力してください',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "以下の項目を確認してください:", "errors" => $validator->errors()]);
+        }
         if (isset($request->date)) {
             $date = $request->date;
             try {
@@ -202,7 +217,7 @@ class AttendanceController extends Controller
             return response()->json(["error" => true, "code" => 21, "message" => "勤務データが見つかりません。"]);
         }
         Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
-        return response()->json(["code" => 0, "message" => "業務メモを更新しました。"]);
+        return response()->json(["code" => 0, "message" => "勤務詳細を更新しました。しばらくお待ちください..."]);
     }
 
 }

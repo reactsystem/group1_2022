@@ -16,7 +16,7 @@
 @section('pageTitle', "出勤・退勤入力")
 
 @section('content')
-    <div class="container">
+    <div class="container mb-4">
         <div class="row">
             <div class="col-md-10">
                 @if($data != null && $data->mode == 0)
@@ -86,6 +86,8 @@
                        style="float: right; margin-left: 5px; width: 100px">出勤</a>
                 @endif
             </div>
+            <div class="col-md-12 mt-3" id="alert">
+            </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
                     <div class="alert alert-danger" role="alert">
@@ -122,6 +124,7 @@
             <label for="textArea" class="form-label">勤務詳細</label>
             <textarea id="textArea" class="form-control" style="min-height: 70vh; width: 100%; height: 100%"
                       placeholder="勤務内容が入力されていません">{{$data->comment}}</textarea>
+            <span class="text-muted ">最大2,000文字まで</span>
         @endif
     </div>
     <!-- Modal -->
@@ -277,8 +280,12 @@
             let saveBtn = document.getElementById("saveBtn")
             let restInput = document.getElementById("restInput")
             let textArea = document.getElementById("textArea")
+            let alert = document.getElementById("alert")
+
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
+
+            alert.innerHTML = ""
 
             axios
                 .post("/api/v1/attends/comment/set", {
@@ -291,9 +298,22 @@
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success"
                         saveBtn.innerText = "保存しました"
+                        alert.innerHTML = '<div class="alert alert-success" role="alert">' +
+                            '<strong>成功</strong> - 保存が完了しました。' +
+                            '</div>'
                         await _sleep(1000)
                         location = "/attends"
                     } else {
+                        let alertStr = '<div class="alert alert-danger" role="alert">' +
+                            '<strong>エラー</strong> - ' +
+                            res.data.message + '<br>'
+                        if (resultCode === 1) {
+                            Object.keys(res.data.errors).forEach(key => {
+                                alertStr += res.data.errors[key] + '<br>'
+                            });
+                        }
+                        alertStr += '</div>';
+                        alert.innerHTML = alertStr
                         saveBtn.className = "btn btn-danger"
                         saveBtn.innerText = "保存失敗"
                         await _sleep(2000)
