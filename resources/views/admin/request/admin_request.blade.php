@@ -245,17 +245,17 @@
                                                 <input type='hidden' id='id-{{$request->id}}-1' name=id>
                                                 <input type='hidden' id='uuid-{{$request->id}}-1' name=uuid>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                キャンセル
-                                            </button>
-                                            <input type='submit' class="btn btn-primary" value="承認">
+                                                    キャンセル
+                                                </button>
+                                                <input type='submit' class="btn btn-primary" value="承認">
 
-                                        </form>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="modal fade" id="Modal-{{$request->id}}-2" aria-labelledby="ModalLabel"
+                            <div class="modal fade" id="Modal-{{$request->id}}-2" aria-labelledby="ModalLabel"
                              aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
