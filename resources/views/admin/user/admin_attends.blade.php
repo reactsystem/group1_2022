@@ -44,17 +44,21 @@
             {{--<pre>{{var_dump($users)}}  </pre>--}}
 
             @foreach($users as $user)
-                <tr>
-                    <th scope="row">{{$user -> id}}</th>
-                    <td>{{$user -> employee_id}}</td>
-                    <td>{{$user -> name}}</td>
-                    <td>{{$user -> departments -> name}}</td>
-                    <td>{{$user -> latestAttemdance->date ?? ""}}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                @if($user->left_date != null)
+                    <tr style="background-color: #BBB">
+                @else
+                    <tr>
+                        @endif
+                        <th scope="row">{{$user -> id}}</th>
+                        <td>{{$user -> employee_id}}</td>
+                        <td>{{$user -> name}}</td>
+                        <td>{{$user -> departments -> name}}</td>
+                        <td>{{$user -> latestAttemdance->date ?? ""}}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
                                 操作
                             </button>
                             <ul class="dropdown-menu">
