@@ -62,7 +62,11 @@
                                     <a class="dropdown-item" href="/admin/attends/view?id={{$user -> id}}">社員情報確認・編集</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="/admin/hogehoge?id={{$user -> id}}">社員申請確認</a>
+                                    <form action = "/admin/request" method = "post">
+                                        @csrf
+                                    <input type = 'hidden' value = {{$user -> id}} name = 'id'>
+                                    <button class="dropdown-item" type = "submit">社員申請確認</button>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
