@@ -1,16 +1,16 @@
-@extends('layouts.2col')
+@extends('layouts.2colb')
 
 @section('data')
     <style>
         li.active {
-            background-color: #222;
-            color: #fff;
+            background-color: #eee;
+            color: #222;
             transition-duration: 0.3s;
         }
 
         .sidebar-list {
             background-color: rgba(0, 0, 0, 0);
-            color: #222;
+            color: #eee;
             transition-duration: 0.15s;
             margin-top: 5px;
             margin-bottom: 5px;
@@ -19,14 +19,14 @@
         }
 
         .sidebar-list:hover {
-            background-color: #444;
-            color: #fff;
+            background-color: #ddd;
+            color: #222;
             transition-duration: 0.05s;
         }
     </style>
     <div class="container">
         <div class="row" style="width: 100%">
-            <div class="col-md-3 text-dark" style="height: 100vh; background-color: #BBB;">
+            <div class="col-md-3 text-dark" style="height: 100vh; background-color: #22;">
                 <ul style="list-style: none; font-size: 16pt; font-weight: bold; cursor: pointer; margin-top: 80px; padding-left: 0; position: fixed">
                     <li class="sidebar-list<?php if (Request::is('admin')) {
                         echo ' active';

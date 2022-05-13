@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('date');
             $table->biginteger('user_id');
             $table->integer('mode');
-            $table->string('comment');
+            $table->longText('comment');
             $table->integer('status')->default(0);
             $table->string('time')->nullable();
             $table->time('rest')->nullable();
