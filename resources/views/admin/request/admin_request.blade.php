@@ -165,73 +165,76 @@
                         ?>
                         {!! $statusText !!}
                     </td>
-                    <td style="float: right">
-                        <a href="/admin/request/detail?id={{$request ->id}}" class="btn btn-secondary">詳細</a>
+                        <td>
+                            <div style="float: right">
+                                <a href="/admin/request/detail?id={{$request ->id}}" class="btn btn-secondary">詳細</a>
 
-                        @if($request->status == 0) {{-- 設定待ち--}}
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#Modal-{{$request->id}}-1"
-                                onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)">承認
-                        </button>
-                        @elseif($request->status == 1) {{-- 承認済み--}}
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#Modal-{{$request->id}}-1"
-                                onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)" disabled>承認
-                        </button>
-                        @elseif($request->status == 2) {{-- 却下済み--}}
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#Modal-{{$request->id}}-1"
-                                onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)">承認
-                        </button>
-                        @elseif($request->status == 3) {{-- 取り消し済み--}}
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#Modal-{{$request->id}}-1"
-                                onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)" disabled>承認
-                        </button>
-                        @else
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#Modal-{{$request->id}}-1"
-                                    onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)">承認
-                            </button>
+                                @if($request->status == 0) {{-- 設定待ち--}}
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#Modal-{{$request->id}}-1"
+                                        onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)">承認
+                                </button>
+                                @elseif($request->status == 1) {{-- 承認済み--}}
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#Modal-{{$request->id}}-1"
+                                        onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)" disabled>承認
+                                </button>
+                                @elseif($request->status == 2) {{-- 却下済み--}}
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#Modal-{{$request->id}}-1"
+                                        onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)">承認
+                                </button>
+                                @elseif($request->status == 3) {{-- 取り消し済み--}}
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#Modal-{{$request->id}}-1"
+                                        onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)" disabled>承認
+                                </button>
+                                @else
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#Modal-{{$request->id}}-1"
+                                            onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 1)">承認
+                                    </button>
 
-                        @endif
+                                @endif
 
-                        @if($request->status == 0) {{-- 設定待ち--}}
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#Modal-{{$request->id}}-2"
-                                onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)">却下
-                        </button>
-                        @elseif($request->status == 1) {{-- 承認済み--}}
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#Modal-{{$request->id}}-2"
-                                onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)">却下
-                        </button>
-                        @elseif($request->status == 2) {{-- 却下済み--}}
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#Modal-{{$request->id}}-2"
-                                onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)" disabled>却下
-                        </button>
-                        @elseif($request->status == 3) {{-- 取り消し済み--}}
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#Modal-{{$request->id}}-2"
-                                onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)" disabled>却下
-                        </button>
-                        @else
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#Modal-{{$request->id}}-2"
-                                    onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)">却下
-                            </button>
-                        @endif
+                                @if($request->status == 0) {{-- 設定待ち--}}
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#Modal-{{$request->id}}-2"
+                                        onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)">却下
+                                </button>
+                                @elseif($request->status == 1) {{-- 承認済み--}}
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#Modal-{{$request->id}}-2"
+                                        onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)">却下
+                                </button>
+                                @elseif($request->status == 2) {{-- 却下済み--}}
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#Modal-{{$request->id}}-2"
+                                        onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)" disabled>却下
+                                </button>
+                                @elseif($request->status == 3) {{-- 取り消し済み--}}
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#Modal-{{$request->id}}-2"
+                                        onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)" disabled>却下
+                                </button>
+                                @else
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#Modal-{{$request->id}}-2"
+                                            onclick="getModal({{$request ->id}},'{{$request ->uuid}}', 2)">却下
+                                    </button>
+                                @endif
+                            </div>
 
-                        {{-- モーダル　--}}
-                        <div class="modal fade" id="Modal-{{$request->id}}-1" tabindex="-1" aria-labelledby="ModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="ModalLabel">確認</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                            {{-- モーダル　--}}
+                            <div class="modal fade" id="Modal-{{$request->id}}-1" tabindex="-1"
+                                 aria-labelledby="ModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ModalLabel">確認</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         承認しますか？
