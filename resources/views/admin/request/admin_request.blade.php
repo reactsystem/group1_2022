@@ -235,16 +235,16 @@
                                             <h5 class="modal-title" id="ModalLabel">確認</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        承認しますか？
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="/admin/request/approve" method='post'>
-                                            @csrf
-                                            <input type='hidden' id='id-{{$request->id}}-1' name=id>
-                                            <input type='hidden' id='uuid-{{$request->id}}-1' name=uuid>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        </div>
+                                        <div class="modal-body">
+                                            承認しますか？
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form action="/admin/request/approve" method='post'>
+                                                @csrf
+                                                <input type='hidden' id='id-{{$request->id}}-1' name=id>
+                                                <input type='hidden' id='uuid-{{$request->id}}-1' name=uuid>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                 キャンセル
                                             </button>
                                             <input type='submit' class="btn btn-primary" value="承認">
