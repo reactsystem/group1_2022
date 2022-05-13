@@ -35,18 +35,18 @@ class VariousRequest extends Model
 
     public function request_types()
     {
-        return $this->hasOne(RequestTypes::class, 'id', 'type');
+        return $this->hasOne(RequestType::class, 'id', 'type');
     }
 
     // リクエスト1つに対して関係しているリクエストをすべて取り出す
     public function related_request()
     {
-        return VariousRequest::where('related_id','=',$this -> uuid)->get();   
-    } 
+        return VariousRequest::where('related_id', '=', $this->uuid)->get();
+    }
 
     // リクエストが子属性の場合に親のリクエストを取り出す
     public function pair_request()
     {
-        return VariousRequest::where('uuid','=',$this -> related_id)->first();   
-    } 
+        return VariousRequest::where('uuid', '=', $this->related_id)->first();
+    }
 }

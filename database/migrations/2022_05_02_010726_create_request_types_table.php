@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("name");
             $table->integer("type");
             $table->string("color")->default("#222");
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
     }

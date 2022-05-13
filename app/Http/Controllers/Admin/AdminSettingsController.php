@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Configuration;
 use App\Models\Department;
 use App\Models\Holiday;
+use App\Models\RequestType;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -192,6 +194,24 @@ class AdminSettingsController extends Controller
         return view('admin.settings.holiday.edit', compact('data', 'id'));
     }
 
+    function deleteHoliday(Request $request)
+    {
+        if (empty($request->id)) {
+            return redirect("/admin/settings/holiday")->with('error', '指定された休日が見つかりません。(E20)');
+        }
+        $id = $request->id;
+        $data = Holiday::find($id);
+        if ($data == null || $data->deleted_at != null) {
+            return redirect("/admin/settings/holiday")->with('error', '指定された休日が見つかりません。(E21)');
+        }
+        try {
+            $data->update(['deleted_at' => new DateTime()]);
+            return redirect("/admin/settings/holiday")->with('result', '休日を削除しました。');
+        } catch (\Exception $e) {
+            return redirect("/admin/settings/holiday")->with('error', '休日の削除に失敗しました。(E30)');
+        }
+    }
+
     function editHoliday(Request $request)
     {
         $rules = [
@@ -252,7 +272,7 @@ class AdminSettingsController extends Controller
 
     function department(Request $request)
     {
-        $data = Department::where("created_at", "!=", null)->paginate(20); // deleted_atに変更する
+        $data = Department::where("deleted_at", "=", null)->paginate(20); // deleted_atに変更する
         return view('admin.settings.department.index', compact('data'));
     }
 
@@ -290,10 +310,28 @@ class AdminSettingsController extends Controller
     {
         $id = $request->id;
         $data = Department::find($id);
-        if ($data == null) {
+        if ($data == null || $data->deleted_at != null) {
             return response()->json(["error" => true, "code" => 20, "message" => "指定された部署が見つかりません。"]);
         }
         return view('admin.settings.department.edit', compact('data', 'id'));
+    }
+
+    function deleteDepartment(Request $request)
+    {
+        if (empty($request->id)) {
+            return redirect("/admin/settings/department")->with('error', '指定された部署が見つかりません。(E20)');
+        }
+        $id = $request->id;
+        $data = Department::find($id);
+        if ($data == null || $data->deleted_at != null) {
+            return redirect("/admin/settings/department")->with('error', '指定された部署が見つかりません。(E21)');
+        }
+        try {
+            $data->update(['deleted_at' => new DateTime()]);
+            return redirect("/admin/settings/department")->with('result', '部署を削除しました。');
+        } catch (\Exception $e) {
+            return redirect("/admin/settings/department")->with('error', '部署の削除に失敗しました。(E30)');
+        }
     }
 
     function editDepartment(Request $request)
@@ -320,6 +358,116 @@ class AdminSettingsController extends Controller
             ];
             $data->update($param);
             return response()->json(["error" => false, "code" => 0, "message" => "部署(" . $id . ")を更新しました。"]);
+        } catch (\Exception $e) {
+            return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
+        }
+        //return view('admin.attend-manage.edit', compact('data', 'id'));
+    }
+
+    // 申請種別設定
+
+    function requestTypes(Request $request)
+    {
+        $data = RequestType::where("deleted_at", "=", null)->paginate(20); // deleted_atに変更する
+        return view('admin.settings.request_types.index', compact('data'));
+    }
+
+    function newRequestType(Request $request)
+    {
+        return view('admin.settings.request_types.new');
+    }
+
+    function createRequestType(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+            'type' => 'required|numeric|min:0|max:3',
+        ];
+        $messages = [
+            'name.required' => '名称を記入してください',
+            'type.required' => '名称を記入してください',
+            'type.numeric' => 'タイプを正しく選択してください',
+            'type.min' => 'タイプを正しく選択してください',
+            'type.max' => 'タイプを正しく選択してください',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "必須項目が記入されていません", "errors" => $validator->errors()]);
+        }
+        try {
+            $name = $request->name;
+            $type = $request->type;
+            $param = [
+                'name' => $name,
+                'type' => $type,
+            ];
+            $id = RequestType::create($param)->id;
+            return response()->json(["error" => false, "code" => 0, "message" => "申請種別を作成しました。", "id" => $id]);
+        } catch (\Exception $e) {
+            return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
+        }
+        //return view('admin.attend-manage.edit', compact('data', 'id'));
+    }
+
+    function viewRequestType(Request $request)
+    {
+        $id = $request->id;
+        $data = RequestType::find($id);
+        if ($data == null || $data->deleted_at != null) {
+            return redirect("/admin/settings/request-types")->with('error', '指定された申請種別が見つかりません。(E20)');
+        }
+        return view('admin.settings.request_types.edit', compact('data', 'id'));
+    }
+
+    function deleteRequestType(Request $request)
+    {
+        if (empty($request->id)) {
+            return redirect("/admin/settings/request-types")->with('error', '指定された申請種別が見つかりません。(E22)');
+        }
+        $id = $request->id;
+        $data = RequestType::find($id);
+        if ($data == null || $data->deleted_at != null) {
+            return redirect("/admin/settings/request-types")->with('error', '指定された申請種別が見つかりません。(E21)');
+        }
+        try {
+            $data->update(['deleted_at' => new DateTime()]);
+            return redirect("/admin/settings/request-types")->with('result', '申請種別を削除しました。');
+        } catch (\Exception $e) {
+            return redirect("/admin/settings/request-types")->with('error', '申請種別の削除に失敗しました。(E30)');
+        }
+    }
+
+    function editRequestType(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+            'type' => 'required|numeric|min:0|max:3',
+        ];
+        $messages = [
+            'name.required' => '名称を記入してください',
+            'type.required' => '名称を記入してください',
+            'type.numeric' => 'タイプを正しく選択してください',
+            'type.min' => 'タイプを正しく選択してください',
+            'type.max' => 'タイプを正しく選択してください',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "必須項目が記入されていません", "errors" => $validator->errors()]);
+        }
+        $id = $request->id;
+        $data = RequestType::find($id);
+        if ($data == null || $data->deleted_at != null) {
+            return response()->json(["error" => true, "code" => 20, "message" => "指定された申請種別が見つかりません。"]);
+        }
+        try {
+            $name = $request->name;
+            $type = $request->type;
+            $param = [
+                'name' => $name,
+                'type' => $type,
+            ];
+            $data->update($param);
+            return response()->json(["error" => false, "code" => 0, "message" => "申請種別(" . $id . ")を更新しました。"]);
         } catch (\Exception $e) {
             return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
         }

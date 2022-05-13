@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\Holiday;
 use App\Models\MonthlyReport;
-use App\Models\RequestTypes;
+use App\Models\RequestType;
 use App\Models\VariousRequest;
 use DateTime;
 use Illuminate\Contracts\Foundation\Application;
@@ -165,7 +165,7 @@ class AttendanceManagementController extends Controller
         }
         $dt = Carbon::createFromDate($year, $month);
         CalenderUtil::renderCalendar($dt);
-        $cats = RequestTypes::all();
+        $cats = RequestType::all();
         $data = MonthlyReport::where("user_id", "=", Auth::id())->where("date", "=", $year . "-" . sprintf("%02d", $month))->first();
         $confirmStatus = 0;
         if ($data != null) {

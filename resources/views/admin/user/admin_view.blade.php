@@ -10,6 +10,8 @@
             </div>
             <div class="col-md-6">
                 <a href='/admin/attends/edit?id={{$user['id']}}' class="btn btn-primary" style="float: right;">編集</a>
+                <a href='/admin/attend-manage/calender/{{$user->id}}' class="btn btn-success"
+                   style="float: right; margin-right: 10px;">この社員の勤怠カレンダー</a>
                 <a href='/admin/attends' class="btn btn-primary" style="float: right; margin-right: 10px;">社員一覧へ戻る</a>
             </div>
             @if (session('error'))

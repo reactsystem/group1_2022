@@ -22,7 +22,7 @@
         <form>
             <div class="row">
                 <div class="col-md-6">
-                    <h2 class="fw-bold">部署追加</h2>
+                    <h2 class="fw-bold">申請種別追加</h2>
                 </div>
                 <div class="col-md-6">
                     <button type="button" onclick="createHolidayData()" class="btn btn-primary"
@@ -30,8 +30,8 @@
                             id="saveBtn">
                         追加
                     </button>
-                    <a href="/admin/settings/department" class="btn btn-secondary"
-                       style="float: right; margin-right: 10px;">部署一覧に戻る</a>
+                    <a href="/admin/settings/request-types" class="btn btn-secondary"
+                       style="float: right; margin-right: 10px;">申請種別一覧に戻る</a>
                 </div>
                 <div class="col-md-12 mt-3" id="alert">
                 </div>
@@ -57,6 +57,15 @@
                     <input type="text" class="form-control" id="nameInput" placeholder="名称を入力してください"
                     >
                 </div>
+                <div class="mb-3 col-md-12 col-lg-6">
+                    <label for="status" class="form-label">タイプ</label>
+                    <select class="form-select" aria-label="" id="typeName">
+                        <option value="1" selected>時間指定</option>
+                        <option value="2">有給消費(理由不要)</option>
+                        <option value="0">理由必要</option>
+                        <option value="3">理由不要</option>
+                    </select>
+                </div>
             </div>
         </form>
     </div>
@@ -70,6 +79,7 @@
             let textArea = document.getElementById("textArea")
 
             let nameInput = document.getElementById("nameInput")
+            let typeName = document.getElementById("typeName")
 
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "追加しています"
@@ -77,8 +87,9 @@
             alert.innerHTML = ""
 
             axios
-                .post("/admin/settings/department/new", {
+                .post("/admin/settings/request-types/new", {
                     name: nameInput.value,
+                    type: typeName.value,
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
@@ -90,7 +101,7 @@
                             '<strong>成功</strong> - 休日を追加しました。編集ページに移動しています...' +
                             '</div>'
                         await _sleep(1000)
-                        location = "/admin/settings/department/edit/" + res.data.id
+                        location = "/admin/settings/request-types/edit/" + res.data.id
                     } else {
                         let alertStr = '<div class="alert alert-danger" role="alert">' +
                             '<strong>エラー</strong> - ' +

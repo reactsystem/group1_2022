@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Models\RequestTypes;
+use App\Models\RequestType;
 use App\Models\VariousRequest;
 use DateTime;
 use Illuminate\Http\Request;
@@ -89,7 +89,7 @@ class RequestController extends Controller
 
     function createRequest(Request $request)
     {
-        $types = RequestTypes::all();
+        $types = RequestType::all();
         $reqDate = $request->date;
         return view('front.request.create', compact('types', 'reqDate'));
     }
@@ -110,7 +110,7 @@ class RequestController extends Controller
         if (count($dates) == 0) {
             return redirect("/request")->with('error', '日付が指定されていません');
         }
-        $type = RequestTypes::find($request->type);
+        $type = RequestType::find($request->type);
         if ($type == null) {
             return redirect("/request")->with('error', '種別が指定されていません');
         }
