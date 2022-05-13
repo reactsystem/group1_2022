@@ -60,12 +60,15 @@ Route::group(['middleware' => 'auth'], function () {
     /* ユーザー管理 */
     Route::get('/account', [UserEditController::class, 'account']);
     Route::get('/account/edit', [UserEditController::class, 'account_edit']);
+    Route::get('/account/notifications', [UserEditController::class, 'notifications']);
+    Route::get('/account/notifications/{id}', [UserEditController::class, 'viewNotification']);
+    Route::get('/account/notifications/delete/{id}', [UserEditController::class, 'deleteNotification']);
     Route::post('/account/account_edit_done', [UserEditController::class, 'account_edit_done']);
     Route::get('/account/password_update', [UserEditController::class, 'password_update']);
     Route::patch('/account/password_update_done', [UserEditController::class, 'password_update_done']);
 
 
-    });
+});
 
 Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin', [AdminSettingsController::class, 'index'])->name('admin-home');

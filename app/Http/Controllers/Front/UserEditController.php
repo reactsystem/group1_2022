@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,7 +83,41 @@ class UserEditController extends Controller
         $user->password = bcrypt($request->new_password);
         $user->save();
 
-        return redirect ('/account/password_update')
-            ->with('status','パスワードの変更が終了しました');
+        return redirect('/account/password_update')
+            ->with('status', 'パスワードの変更が終了しました');
+    }
+
+    function notifications(Request $request)
+    {
+        $data = Notification::paginate(20); // deleted_atに変更する
+        return view('front.account.notifications.index', compact('data'));
+    }
+
+    function viewNotification(Request $request)
+    {
+        $id = $request->id;
+        $data = Notification::find($id);
+        if ($data == null) {
+            return redirect("/account/notifications")->with('error', '指定された通知が見つかりません。(E20)');
+        }
+        return view('front.account.notifications.edit', compact('data', 'id'));
+    }
+
+    function deleteNotification(Request $request)
+    {
+        if (empty($request->id)) {
+            return redirect("/account/notifications")->with('error', '指定された通知が見つかりません。(E22)');
+        }
+        $id = $request->id;
+        $data = Notification::find($id);
+        if ($data == null) {
+            return redirect("/account/notifications")->with('error', '指定された通知が見つかりません。(E21)');
+        }
+        try {
+            $data->delete();
+            return redirect("/account/notifications")->with('result', '通知を削除しました。');
+        } catch (\Exception $e) {
+            return redirect("/account/notifications")->with('error', '通知の削除に失敗しました。(E30)');
+        }
     }
 }
