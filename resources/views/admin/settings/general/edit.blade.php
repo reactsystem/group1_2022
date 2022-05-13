@@ -74,7 +74,7 @@
                 >
             </div>  --}}
             <div class="mb-3">
-                <label for="formFile" class="form-label">休日設定CSV</label>
+                <label for="formFile" class="form-label">有給設定CSV</label>
                 <input class="form-control" type="file" id="holidaysConfig">
             </div>
         </div>
