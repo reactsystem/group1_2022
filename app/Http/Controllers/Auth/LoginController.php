@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use DateTime;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -51,6 +52,15 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
+        if ($user->left_date != null || $user->left_date != "") {
+            $dateInt = intval(preg_replace("/-/", "", $user->left_date));
+            $today = new DateTime();
+            $todayInt = intval(preg_replace("/-/", "", $today->format("Y-m-d")));
+            if ($dateInt < $todayInt) {
+                Auth::logout();
+                return redirect("/login")->with('error', 'このアカウントは退職済みの為ログイン出来ません。');
+            }
+        }
         if (Storage::disk('local')->exists('config/paid_holidays.csv')) {
             $config = Storage::disk('local')->get('config/paid_holidays.csv');
             $config = str_replace(array("\r\n", "\r"), "\n", $config);
