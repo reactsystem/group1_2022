@@ -1,30 +1,6 @@
 @extends('layouts.admin')
 @section('pageTitle', "申請一覧")
 @section('content')
-    @if (session('error_message'))
-        <div class="col-md-12 mt-3">
-            <div class="alert alert-danger" role="alert">
-                <strong>エラー</strong> {{ session('error_message') }}
-            </div>
-        </div>
-    @endif
-@section('content')
-    @if (session('flash_message'))
-        <div class="col-md-12 mt-3">
-            <div class="alert alert-success" role="alert">
-                {{ session('flash_message') }}
-            </div>
-        </div>
-    @endif
-    @isset($all_requests[0])
-
-    @else
-        <div class="col-md-12 mt-3">
-            <div class="alert alert-success" role="alert">
-                申請はありません
-            </div>
-        </div>
-    @endisset
 
     <div class="row">
         <div class="col-md-6">
@@ -41,6 +17,29 @@
             </form>
         </div>
     </div>
+    @if (session('error_message'))
+        <div class="col-md-12 mt-3">
+            <div class="alert alert-danger" role="alert">
+                <strong>エラー</strong> {{ session('error_message') }}
+            </div>
+        </div>
+    @endif
+    @if (session('flash_message'))
+        <div class="col-md-12 mt-3">
+            <div class="alert alert-success" role="alert">
+                {{ session('flash_message') }}
+            </div>
+        </div>
+    @endif
+    @isset($all_requests[0])
+
+    @else
+        <div class="col-md-12 mt-3">
+            <div class="alert alert-success" role="alert">
+                申請はありません
+            </div>
+        </div>
+    @endisset
     <hr>
 
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
@@ -88,10 +87,10 @@
                             <div class="mb-3 col-sm-12 col-md-9">
                                 <select class="form-select" aria-label="" id="status" name='status'>
                                     <option value="" selected>指定しない</option>
-                                    <option value="0">承認待ち</option>
-                                    <option value="1">承認済み</option>
-                                    <option value="2">却下済み</option>
-                                    <option value="3">取り消し済み</option>
+                                    <option value="0">申請中</option>
+                                    <option value="1">承認</option>
+                                    <option value="2">却下</option>
+                                    <option value="3">取消</option>
 
                                 </select>
                             </div>
@@ -118,7 +117,7 @@
             <th scope="col">申請種別</th>
             <th scope="col">理由</th>
             <th scope="col">状態</th>
-            <th scope="col">クイックアクション</th>
+            <th scope="col" style="text-align: right">クイックアクション</th>
         </tr>
         </thead>
         <tbody>
@@ -148,18 +147,25 @@
                         </div>
                     </td>
                     <td>
-                        @if($request -> status == 0)
-                            <span style="color: rgb(39, 39, 255)">●</span><span>承認待ち</span>
-                        @elseif($request -> status == 1)
-                            <span style="color: rgb(0, 184, 0)">●</span><span>承認済み</span>
-                        @elseif($request -> status == 2)
-                            <span style="color: #E00">●</span><span>却下済み</span>
-                        @elseif($request -> status == 3)
-                            <span style="color: #AAA">●</span><span>取消済み</span>
-                        @else
-                        @endif
+
+                        <?php
+                        // CHECK STATUS
+                        $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
+                        switch ($request->status) {
+                            case 1:
+                                $statusText = '<span style="color: #0E0">●</span> <strong>承認</strong>';
+                                break;
+                            case 2:
+                                $statusText = '<span style="color: #E00">●</span> <strong>却下</strong>';
+                                break;
+                            case 3:
+                                $statusText = '<span style="color: #AAA">●</span> <strong>取消</strong>';
+                                break;
+                        }
+                        ?>
+                        {!! $statusText !!}
                     </td>
-                    <td>
+                    <td style="float: right">
                         <a href="/admin/request/detail?id={{$request ->id}}" class="btn btn-secondary">詳細</a>
 
                         @if($request->status == 0) {{-- 設定待ち--}}

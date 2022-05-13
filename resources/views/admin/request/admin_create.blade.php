@@ -35,7 +35,7 @@
 
                 <div class="col-sm">
                     <label for="userInput" class="form-label">社員</label>
-                    <select class="form-select" aria-label="" id="requestId" name="user_id" required>
+                    <select class="form-select" aria-label="" id="userInput" name="user_id" required>
                         <option value="0">指定なし</option>
                         @foreach($users as $user)
                             <option value="{{$user->id}}">{{sprintf("%03d", $user->employee_id)}}
@@ -57,8 +57,8 @@
                     <div class="form-text">最大10日までまとめて選択できます</div>
                 </div>
                 <div class="col-sm">
-                    <label for="exampleInputEmail1" class="form-label">申請種別</label>
-                    <select name="type" class="form-select" aria-label="Default select example" id="requestType">
+                    <label for="requestType" class="form-label">申請種別</label>
+                    <select name="type" class="form-select" id="requestType">
                         <option selected>選択してください</option>
                         @foreach($types as $type)
                             <option value="{{$type->id}}">{{$type->name}}</option>
@@ -111,6 +111,7 @@
         let timeAvailable = false
         let workTimeAvailable = false
         let reasonAvailable = false
+        let userSelected = false
 
         const isNumber = function (value) {
             return ((typeof value === 'number') && (isFinite(value)));
@@ -122,8 +123,8 @@
             @endforeach
         ]
         let proceedButton = document.getElementById('proceedButton');
-        let requestId = document.getElementById('requestId');
-        let idx = requestId.selectedIndex;
+        let userInput = document.getElementById('userInput');
+        let userId = userInput.selectedIndex;
         let requestDate = document.getElementById('requestDate');
         let requestTime = document.getElementById('requestTime');
         let requestReason = document.getElementById('requestReason');
@@ -136,6 +137,7 @@
         }
 
         function check() {
+            userId = userInput.selectedIndex;
             let requestType = document.getElementById('requestType');
             checkPassed = false
             if (!isFinite(requestType.value) || requestType.value <= 0) {
@@ -158,10 +160,7 @@
                     console.log('WRITE: ' + req2[req2.length - 1])
                 }
             );
-
-            requestId = document.getElementById('requestId');
-            idx = requestId.selectedIndex;
-            let message = '<b>申請者の名前:</b> ' + requestId.options[idx].text + '<br>'+'<b>申請する日付:</b> ' + req2.join(', ') + '<br>' +
+            let message = '<b>申請者の名前:</b> ' + requestId.options[userId].text + '<br>' + '<b>申請する日付:</b> ' + req2.join(', ') + '<br>' +
                 '<b>種別:</b> ' + types[requestType.value - 1][0] + '<br>'
             if (types[requestType.value - 1][1] === 1) {
                 if (requestTime.value !== "") {
@@ -229,10 +228,22 @@
             }
         };
 
+        userInput.onchange = function () {
+            userSelected = false
+            console.log('DATA: ' + userInput.value + ' / ' + isFinite(userInput.value))
+            if (userInput.value != 0 && isFinite(userInput.value)) {
+                userSelected = true
+                checkData()
+            } else {
+                userSelected = false
+                checkData()
+            }
+        };
+
         // 下に加えてInputName がNULL以外なら通したい
         function checkData() {
-            console.log('Type: ' + typeSelected + ' / Time: ' + timeAvailable + ' / Work: ' + workTimeAvailable + ' / Reason: ' + reasonAvailable)
-            if ( typeSelected && timeAvailable && (types[requestType.value - 1][1] !== 1 || workTimeAvailable) && (types[requestType.value - 1][1] === 2 || reasonAvailable)) {
+            console.log('User: ' + userSelected + ' Type: ' + typeSelected + ' / Time: ' + timeAvailable + ' / Work: ' + workTimeAvailable + ' / Reason: ' + reasonAvailable)
+            if (userSelected && typeSelected && timeAvailable && (types[requestType.value - 1][1] !== 1 || workTimeAvailable) && (types[requestType.value - 1][1] === 2 || reasonAvailable)) {
                 proceedButton.removeAttribute("disabled")
             } else {
                 proceedButton.setAttribute("disabled", "")

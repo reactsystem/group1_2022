@@ -17,11 +17,11 @@
 
             <div class="mb-3">
                 <label for="nameInput" class="form-label">部署</label>
-                <input class="form-control text-muted" style="cursor: no-drop" value="{{$user['group_id']}}" disabled>
+                <input class="form-control text-muted" style="cursor: no-drop" value="{{$user['dname']}}" disabled>
             </div>
 
             <div class="mb-3">
-                <label for="emailInput" class="form-label">名前</label>
+                <label for="emailInput" class="form-label">メールアドレス</label>
                 <input type="email" class="form-control" id="emailInput" name="InputEmail" placeholder="メールアドレスを入力"
                        value="{{$user['email']}}" required>
             </div>

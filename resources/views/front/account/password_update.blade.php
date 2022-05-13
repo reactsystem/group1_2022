@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-12">
                 <div class="panel panel-default">
                     <h2 class="fw-bold">パスワードの変更</h2>
                     <hr>
@@ -31,9 +31,10 @@
                                 <label for="current_password" class="col-md-4 control-label">現在のパスワード</label>
 
                                 <div class="col-md-6">
-                                    <input id="current_password" type="password" class="form-control" name="current_password" required>
+                                    <input id="current_password" type="password" class="form-control"
+                                           name="current_password" required>
 
-                                @if ($errors->has('current_password'))
+                                    @if ($errors->has('current_password'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('current_password') }}</strong>
                                         </span>
@@ -41,13 +42,14 @@
                                 </div>
                             </div>
 
-                            <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }} mt-3">
                                 <label for="new_password" class="col-md-4 control-label">新しいパスワード</label>
 
                                 <div class="col-md-6">
-                                    <input id="new_password" type="password" class="form-control" name="new_password" required>
+                                    <input id="new_password" type="password" class="form-control" name="new_password"
+                                           required>
 
-                                @if ($errors->has('new_password'))
+                                    @if ($errors->has('new_password'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('new_password') }}</strong>
                                         </span>
@@ -55,12 +57,14 @@
                                 </div>
                             </div>
 
-                            <div class="form-group{{ $errors->has('new_password_confirmation') ? ' has-error' : '' }}">
+                            <div
+                                class="form-group{{ $errors->has('new_password_confirmation') ? ' has-error' : '' }} mt-3">
                                 <label for="new_password-confirm" class="col-md-4 control-label">新しいパスワード（確認）</label>
                                 <div class="col-md-6">
-                                    <input id="new_password-confirm" type="password" class="form-control" name="new_password_confirmation" required>
+                                    <input id="new_password-confirm" type="password" class="form-control"
+                                           name="new_password_confirmation" required>
 
-                                @if ($errors->has('new_password_confirmation'))
+                                    @if ($errors->has('new_password_confirmation'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('new_password_confirmation') }}</strong>
                                         </span>
