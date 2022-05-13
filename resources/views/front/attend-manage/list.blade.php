@@ -395,13 +395,16 @@
                 $dayKey = preg_split("/-/", $key)[2];
                 if (array_key_exists($dayKey, $holidays)) {
                     $found[$dayKey] = true;
-                    echo "{date: '" . $key . "',";
-                    echo "typeName: '" . $holidays[$dayKey]->name . " (会社設定休日)',";
-                    echo "typeColor: '#ee5822',";
-                    echo "status: 0,";
-                    echo "reason: '',";
-                    echo "time: ''},";
+                    foreach ($holidays[$dayKey] as $holiday) {
+                        echo "{date: '" . $key . "',";
+                        echo "typeName: '" . $holiday->name . " (会社設定休日)',";
+                        echo "typeColor: '#ee5822',";
+                        echo "status: 0,";
+                        echo "reason: '',";
+                        echo "time: ''},";
+                    }
                 }
+
 
                 echo "],";
             }
