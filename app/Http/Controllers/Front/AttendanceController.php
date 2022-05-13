@@ -168,6 +168,10 @@ class AttendanceController extends Controller
         if (!isset($request->rest)) {
             return response()->json(["error" => true, "code" => 24, "message" => "休憩時間が設定されていません。"]);
         }
+        $userId = Auth::id();
+        if (isset($request->user) && Auth::user()->group_id == 1) {
+            $userId = $request->user;
+        }
         if (isset($request->date)) {
             $date = $request->date;
             try {
@@ -175,14 +179,14 @@ class AttendanceController extends Controller
                 $year = intval($dateSplit[0]);
                 $month = intval($dateSplit[1]);
                 $day = intval($dateSplit[2]);
-                $confirmData = MonthlyReport::where('user_id', '=', Auth::id())->where('date', '=', $dateSplit[0] . "-" . $dateSplit[1])->first();
+                $confirmData = MonthlyReport::where('user_id', '=', $userId)->where('date', '=', $dateSplit[0] . "-" . $dateSplit[1])->first();
                 if ($confirmData != null) {
                     if ($confirmData->status == 1) {
                         return response()->json(["error" => true, "code" => 23, "message" => "指定された月は既に月報確定が行われています。"]);
                     }
                 }
                 $tempDate = new DateTime();
-                $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $date)->orderByDesc("created_at")->first();
+                $data = Attendance::where("user_id", "=", $userId)->where("attendances.deleted_at", "=", null)->where("date", "=", $date)->orderByDesc("created_at")->first();
                 if ($data == null) {
                     return response()->json(["error" => true, "code" => 25, "message" => "勤務データが見つかりません。(${date})"]);
                 }
@@ -193,7 +197,7 @@ class AttendanceController extends Controller
             }
         }
         $tempDate = new DateTime();
-        $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $data = Attendance::where("user_id", "=", $userId)->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         if ($data == null) {
             return response()->json(["error" => true, "code" => 21, "message" => "勤務データが見つかりません。"]);
         }
