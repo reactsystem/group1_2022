@@ -6,11 +6,28 @@
     <div class="container">
         <h3 class="fw-bold">新着通知</h3>
         <hr>
-        <div class="card">
-            <div class="card-body">
-                ● ここに通知が入ります
-            </div>
-        </div>
+        @if($notifications != null && count($notifications) != 0)
+            @foreach($notifications as $notification)
+                <div class="card">
+                    <div class="card-header" style="display: flex">
+                        <div style="flex: 5; height: 30px; line-height: 30px;">
+                            {{$notification->title}}
+                        </div>
+                        <div style="flex: 1">
+                            <a href="#" class="btn btn-danger btn-sm" style="float: right">削除</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {!! $notification->data !!}
+                    </div>
+                </div>
+            @endforeach
+            {{$notifications->links()}}
+        @else
+            <span class="text-muted text-center">
+                通知はありません
+            </span>
+        @endif
         @if($data == null)
             <hr>
             <div class="alert alert-primary mt-3" style="display: flex">
