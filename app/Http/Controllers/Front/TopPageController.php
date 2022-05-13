@@ -36,16 +36,16 @@ class TopPageController extends Controller
             $wMinutes = intval($datArray[1]);
             $rHours = intval($restData[0]);
             $rMinutes = intval($restData[1]);
-            $xMinutes = max(0, $wHours - $rHours);
-            $xminutes = $wMinutes - $rMinutes;
-            if ($xminutes < 0 && $hours != 0) {
-                $xminutes = 60 - abs($minutes);
-                $xhours -= 1;
-            } else if ($xminutes < 0) {
-                $xminutes = 0;
+            $xHours = max(0, $wHours - $rHours);
+            $xMinutes = $wMinutes - $rMinutes;
+            if ($xMinutes < 0 && $xHours != 0) {
+                $xMinutes = 60 - abs($xMinutes);
+                $xHours -= 1;
+            } else if ($xMinutes < 0) {
+                $xMinutes = 0;
             }
             $hours += $xMinutes;
-            $minutes += $xminutes;
+            $minutes += $xMinutes;
         }
         $date_now = new DateTime();
         if ($data == null) {
