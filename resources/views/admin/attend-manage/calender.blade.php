@@ -529,6 +529,7 @@
                 .post("/api/v1/attends/comment/set", {
                     text: textArea.value,
                     rest: restTime.value,
+                    user: {{$user->id}},
                     date: date
                 })
                 .then(async (res) => {
