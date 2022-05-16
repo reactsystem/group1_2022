@@ -12,6 +12,7 @@ class RequestType extends Model
     protected $fillable = [
         'name',
         'type',
+        'color',
         'deleted_at',
     ];
 

@@ -70,6 +70,12 @@
                     <option value="3" <?php if($data->type == 3){?>selected<?php }?>>理由不要</option>
                 </select>
             </div>
+            <div class="mb-3 col-md-12 col-lg-6">
+                <label for="colorName" class="form-label">カラー</label>
+                <input type="color" class="form-control" id="colorName" placeholder="カラーを選択してください"
+                       value="{{$data->color}}"
+                >
+            </div>
         </div>
     </div>
 
@@ -94,6 +100,7 @@
     <script>
         let requestName = document.getElementById("requestName")
         let typeName = document.getElementById("typeName")
+        let colorName = document.getElementById("colorName")
 
         function saveData() {
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -108,6 +115,7 @@
             axios
                 .post("/admin/settings/request-types/edit/{{$id}}", {
                     name: requestName.value,
+                    color: colorName.value,
                     type: typeName.value,
                 })
                 .then(async (res) => {

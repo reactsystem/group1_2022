@@ -384,10 +384,12 @@ class AdminSettingsController extends Controller
     {
         $rules = [
             'name' => 'required',
+            'color' => 'required',
             'type' => 'required|numeric|min:0|max:3',
         ];
         $messages = [
             'name.required' => '名称を記入してください',
+            'color.required' => 'カラーを選択してください',
             'type.required' => '名称を記入してください',
             'type.numeric' => 'タイプを正しく選択してください',
             'type.min' => 'タイプを正しく選択してください',
@@ -400,8 +402,10 @@ class AdminSettingsController extends Controller
         try {
             $name = $request->name;
             $type = $request->type;
+            $color = $request->color;
             $param = [
                 'name' => $name,
+                'color' => $color,
                 'type' => $type,
             ];
             $id = RequestType::create($param)->id;
@@ -444,10 +448,12 @@ class AdminSettingsController extends Controller
     {
         $rules = [
             'name' => 'required',
+            'color' => 'required',
             'type' => 'required|numeric|min:0|max:3',
         ];
         $messages = [
             'name.required' => '名称を記入してください',
+            'color.required' => '名称を記入してください',
             'type.required' => '名称を記入してください',
             'type.numeric' => 'タイプを正しく選択してください',
             'type.min' => 'タイプを正しく選択してください',
@@ -465,8 +471,10 @@ class AdminSettingsController extends Controller
         try {
             $name = $request->name;
             $type = $request->type;
+            $color = $request->color;
             $param = [
                 'name' => $name,
+                'color' => $color,
                 'type' => $type,
             ];
             $data->update($param);
