@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Configuration;
 use App\Models\Department;
 use App\Models\Holiday;
+use App\Models\Notification;
 use App\Models\RequestType;
 use DateTime;
 use Illuminate\Http\Request;
@@ -472,6 +473,46 @@ class AdminSettingsController extends Controller
             return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
         }
         //return view('admin.attend-manage.edit', compact('data', 'id'));
+    }
+
+    function notifications(Request $request)
+    {
+        $data = Notification::where('user_id', 0)->orderByDesc('id')->paginate(20); // deleted_atに変更する
+        return view('admin.settings.notifications.index', compact('data'));
+    }
+
+    function viewNotification(Request $request)
+    {
+        $id = $request->id;
+        $data = Notification::find($id);
+        if ($data == null) {
+            return redirect("/admin/settings/notifications")->with('error', '指定された通知が見つかりません。(E20)');
+        }
+        if ($data->user_id != 0) {
+            return redirect("/admin/settings/notifications")->with('error', '指定された通知が見つかりません。(E21)');
+        }
+        return view('admin.settings.notifications.edit', compact('data', 'id'));
+    }
+
+    function deleteNotification(Request $request)
+    {
+        if (empty($request->id)) {
+            return redirect("/admin/settings/notifications")->with('error', '指定された通知が見つかりません。(E22)');
+        }
+        $id = $request->id;
+        $data = Notification::find($id);
+        if ($data == null) {
+            return redirect("/admin/settings/notifications")->with('error', '指定された通知が見つかりません。(E21)');
+        }
+        if ($data->user_id != 0) {
+            return redirect("/admin/settings/notifications")->with('error', '指定された通知が見つかりません。(E21)');
+        }
+        try {
+            $data->delete();
+            return redirect("/admin/settings/notifications")->with('result', '通知を削除しました。');
+        } catch (\Exception $e) {
+            return redirect("/admin/settings/notifications")->with('error', '通知の削除に失敗しました。(E30)');
+        }
     }
 
 }

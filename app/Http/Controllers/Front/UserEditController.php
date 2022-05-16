@@ -41,7 +41,8 @@ class UserEditController extends Controller
         $auth_user = Auth::user();
         $user = User::find ($auth_user['id']);
         $user -> name = $request ->InputName;
-        $user -> email = $request ->InputEmail;
+        $user->email = $request->InputEmail;
+        Notification::create(['user_id' => 0, 'title' => 'ユーザー情報が更新されました', 'data' => $user->name . 'がユーザー情報を更新しました。', 'url' => '/admin/attends/view?id=' . $user->id, 'status' => 0]);
 
         $user -> save();
         return view('front/account/account',['user' => $user,]);
@@ -89,7 +90,7 @@ class UserEditController extends Controller
 
     function notifications(Request $request)
     {
-        $data = Notification::orderByDesc('id')->paginate(20); // deleted_atに変更する
+        $data = Notification::where('user_id', Auth::id())->orderByDesc('id')->paginate(20); // deleted_atに変更する
         return view('front.account.notifications.index', compact('data'));
     }
 
@@ -99,6 +100,9 @@ class UserEditController extends Controller
         $data = Notification::find($id);
         if ($data == null) {
             return redirect("/account/notifications")->with('error', '指定された通知が見つかりません。(E20)');
+        }
+        if ($data->user_id != Auth::id()) {
+            return redirect("/account/notifications")->with('error', '指定された通知が見つかりません。(E21)');
         }
         return view('front.account.notifications.edit', compact('data', 'id'));
     }
@@ -111,6 +115,9 @@ class UserEditController extends Controller
         $id = $request->id;
         $data = Notification::find($id);
         if ($data == null) {
+            return redirect("/account/notifications")->with('error', '指定された通知が見つかりません。(E21)');
+        }
+        if ($data->user_id != Auth::id()) {
             return redirect("/account/notifications")->with('error', '指定された通知が見つかりません。(E21)');
         }
         try {

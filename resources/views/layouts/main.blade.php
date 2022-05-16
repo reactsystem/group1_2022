@@ -146,18 +146,18 @@
     <script>
 
         const sectionTitle = document.getElementById('sectionTitle')
+        const sectionTitle2 = document.getElementById('sectionTitle2')
         const sidebarBase = document.getElementById('sidebarBase')
 
         sectionTitle.onclick = function () {
             let classList = sidebarBase.classList
             const data = classList.item(classList.length - 1)
+            console.log('DAT: ' + sectionTitle.style.translate)
             if (data === 'sidebar-base2') {
-                sectionTitle.style.translate = "rotate(0deg)"
-                sectionTitle.innerText = "▶"
+                sectionTitle2.style.transform = "rotate(0.0deg)"
                 classList.replace("sidebar-base2", "sidebar-base")
             } else {
-                sectionTitle.style.translate = "rotate(90deg)"
-                sectionTitle.innerText = "▼"
+                sectionTitle2.style.transform = "rotate(90.0deg)"
                 classList.replace("sidebar-base", "sidebar-base2")
             }
         }

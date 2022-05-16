@@ -73,7 +73,7 @@ class AttendanceController extends Controller
         $tempDate = new DateTime();
         $data = MonthlyReport::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-m'))->first();
         if ($data != null) {
-            if ($data->status == 1) {
+            if ($data->status >= 1) {
                 return redirect("/attends")->with('error', '今月の月報が確定されているため出勤できません。');
             }
         }
@@ -137,7 +137,7 @@ class AttendanceController extends Controller
             //$minutes = "$timeMinutes";
         }
 
-        Attendance::find($data->id)->update(['mode' => 1, 'left_at' => $tempDate, 'time' => "$hours:$minutes"]);
+        Attendance::find($data->id)->update(['rest' => $data->rest ?? "00:00", 'mode' => 1, 'left_at' => $tempDate, 'time' => "$hours:$minutes"]);
         if ($workTimeOver) {
             return redirect("/attends")->with('result', '退勤しました。 ');
         }

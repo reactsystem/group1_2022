@@ -25,12 +25,18 @@
             margin-top: -6px;
             margin-right: 12px;
             color: #888;
-            transition-duration: 0.2s;
+            transition-duration: 0.4s;
         }
 
         .sidebarBtn:hover {
             color: #fff;
-            transition-duration: 0.05s;
+            transition-duration: 0.4s;
+        }
+
+        #sectionTitle2 {
+            transition-duration: 0.2s;
+            display: inline-block;
+            margin-top: -5px;
         }
 
         .noselect {
@@ -50,13 +56,14 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm fixed-top">
         <div class="container noselect">
-            <span class="d-inline d-lg-none sidebarBtn" id="sectionTitle">▶</span>
+            <span class="d-inline d-lg-none sidebarBtn" id="sectionTitle">MENU <span id="sectionTitle2">▶</span></span>
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
             @if (View::hasSection('pageTitle'))
-                <span style="font-size: 1.25rem; margin-top: -6px; margin-right: 12px; color: #888">|</span>
-                <span class="text-white" style="font-size: 1.125rem;">@yield('pageTitle')</span>
+                <span class="d-none d-sm-inline"
+                      style="font-size: 1.25rem; margin-top: -6px; margin-right: 12px; color: #888">|</span>
+                <span class="d-none d-sm-inline text-white" style="font-size: 1.125rem;">@yield('pageTitle')</span>
             @endif
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

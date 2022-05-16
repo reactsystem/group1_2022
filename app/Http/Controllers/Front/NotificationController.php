@@ -12,12 +12,12 @@ class NotificationController extends Controller
     function jump(int $id)
     {
         $data = Notification::find($id);
-        if ($data == null || $data->user_id != Auth::id()) {
-            return redirect("/home");
+        if ($data != null && (($data->user_id == 0 && Auth::user()->group_id == 1) || $data->user_id == Auth::id())) {
+            $url = preg_replace("/%%THIS%%/", $data->id, $data->url);
+            $data->update(['status' => 1]);
+            return redirect($url);
         }
-        $url = preg_replace("/%%THIS%%/", $data->id, $data->url);
-        $data->update(['status' => 1]);
-        return redirect($url);
+        return redirect("/home");
     }
 
 }

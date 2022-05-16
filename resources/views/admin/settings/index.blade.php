@@ -43,6 +43,21 @@
         <hr>
         <div class="card mb-3 mt-3">
             <div class="card-header">
+                通知
+            </div>
+            <div class="card-body">
+                <div>
+                    <span>
+                        通知管理<br>
+                        <span class="text-muted">通知の再表示と削除が行えます</span>
+                    </span>
+                    <a href="/admin/settings/notifications" style="float: right; margin-top: -19px"
+                       class="btn btn-primary">通知管理</a>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3 mt-3">
+            <div class="card-header">
                 環境設定
             </div>
             <div class="card-body">
