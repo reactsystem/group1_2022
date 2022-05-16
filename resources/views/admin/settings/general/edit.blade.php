@@ -77,6 +77,9 @@
                 <label for="formFile" class="form-label">有給設定CSV</label>
                 <input class="form-control" type="file" id="holidaysConfig">
             </div>
+            <div class="mb-3">
+                <a href="/admin/settings/general/download" class="btn btn-success">デフォルトの有給設定CSVをダウンロード</a>
+            </div>
         </div>
     </div>
 
