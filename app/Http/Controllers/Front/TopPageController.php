@@ -19,6 +19,7 @@ class TopPageController extends Controller
         if (!Auth::check()) {
             return redirect('/login');
         }
+        $notifications = Auth::user()->notifications()->where('status', 0)->orderByDesc('id')->paginate(5);
         $tempDate = new DateTime();
         $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         $allData = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("mode", "=", 1)->get();
@@ -49,7 +50,7 @@ class TopPageController extends Controller
         }
         $date_now = new DateTime();
         if ($data == null) {
-            return view('front.index', compact('data', 'hours', 'minutes', 'hoursReq', 'minutesReq'));
+            return view('front.index', compact('notifications', 'data', 'hours', 'minutes', 'hoursReq', 'minutesReq'));
         }
         if ($data->mode == 1) {
             $date_now = $data->updated_at;
@@ -99,7 +100,8 @@ class TopPageController extends Controller
 
         $hoursReq += intval($minutesReq / 60);
         $minutesReq = $minutesReq % 60;
-        return view('front.index', compact('interval', 'data', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'xHours', 'xMinutes'));
+
+        return view('front.index', compact('notifications', 'interval', 'data', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'xHours', 'xMinutes'));
     }
 
 

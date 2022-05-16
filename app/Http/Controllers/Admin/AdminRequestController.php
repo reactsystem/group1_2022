@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\RequestType;
 use App\Models\User;
 use App\Models\VariousRequest;
@@ -68,21 +69,24 @@ class AdminRequestController extends Controller
         VariousRequest::find($request ->id)->update(['status' => 1]);
         VariousRequest::where('related_id','=',$request ->uuid)->update(['status' => 1]);
         $message = '申請を承認しました。';
+        Notification::create(['user_id' => $user->id, 'badge_color' => '00DD00', 'title' => '申請が承認されました', 'data' => '申請が承認されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
 
         return redirect('/admin/request')->with('flash_message', $message);
     }
 
     // 申請却下
     function reject(Request $request){
-        VariousRequest::find($request ->id)->update(['status' => 2]);
-        VariousRequest::where('related_id','=',$request ->uuid)->update(['status' => 2]);
-        $this_request = VariousRequest::find($request ->id);
-        $request_days = $this_request -> related_request() -> count() +1;
-        $user = User::find($this_request ->user_id);
+        VariousRequest::find($request->id)->update(['status' => 2]);
+        VariousRequest::where('related_id', '=', $request->uuid)->update(['status' => 2]);
+        $this_request = VariousRequest::find($request->id);
+        $request_days = $this_request->related_request()->count() + 1;
+        $user = User::find($this_request->user_id);
 
         // 有給休暇を戻す
-        $user -> paid_holiday = $user->paid_holiday + $request_days;
-        $user ->save();
+        $user->paid_holiday = $user->paid_holiday + $request_days;
+        $user->save();
+
+        Notification::create(['user_id' => $user->id, 'badge_color' => 'DD0000', 'title' => '申請が却下されました', 'data' => '申請が却下されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
 
         return redirect('/admin/request')->with('error', '申請を却下しました。');
     }

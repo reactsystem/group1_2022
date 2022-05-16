@@ -51,19 +51,28 @@ class User extends Authenticatable
         return $this->hasOne(Attendance::class)->ofMany('date', 'max');
     }
 
-    function departments(){
+    function departments()
+    {
         return $this->hasOne(Department::class, 'id', 'department');
     }
 
-    function attendance(){
+    function attendance()
+    {
         return $this->hasMany(Attendance::class, 'user_id', 'id');
     }
 
-    function user_memo(){
+    function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id');
+    }
+
+    function user_memo()
+    {
         return $this->hasOne(UserMemo::class, 'user_id', 'id');
     }
 
-    function various_requests(){
-        return $this ->hasOne(various_request::class,'user_id','id');
+    function various_requests()
+    {
+        return $this->hasOne(various_request::class, 'user_id', 'id');
     }
 }

@@ -10,6 +10,8 @@
             </div>
             <div class="col-md-6">
                 <a href='/admin/attends/new' class="btn btn-primary" style="float: right">新規登録</a>
+                <a href='/admin/attends/notify' class="btn btn-success"
+                   style="float: right; margin-right: 10px">メッセージ送信</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
@@ -59,24 +61,28 @@
                                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                                         data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                操作
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="/admin/attends/view?id={{$user -> id}}">社員情報確認・編集</a>
-                                </li>
-                                <li>
-                                    <form action = "/admin/request" method = "post">
-                                        @csrf
-                                    <input type = 'hidden' value = {{$user -> id}} name = 'id'>
-                                    <button class="dropdown-item" type = "submit">社員申請確認</button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
+                                    操作
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="/admin/attends/view?id={{$user -> id}}">社員情報確認・編集</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/admin/attend-manage/calender/{{$user->id}}">勤怠情報確認</a>
+                                    </li>
+                                    <li>
+                                        <form action="/admin/request" method="post">
+                                            @csrf
+                                            <input type='hidden' value='{{$user -> id}}' name='id'>
+                                            <button class="dropdown-item" type="submit">社員申請確認</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
             </tbody>
         </table>
     </div>

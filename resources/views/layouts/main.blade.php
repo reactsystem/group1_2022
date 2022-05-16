@@ -25,12 +25,75 @@
             color: #fff;
             transition-duration: 0.05s;
         }
+
+        @media screen and (max-width: 1023px) {
+            .sidebar-data {
+                list-style: none;
+                font-size: 16pt;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 80px;
+                padding-left: 0;
+                transition-duration: 0.3s;
+            }
+
+            .sidebar-base {
+                background-color: #BBB;
+                height: 0;
+                z-index: -20;
+                transition-duration: 0.3s;
+            }
+
+            .sidebar-base2 {
+                background-color: #BBB;
+                height: 370px;
+                z-index: 10;
+                transition-duration: 0.3s;
+            }
+
+            .main-card {
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            .sidebar-data {
+                list-style: none;
+                font-size: 16pt;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 80px;
+                padding-left: 0;
+                position: fixed;
+                transition-duration: 0.3s;
+                padding-right: 20px;
+                z-index: 10;
+            }
+
+            .sidebar-base {
+                height: 100vh;
+                background-color: #BBB;
+                transition-duration: 0.3s;
+                z-index: 0;
+            }
+
+            .sidebar-base2 {
+                height: 100vh;
+                background-color: #BBB;
+                transition-duration: 0.3s;
+                z-index: 0;
+            }
+
+            .main-card {
+                border-radius: 0;
+            }
+        }
     </style>
     <div class="container">
         <div class="row" style="width: 100%">
-            <div class="col-lg-3 col-md-12 text-dark d-none d-sm-none d-lg-inline-block"
-                 style="height: 100vh; background-color: #BBB;">
-                <ul style="list-style: none; font-size: 16pt; font-weight: bold; cursor: pointer; margin-top: 80px; padding-left: 0; position: fixed; width: 13rem">
+            <div id="sidebarBase" class="col-lg-4 col-xl-3 col-md-12 text-dark sidebar-base">
+                <ul class="sidebar-data">
                     <li class="sidebar-list<?php if (Request::is('home')) {
                         echo ' active';
                     }?>" onclick="href('/home')"><span style="color: #888;">●</span> トップページ
@@ -59,7 +122,7 @@
                     @endif
                 </ul>
             </div>
-            <div class="col-lg-9 col-md-12 bg-light" style="height: 100%; min-height: 100vh">
+            <div class="col-lg-8 col-xl-9 bg-light main-card" style="height: 100%; min-height: 100vh;">
                 <div style="margin-top: 80px">
                     @yield('content')
                 </div>
@@ -67,7 +130,25 @@
         </div>
     </div>
     <script>
-        function href(url){
+
+        const sectionTitle = document.getElementById('sectionTitle')
+        const sidebarBase = document.getElementById('sidebarBase')
+
+        sectionTitle.onclick = function () {
+            let classList = sidebarBase.classList
+            const data = classList.item(classList.length - 1)
+            if (data === 'sidebar-base2') {
+                sectionTitle.style.translate = "rotate(0deg)"
+                sectionTitle.innerText = "▶"
+                classList.replace("sidebar-base2", "sidebar-base")
+            } else {
+                sectionTitle.style.translate = "rotate(90deg)"
+                sectionTitle.innerText = "▼"
+                classList.replace("sidebar-base", "sidebar-base2")
+            }
+        }
+
+        function href(url) {
             location = url
         }
     </script>

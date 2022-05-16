@@ -29,6 +29,14 @@
             <div class="card-body">
                 <div>
                     <span>
+                        通知管理<br>
+                        <span class="text-muted">通知の再表示と削除が行えます</span>
+                    </span>
+                    <a href="/account/notifications" style="float: right; margin-top: -19px" class="btn btn-primary">通知管理</a>
+                </div>
+                <hr>
+                <div>
+                    <span>
                         ユーザー情報確認・編集<br>
                         <span class="text-muted">ユーザー情報の確認と編集が行えます。</span>
                     </span>

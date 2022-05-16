@@ -18,13 +18,39 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .sidebarBtn {
+            cursor: pointer;
+            font-size: 1.25rem;
+            margin-top: -6px;
+            margin-right: 12px;
+            color: #888;
+            transition-duration: 0.2s;
+        }
+
+        .sidebarBtn:hover {
+            color: #fff;
+            transition-duration: 0.05s;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+        }
+    </style>
 
     @yield('styles')
+    @yield('styles_basic')
 </head>
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm fixed-top">
         <div class="container">
+            <span class="d-inline d-lg-none sidebarBtn noselect" id="sectionTitle">▶</span>
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
@@ -46,7 +72,7 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
+                    <li class="nav-item d-lg-inline d-md-none d-none">
                         <span id="navCurrentTime" class="nav-link text-white fw-bold"
                               style="font-size: 1.125rem;padding-bottom: 0;padding-top: 6px;">時刻取得中</span>
                     </li>

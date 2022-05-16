@@ -6,11 +6,23 @@
     <div class="container">
         <h3 class="fw-bold">新着通知</h3>
         <hr>
-        <div class="card">
-            <div class="card-body">
-                ● ここに通知が入ります
-            </div>
-        </div>
+        @if($notifications != null && count($notifications) != 0)
+            @foreach($notifications as $notification)
+                <div class="card mb-3" onclick="href('/notification/{{$notification->id}}')" style="cursor: pointer">
+                    <div class="card-body">
+                        <span
+                            style="color: #{{$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
+                            class="text-muted"> - </span>
+                        {!! $notification->data !!}
+                    </div>
+                </div>
+            @endforeach
+            {{$notifications->links()}}
+        @else
+            <span class="text-muted text-center">
+                通知はありません
+            </span>
+        @endif
         @if($data == null)
             <hr>
             <div class="alert alert-primary mt-3" style="display: flex">
