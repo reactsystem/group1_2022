@@ -160,7 +160,7 @@
                     console.log('WRITE: ' + req2[req2.length - 1])
                 }
             );
-            let message = '<b>申請者の名前:</b> ' + requestId.options[userId].text + '<br>' + '<b>申請する日付:</b> ' + req2.join(', ') + '<br>' +
+            let message = '<b>申請者の名前:</b> ' + userInput.options[userId].text + '<br>' + '<b>申請する日付:</b> ' + req2.join(', ') + '<br>' +
                 '<b>種別:</b> ' + types[requestType.value - 1][0] + '<br>'
             if (types[requestType.value - 1][1] === 1) {
                 if (requestTime.value !== "") {

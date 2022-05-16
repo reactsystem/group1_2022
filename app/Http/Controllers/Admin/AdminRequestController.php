@@ -14,8 +14,8 @@ class AdminRequestController extends Controller
 {
     // メイン
     function request(){
-        $all_requests = VariousRequest::whereNull('related_id')->where('status','=',0)->get();
-        $all_user= User::all();
+        $all_requests = VariousRequest::whereNull('related_id')->where('status', '=', 0)->orderByDesc('id')->get();
+        $all_user = User::all();
         return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $all_requests,]);
     }
 
