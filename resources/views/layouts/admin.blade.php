@@ -51,12 +51,14 @@
             .sidebar-base {
                 background-color: #222;
                 height: 0;
+                z-index: 1;
                 transition-duration: 0.3s;
             }
 
             .sidebar-base2 {
                 background-color: #222;
                 height: 370px;
+                z-index: 1;
                 transition-duration: 0.3s;
             }
 
@@ -125,7 +127,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-lg-8 col-xl-9 bg-light main-card" style="height: 100%; min-height: 100vh">
+            <div class="col-lg-8 col-xl-9 bg-light main-card" style="height: 100%; min-height: 100vh; z-index: 2">
                 <div style="margin-top: 80px">
                     @yield('content')
                 </div>
