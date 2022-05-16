@@ -104,7 +104,7 @@
 
             <div class="mb-3">
                 <label for="InputemployeeID" class="form-label">社員番号</label>
-                <input type="text" class="form-control" id="InputemployeeID" name='employee_id' required>
+                <input type="number" class="form-control" id="InputemployeeID" name='employee_id' required>
             </div>
             <div class="mb-3">
                 権限<select class="form-select" aria-label="権限" name='group_id' required>
