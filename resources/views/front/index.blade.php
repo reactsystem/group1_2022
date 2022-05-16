@@ -35,7 +35,7 @@
             </div>
         @endif
         <hr>
-        <div style="display: flex; width: 100%; gap: 10px" class="mt-3">
+        <div style="display: flex; width: 100%; gap: 10px; flex-wrap: wrap" class="mt-3">
             @if($data != null)
                 <div style="flex: 1">
                     <span class="text-muted">本日の勤務時間(未確定)</span>

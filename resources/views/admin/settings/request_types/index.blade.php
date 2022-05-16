@@ -24,7 +24,7 @@
                 <h2 class="fw-bold">申請種別設定</h2>
             </div>
             <div class="col-md-6">
-                <a href="/admin/settings/department/new" class="btn btn-primary" style="float: right">申請種別を追加</a>
+                <a href="/admin/settings/request-types/new" class="btn btn-primary" style="float: right">申請種別を追加</a>
                 <a href="/admin/settings" class="btn btn-secondary"
                    style="float: right; margin-right: 10px">システム設定に戻る</a>
             </div>

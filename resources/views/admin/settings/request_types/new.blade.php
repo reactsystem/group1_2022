@@ -102,6 +102,7 @@
                             '</div>'
                         await _sleep(1000)
                         location = "/admin/settings/request-types/edit/" + res.data.id
+                        return
                     } else {
                         let alertStr = '<div class="alert alert-danger" role="alert">' +
                             '<strong>エラー</strong> - ' +
