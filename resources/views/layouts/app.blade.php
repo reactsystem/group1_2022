@@ -47,6 +47,10 @@
             -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none;
         }
+
+        .modal {
+            z-index: 1055 !important;
+        }
     </style>
 
     @yield('styles')

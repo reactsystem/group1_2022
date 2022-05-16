@@ -18,7 +18,7 @@
 @section('content')
     <div class="container mb-4">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-10 col-12">
                 @if($data != null && $data->mode == 0)
                     <div class="row">
                         <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
@@ -28,7 +28,7 @@
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
                             {{$interval}}
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 col-sm-3">
 
                         </div>
                         <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
@@ -41,31 +41,31 @@
                     </div>
                 @elseif($data != null && $data->mode == 1)
                     <div class="row">
-                        <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
+                        <div class="col-6 col-md-auto" style="line-height: 40px; height: 40px; padding-right: 0">
                             労働時間
                         </div>
-                        <div class="col-auto"
+                        <div class="col-6 col-md-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
                             {{$interval}}
                         </div>
-                        <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
+                        <div class="col-6 col-md-auto" style="line-height: 40px; height: 40px; padding-right: 0">
                             出勤時刻
                         </div>
-                        <div class="col-auto"
+                        <div class="col-6 col-md-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
                             {{$data->created_at->format("G:i")}}
                         </div>
-                        <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
+                        <div class="col-6 col-md-auto" style="line-height: 40px; height: 40px; padding-right: 0">
                             退勤時刻
                         </div>
-                        <div class="col-auto"
+                        <div class="col-6 col-md-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
                             {{$data->updated_at->format("G:i")}}
                         </div>
-                        <div class="col-auto" style="line-height: 40px; height: 40px; padding-right: 0">
+                        <div class="col-6 col-md-auto" style="line-height: 40px; height: 40px; padding-right: 0">
                             合計時間
                         </div>
-                        <div class="col-auto"
+                        <div class="col-6 col-md-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
                             {{$data->time}}
                         </div>
@@ -74,7 +74,7 @@
                     <h5 class="" style="line-height: 40px">まだ出勤していません</h5>
                 @endif
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 d-none d-md-inline">
                 @if($data != null && $data->mode == 0)
                     <a class="btn btn-danger" onclick="leave()"
                        style="float: right; margin-left: 5px; width: 100px">退勤</a>
@@ -84,6 +84,18 @@
                 @else
                     <a class="btn btn-primary" href="/attends/start"
                        style="float: right; margin-left: 5px; width: 100px">出勤</a>
+                @endif
+            </div>
+            <div class="col-md-2 col-12 d-inline d-md-none text-center mt-2" style="width: 100%">
+                @if($data != null && $data->mode == 0)
+                    <a class="btn btn-danger" onclick="leave()"
+                       style="margin: 0 auto; width: 100px">退勤</a>
+                @elseif($data != null && $data->mode == 1)
+                    <a class="btn btn-secondary" href="/attends/cancel"
+                       style="margin: 0 auto; width: 100px">退勤取消</a>
+                @else
+                    <a class="btn btn-primary" href="/attends/start"
+                       style="margin: 0 auto; width: 100px">出勤</a>
                 @endif
             </div>
             <div class="col-md-12 mt-3" id="alert">
