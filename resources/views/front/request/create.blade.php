@@ -153,7 +153,7 @@
                     message += '<b>有給消費:</b> ' + reqDates.length + '日(残り{{Auth::user()->paid_holiday}}日)<br>'
                 }
             }
-            if (types[requestType.value - 1][1] !== 2 && requestReason.value === "") {
+            if (types[requestType.value - 1][1] !== 2 && types[requestType.value - 1][1] !== 3 && requestReason.value === "") {
                 submitButton.className = "btn btn-danger disabled"
                 submitButton.innerText = "申請できません"
                 v1++
@@ -201,7 +201,7 @@
 
         function checkData() {
             console.log('Type: ' + typeSelected + ' / Time: ' + timeAvailable + ' / Work: ' + workTimeAvailable + ' / Reason: ' + reasonAvailable)
-            if (typeSelected && timeAvailable && (types[requestType.value - 1][1] !== 1 || workTimeAvailable) && (types[requestType.value - 1][1] === 2 || reasonAvailable)) {
+            if (typeSelected && timeAvailable && (types[requestType.value - 1][1] !== 1 || workTimeAvailable) && (types[requestType.value - 1][1] === 2 || types[requestType.value - 1][1] === 3 || reasonAvailable)) {
                 proceedButton.removeAttribute("disabled")
             } else {
                 proceedButton.setAttribute("disabled", "")

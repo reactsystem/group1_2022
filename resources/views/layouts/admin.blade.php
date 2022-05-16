@@ -142,9 +142,9 @@
         </div>
     </div>
     <div id="loading"
-         style="transition-duration: 0.5s; position: fixed; top: 0; left: 0; min-width: 100vw; min-height: 100vh; background-color: #bbb; z-index: 10">
+         style="transition-duration: 0.5s; position: fixed; top: 0; left: 0; min-width: 100vw; min-height: 100vh; background-color: #222; z-index: 10">
         <span
-            style="position: fixed; margin: 0 auto; top: 45%; width: 100vw; text-align: center; color: #333; font-size: 40pt">
+            style="position: fixed; margin: 0 auto; top: 45%; width: 100vw; text-align: center; color: #bbb; font-size: 40pt">
             Loading...
         </span>
     </div>

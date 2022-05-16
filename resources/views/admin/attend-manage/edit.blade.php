@@ -32,6 +32,8 @@
                     <a href="/admin/attend-manage/view/{{$id}}" class="btn btn-secondary"
                        style="float: right; margin-right: 10px;">キャンセル</a>
                 </div>
+                <div class="col-md-12 mt-3" id="alert">
+                </div>
                 @if (session('error'))
                     <div class="col-md-12 mt-3">
                         <div class="alert alert-danger" role="alert">
@@ -140,6 +142,7 @@
         const startDate = new Date(startTime)
         const currentDate = new Date()
         let diff = new Date(currentDate.getTime() - startDate.getTime() + 54000000)
+        let alert = document.getElementById("alert")
 
         function saveAttendData() {
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -157,6 +160,8 @@
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
 
+            alert.innerHTML = ""
+
             axios
                 .post("/admin/attend-manage/edit/{{$id}}", {
                     date: dateInput.value,
@@ -171,8 +176,21 @@
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success"
                         saveBtn.innerText = "保存しました"
-                        await _sleep(1500)
+                        alert.innerHTML = '<div class="alert alert-success" role="alert">' +
+                            '<strong>成功</strong> - 保存が完了しました。' +
+                            '</div>'
+                        await _sleep(1000)
                     } else {
+                        let alertStr = '<div class="alert alert-danger" role="alert">' +
+                            '<strong>エラー</strong> - ' +
+                            res.data.message + '<br>'
+                        if (resultCode === 1) {
+                            Object.keys(res.data.errors).forEach(key => {
+                                alertStr += res.data.errors[key] + '<br>'
+                            });
+                        }
+                        alertStr += '</div>';
+                        alert.innerHTML = alertStr
                         saveBtn.className = "btn btn-danger"
                         saveBtn.innerText = "保存失敗"
                         await _sleep(2000)
