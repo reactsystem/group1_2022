@@ -31,7 +31,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="fw-bold">仮設管理者トップページ</h2>
+        <h2 class="fw-bold">ダッシュボード</h2>
         <hr>
         <h4 class="fw-bold mt-4">新着通知</h4>
         <hr>
