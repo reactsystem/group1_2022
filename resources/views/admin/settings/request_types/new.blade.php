@@ -66,6 +66,11 @@
                         <option value="3">理由不要</option>
                     </select>
                 </div>
+                <div class="mb-3 col-md-12 col-lg-6">
+                    <label for="colorName" class="form-label">カラー</label>
+                    <input type="color" class="form-control" id="colorName" placeholder="カラーを選択してください"
+                    >
+                </div>
             </div>
         </form>
     </div>
@@ -79,6 +84,7 @@
             let textArea = document.getElementById("textArea")
 
             let nameInput = document.getElementById("nameInput")
+            let colorName = document.getElementById("colorName")
             let typeName = document.getElementById("typeName")
 
             saveBtn.setAttribute("disabled", "")
@@ -89,6 +95,7 @@
             axios
                 .post("/admin/settings/request-types/new", {
                     name: nameInput.value,
+                    color: colorName.value,
                     type: typeName.value,
                 })
                 .then(async (res) => {
