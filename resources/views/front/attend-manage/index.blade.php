@@ -472,7 +472,7 @@
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="restInput" class="form-label">休憩時間</label>
                 <input type="time" class="form-control" id="restInput" placeholder="未設定"
-                       value="`+modalData.rest+`"
+                       value="`+modalData.rest+`" disabled
                 >
             </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
                 } else {
