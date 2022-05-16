@@ -67,7 +67,7 @@
             .main-card {
                 border-top-left-radius: 20px;
                 border-top-right-radius: 20px;
-                transition-duration: 0.4s;
+                transition-duration: 0.2s;
             }
         }
 
@@ -98,6 +98,10 @@
             .main-card {
                 border-radius: 0;
             }
+        }
+
+        .basement {
+            transition-duration: 0.0s;
         }
     </style>
     <div class="container">
@@ -131,11 +135,18 @@
                 </ul>
             </div>
             <div class="col-lg-8 col-xl-9 bg-light main-card" id="mainCard" style="height: 100%; min-height: 100vh;">
-                <div style="margin-top: 80px">
+                <div style="margin-top: 80px" class="basement">
                     @yield('content')
                 </div>
             </div>
         </div>
+    </div>
+    <div id="loading"
+         style="transition-duration: 0.5s; position: fixed; top: 0; left: 0; min-width: 100vw; min-height: 100vh; background-color: #bbb; z-index: 10">
+        <span
+            style="position: fixed; margin: 0 auto; top: 45%; width: 100vw; text-align: center; color: #333; font-size: 40pt">
+            Loading...
+        </span>
     </div>
     <script>
 
@@ -143,6 +154,14 @@
         const sectionTitle2 = document.getElementById('sectionTitle2')
         const sidebarBase = document.getElementById('sidebarBase')
         const mainCard = document.getElementById('mainCard')
+        const _sleepX = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        window.onload = async () => {
+            await _sleepX(200)
+            loading.style.opacity = 0.0
+            await _sleepX(500)
+            loading.style.display = "none"
+        }
 
         sectionTitle.ontransitionend = () => {
             let classList = sidebarBase.classList

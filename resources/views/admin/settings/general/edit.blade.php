@@ -96,7 +96,7 @@
             let startInput = document.getElementById("startInput")
             let endInput = document.getElementById("endInput")
             let restInput = document.getElementById("restInput")
-            let restOverInput = document.getElementById("restOverInput")
+            //let restOverInput = document.getElementById("restOverInput")
             let holidaysConfig = document.getElementById("holidaysConfig")
 
             saveBtn.setAttribute("disabled", "")
@@ -111,7 +111,7 @@
             params.append("start", startInput.value)
             params.append("end", endInput.value)
             params.append("rest", restInput.value)
-            params.append("rest_over", restOverInput.value)
+            //params.append("rest_over", restOverInput.value)
             params.append("paid_holiday", holidaysConfig.files[0])
 
             axios

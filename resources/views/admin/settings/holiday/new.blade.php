@@ -133,6 +133,7 @@
                             '</div>'
                         await _sleep(1000)
                         location = "/admin/settings/holiday/edit/" + res.data.id
+                        return
                     } else {
                         let alertStr = '<div class="alert alert-danger" role="alert">' +
                             '<strong>エラー</strong> - ' +
