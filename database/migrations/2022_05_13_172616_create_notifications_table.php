@@ -17,6 +17,9 @@ return new class extends Migration {
             $table->bigInteger('user_id');
             $table->string('title');
             $table->longText('data');
+            $table->string('url')->default('/account/notifications/%%THIS%%');
+            $table->string('badge_color')->default("008cff");
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

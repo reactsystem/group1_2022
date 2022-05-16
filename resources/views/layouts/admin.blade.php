@@ -26,7 +26,8 @@
     </style>
     <div class="container">
         <div class="row" style="width: 100%">
-            <div class="col-md-3 text-dark" style="height: 100vh; background-color: #22;">
+            <div class="col-lg-4 col-xl-3 col-md-12 text-dark d-lg-inline d-md-none d-sm-none d-none"
+                 style="height: 100vh; background-color: #22;">
                 <ul style="list-style: none; font-size: 16pt; font-weight: bold; cursor: pointer; margin-top: 80px; padding-left: 0; position: fixed">
                     <li class="sidebar-list<?php if (Request::is('admin')) {
                         echo ' active';
@@ -54,7 +55,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-md-9 bg-light" style="height: 100%; min-height: 100vh">
+            <div class="col-lg-8 col-xl-9 bg-light" style="height: 100%; min-height: 100vh">
                 <div style="margin-top: 80px">
                     @yield('content')
                 </div>

@@ -8,16 +8,11 @@
         <hr>
         @if($notifications != null && count($notifications) != 0)
             @foreach($notifications as $notification)
-                <div class="card">
-                    <div class="card-header" style="display: flex">
-                        <div style="flex: 5; height: 30px; line-height: 30px;">
-                            {{$notification->title}}
-                        </div>
-                        <div style="flex: 1">
-                            <a href="#" class="btn btn-danger btn-sm" style="float: right">削除</a>
-                        </div>
-                    </div>
+                <div class="card mb-3" onclick="href('/notification/{{$notification->id}}')" style="cursor: pointer">
                     <div class="card-body">
+                        <span
+                            style="color: #{{$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
+                            class="text-muted"> - </span>
                         {!! $notification->data !!}
                     </div>
                 </div>

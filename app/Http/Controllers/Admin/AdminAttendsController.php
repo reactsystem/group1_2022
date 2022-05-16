@@ -4,9 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\UserMemo;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Validator;
 
 
 class AdminAttendsController extends Controller
@@ -92,14 +99,47 @@ class AdminAttendsController extends Controller
         $user->group_id=$request->group_id;
         $user->joined_date=$request->joined_date;
         $user->left_date=$request->left_date;
-        $user->paid_holiday=$request->paid_holiday;
+        $user->paid_holiday = $request->paid_holiday;
 
         $user->save();
 
         $user_memo = UserMemo::where('user_id', '=', $request->id)->first();
         $user_memo->memo = $request->memo;
-        $user_memo -> save();
+        $user_memo->save();
         return redirect('/admin/attends');
+    }
+
+    function message(Request $request): Factory|View|Application
+    {
+        $users = User::where('left_date', '=', null)->get();
+        return view('admin.user.notification', compact('users'));
+    }
+
+    function createMessage(Request $request): Redirector|Application|RedirectResponse
+    {
+        $user = User::find($request->user_id);
+        if ($user == null) {
+            redirect('/admin/attends/notify')->with('error', '指定された社員が見つかりません。');
+        }
+        $rules = [
+            'user_id' => 'required|numeric',
+            'title' => 'required',
+            'data' => 'required',
+        ];
+        $messages = [
+            'user_id.required' => '社員を選択してください。',
+            'user_id.numeric' => '社員を正しく選択してください',
+            'title.required' => 'タイトルを記入してください',
+            'data.required' => 'メッセージを記入してください',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return redirect('/admin/attends/notify')->with('error', '必須項目が記入されていません。');
+            //return response()->json(["error" => true, "code" => 1, "message" => "必須項目が記入されていません", "errors" => $validator->errors()]);
+        }
+        Notification::create(['user_id' => $user->id, 'title' => $request->title, 'data' => $request->data, 'url' => $request->url ?? '/account/notifications/%%THIS%%', 'status' => 0]);
+
+        return redirect('/admin/attends')->with('result', 'メッセージを送信しました。');
     }
 
 }

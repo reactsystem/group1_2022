@@ -6,6 +6,7 @@ use App\Http\Controllers\CalenderUtil;
 use App\Models\Attendance;
 use App\Models\Holiday;
 use App\Models\MonthlyReport;
+use App\Models\Notification;
 use App\Models\RequestType;
 use App\Models\User;
 use App\Models\VariousRequest;
@@ -401,6 +402,7 @@ class AdminAttendManagementController
                 return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('error', 'この月の月報は確定されていないため承認出来ません。');
             } else {
                 MonthlyReport::find($data->id)->update(['status' => 2]);
+                Notification::create(['user_id' => $data->user_id, 'title' => '月報が承認されました', 'data' => '月報(' . $year . '年' . $month . '月度)が承認されました。承認の解除については管理部までご連絡ください。', 'url' => 'attend-manage?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
                 return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('result', '月報を承認しました。');
             }
         }

@@ -19,7 +19,7 @@ class TopPageController extends Controller
         if (!Auth::check()) {
             return redirect('/login');
         }
-        $notifications = Auth::user()->notifications()->paginate(5);
+        $notifications = Auth::user()->notifications()->where('status', 0)->orderByDesc('id')->paginate(5);
         $tempDate = new DateTime();
         $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         $allData = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("mode", "=", 1)->get();

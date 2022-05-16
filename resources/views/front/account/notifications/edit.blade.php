@@ -50,7 +50,7 @@
         </div>
         <hr>
         <div style="display: flex">
-            <h5 style="flex: 2;">
+            <h5 class="fw-bold" style="flex: 2;">
                 {{$data->title}}
             </h5>
             <div class="text-muted" style="flex: 1;">
@@ -60,7 +60,7 @@
             </div>
         </div>
         <hr>
-        <div style="">
+        <div style="cursor: pointer;" onclick="href('/notification/{{$data->id}}')">
             {!! $data->data !!}
         </div>
     </div>

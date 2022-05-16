@@ -12,7 +12,7 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
                         style="float: right;">登録
                 </button>
-                <a href='/admin/attends' class="btn btn-primary" style="float: right; margin-right: 10px;">戻る</a>
+                <a href='/admin/attends' class="btn btn-secondary" style="float: right; margin-right: 10px;">戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">

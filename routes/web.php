@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminTopPageController;
 use App\Http\Controllers\Front\AttendanceController;
 use App\Http\Controllers\Front\AttendanceManagementController;
+use App\Http\Controllers\Front\NotificationController;
 use App\Http\Controllers\Front\RequestController;
 use App\Http\Controllers\Front\TopPageController;
 use App\Http\Controllers\Front\UserEditController;
@@ -36,6 +37,8 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', [TopPageController::class, 'index'])->name('home');
+
+    Route::get('/notification/{id}', [NotificationController::class, 'jump']);
 
     /* 出勤・退勤 */
     Route::get('/attends', [AttendanceController::class, 'index'])->name('attend');
@@ -80,6 +83,8 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/attends/edit', [AdminAttendsController::class, 'admin_edit']);
     Route::post('/admin/attends/add', [AdminAttendsController::class, 'add_new_user']);
     Route::post('/admin/attends/update', [AdminAttendsController::class, 'update_user']);
+    Route::get('/admin/attends/notify', [AdminAttendsController::class, 'message']);
+    Route::post('/admin/attends/notify', [AdminAttendsController::class, 'createMessage']);
 
     /* 勤怠情報管理 */
     Route::get('/admin/attend-manage/search', [AdminAttendManagementController::class, 'search']);

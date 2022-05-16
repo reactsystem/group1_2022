@@ -89,7 +89,7 @@ class UserEditController extends Controller
 
     function notifications(Request $request)
     {
-        $data = Notification::paginate(20); // deleted_atに変更する
+        $data = Notification::orderByDesc('id')->paginate(20); // deleted_atに変更する
         return view('front.account.notifications.index', compact('data'));
     }
 
