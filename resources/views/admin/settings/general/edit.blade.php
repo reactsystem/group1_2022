@@ -20,10 +20,10 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <h2 class="fw-bold">各種情報編集</h2>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <button onclick="saveGeneralConfig()" id="saveBtn" class="btn btn-primary"
                         style="float: right; width: 150px">保存
                 </button>
