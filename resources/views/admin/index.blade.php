@@ -53,11 +53,18 @@
                 通知はありません
             </span>
         @endif
-        <h4 class="fw-bold mt-5">対応待ちの申請 ({{$requests->total()}}個)</h4>
+        <div class="row mt-5">
+            <div class="col-md-8">
+                <h4 class="fw-bold">対応待ちの申請 ({{$requests->total()}}個)</h4>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/request" style="float: right" class="btn btn-primary">申請一覧</a>
+            </div>
+        </div>
         <hr>
         @if($requests != null && count($requests) != 0)
             @foreach($requests as $request)
-                <div class="card mb-3 card-hover" onclick="href('/notification/{{$request->id}}')"
+                <div class="card mb-3 card-hover" onclick="href('/admin/request/detail?id={{$request->id}}')"
                      style="cursor: pointer">
                     <div class="card-body">
                         <?php
@@ -94,7 +101,15 @@
                 対応待ちの申請はありません
             </span>
         @endif
-        <h4 class="fw-bold mt-5">最新15件の勤務情報</h4>
+        <div class="row mt-5">
+            <div class="col-md-8">
+                <h4 class="fw-bold">最新15件の勤怠ログ</h4>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/attend-manage" style="float: right" class="btn btn-primary">勤怠情報管理</a>
+            </div>
+        </div>
+        <hr>
         <hr>
         <table class="table mb-5">
             <tr>

@@ -14,7 +14,7 @@ class AdminRequestController extends Controller
 {
     // メイン
     function request(){
-        $all_requests = VariousRequest::whereNull('related_id')->where('status', '=', 0)->orderByDesc('id')->get();
+        $all_requests = VariousRequest::whereNull('related_id')->where('status', '=', 0)->orderByDesc('id')->paginate(10);
         $all_user = User::all();
         return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $all_requests,]);
     }
@@ -36,9 +36,9 @@ class AdminRequestController extends Controller
 
         // 条件：日付
         if(isset($request->dateInput)){
-            $requests = $all_requests -> where('date','=',$request->dateInput) ->get();
+            $requests = $all_requests->where('date', '=', $request->dateInput)->paginate(10);
         }else{
-            $requests = $all_requests -> whereNull('related_id')->get();
+            $requests = $all_requests->whereNull('related_id')->paginate(10);
         }
 
         return view('/admin/request/admin_request',['users' => $all_user,'all_requests' => $requests,]);

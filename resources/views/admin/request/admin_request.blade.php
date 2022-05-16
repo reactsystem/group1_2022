@@ -288,6 +288,7 @@
             @endforeach
             </tbody>
         </table>
+        {{$all_requests->links()}}
     </div>
 
     <!-- Modal -->

@@ -45,7 +45,7 @@ class TopPageController extends Controller
             } else if ($xMinutes < 0) {
                 $xMinutes = 0;
             }
-            $hours += $xMinutes;
+            $hours += $xHours;
             $minutes += $xMinutes;
         }
         $date_now = new DateTime();

@@ -23,7 +23,7 @@ class AdminAttendsController extends Controller
     {
         $sort = $request->sort;
         if (empty($sort)) $sort = 'id';
-        $users = User::all();
+        $users = User::paginate(20);
         // 最終出勤日
 
 
