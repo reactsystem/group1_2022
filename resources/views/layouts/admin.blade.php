@@ -1,5 +1,18 @@
 @extends('layouts.2colb')
 
+@section('styles_basic')
+    <style>
+        @media screen and (max-width: 991.999px) {
+            #app {
+                background-color: #222;
+            }
+        }
+
+        @media screen and (min-width: 992px) {
+        }
+    </style>
+@endsection
+
 @section('data')
     <style>
         li.active {
@@ -24,7 +37,7 @@
             transition-duration: 0.05s;
         }
 
-        @media screen and (max-width: 1023px) {
+        @media screen and (max-width: 991.9999px) {
             .sidebar-data {
                 list-style: none;
                 font-size: 16pt;
@@ -53,7 +66,7 @@
             }
         }
 
-        @media screen and (min-width: 1024px) {
+        @media screen and (min-width: 992px) {
             .sidebar-data {
                 list-style: none;
                 font-size: 16pt;

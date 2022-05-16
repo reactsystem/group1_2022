@@ -49,8 +49,8 @@
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm fixed-top">
-        <div class="container">
-            <span class="d-inline d-lg-none sidebarBtn noselect" id="sectionTitle">▶</span>
+        <div class="container noselect">
+            <span class="d-inline d-lg-none sidebarBtn" id="sectionTitle">▶</span>
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
