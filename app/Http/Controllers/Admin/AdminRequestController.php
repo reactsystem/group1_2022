@@ -94,7 +94,7 @@ class AdminRequestController extends Controller
     // 申請新規追加
     function create(Request $request){
         $all_user = User::all();
-        $types = RequestType::all();
+        $types = RequestType::where('deleted_at', null)->get();
         return view('admin/request/admin_create', ['types' => $types, 'users' => $all_user]);
     }
 
@@ -115,7 +115,7 @@ class AdminRequestController extends Controller
                 return redirect("/admin/request/create")->with('error', '日付が指定されていません');
             }
             $type = RequestType::find($request->type);
-            if ($type == null) {
+            if ($type == null || $type->deleted_at != null) {
                 return redirect("/admin/request/create")->with('error', '種別が指定されていません');
             }
             $holidays = 0;

@@ -84,6 +84,7 @@
 
     <script>
         let departmentName = document.getElementById("departmentName")
+        let alert = document.getElementById("alert")
 
         function saveData() {
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

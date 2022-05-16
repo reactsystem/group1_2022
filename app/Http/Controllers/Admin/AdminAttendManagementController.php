@@ -176,6 +176,9 @@ class AdminAttendManagementController
             $date = $request->date ?? $data->date;
             $status = $request->status ?? $data->mode;
             $endTime = $request->end;
+            if ($status == 1 && $request->end == null) {
+                return response()->json(["error" => true, "code" => 23, "message" => "退勤済みに設定する場合は退勤時刻を記入してください。"]);
+            }
             $restTime = $request->rest;
             $startDate = $data->created_at;
             if (isset($request->start)) {
@@ -190,7 +193,7 @@ class AdminAttendManagementController
                     $endDate = new DateTime($data->created_at->format("Y-m-d ${endTime}:00"));
                 }
             } else {
-                $endDate = $data->left_at;
+                $endDate = new DateTime($data->left_at);
             }
 
             $workTime = "00:00";

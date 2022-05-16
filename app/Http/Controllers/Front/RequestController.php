@@ -90,7 +90,7 @@ class RequestController extends Controller
 
     function createRequest(Request $request)
     {
-        $types = RequestType::all();
+        $types = RequestType::where('deleted_at', null)->get();
         $reqDate = $request->date;
         return view('front.request.create', compact('types', 'reqDate'));
     }
@@ -112,7 +112,7 @@ class RequestController extends Controller
             return redirect("/request")->with('error', '日付が指定されていません');
         }
         $type = RequestType::find($request->type);
-        if ($type == null) {
+        if ($type == null || $type->deleted_at != null) {
             return redirect("/request")->with('error', '種別が指定されていません');
         }
         $holidays = 0;
