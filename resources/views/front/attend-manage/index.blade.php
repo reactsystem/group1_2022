@@ -460,7 +460,7 @@
                     if (isNaN(tempHours) || isNaN(tempMinutes)) {
                         restTimeStr = "--:--"
                     }*/
-                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + data.time + `</h2></span></div></div>`
+                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + ((data.time === 'null' ? '--:--' : data.time) ?? '--:--') + `</h2></span></div></div>`
                     console.log(data.typeName)
                 })
             }
