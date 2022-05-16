@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\RequestType;
 use App\Models\VariousRequest;
 use DateTime;
@@ -130,6 +131,7 @@ class RequestController extends Controller
         }
         $reason = $request->reason;
         $uuid = Str::uuid();
+        $id = 0;
         foreach ($tempDate as $index => $item) {
             //echo $request->time;
             $timeStr = "";
@@ -138,7 +140,7 @@ class RequestController extends Controller
                 $timeStr = intval($time[0]) . ":" . sprintf("%02d", intval($time[1]));
             }
             if ($index == 0) {
-                VariousRequest::create([
+                $id = VariousRequest::create([
                     'uuid' => $uuid,
                     'user_id' => Auth::id(),
                     'type' => $type->id,
@@ -146,7 +148,7 @@ class RequestController extends Controller
                     'status' => 0,
                     'time' => $timeStr,
                     'reason' => $request->reason ?? "",
-                ]);
+                ])->id;
             } else {
                 VariousRequest::create([
                     'uuid' => Str::uuid(),
@@ -160,11 +162,13 @@ class RequestController extends Controller
                 ]);
             }
         }
+        $user = Auth::user();
         if ($holidays > 0) {
-            $user = Auth::user();
             $user->paid_holiday = $user->paid_holiday - $holidays;
             $user->save();
         }
+        Notification::create(['user_id' => 0, 'title' => '申請が行われました', 'data' => $user->name . 'が申請(' . $type->name . ')を行いました。', 'url' => '/admin/request/detail?id=' . $id, 'status' => 0]);
+
         return redirect("/request")->with('result', '申請を行いました');
         //return view('front.request.check', compact('dates', 'type', 'holidays', 'reason', 'time'));
     }

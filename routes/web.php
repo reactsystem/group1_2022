@@ -127,6 +127,10 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/settings/general/edit', [AdminSettingsController::class, 'editGeneral']);
     Route::post('/admin/settings/general/edit', [AdminSettingsController::class, 'updateGeneral']);
 
+    Route::get('/admin/settings/notifications', [AdminSettingsController::class, 'notifications']);
+    Route::get('/admin/settings/notifications/{id}', [AdminSettingsController::class, 'viewNotification']);
+    Route::get('/admin/settings/notifications/delete/{id}', [AdminSettingsController::class, 'deleteNotification']);
+
     /* 各種申請 */
     Route::get('/admin/request', [AdminRequestController::class, 'request']);
     Route::post('/admin/request', [AdminRequestController::class, 'search']);
