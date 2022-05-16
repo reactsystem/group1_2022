@@ -39,10 +39,17 @@
                 <input type="text" class="form-control" value="{{$user['name']}}" id="InputName" name='name' disabled>
             </div>
 
+            @isset($user->user_memo->memo))
             <div class="mb-3">
                 <label for="InputMemo" class="form-label">社員メモ</label>
                 <input type="text" class="form-control" id="InputMemo" value="{{$user->user_memo->memo}}" name='memo'  disabled>
               </div>
+            @else
+            <div class="mb-3">
+              <label for="InputMemo" class="form-label">社員メモ</label>
+              <input type="text" class="form-control" id="InputMemo" value="記述なし" name='memo'  disabled>
+            </div>
+            @endisset
 
               <div class="mb-3">
                 <label for="InputemployeeID" class="form-label">社員番号</label>
