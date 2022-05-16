@@ -46,7 +46,7 @@
 
               <div class="mb-3">
                 <label for="InputemployeeID" class="form-label">社員番号</label>
-                <input type="text" class="form-control" value="{{$user['employee_id']}}" name='employee_id' id="InputemployeeID"  disabled required>
+                <input type="number" class="form-control" value="{{$user['employee_id']}}" name='employee_id' id="InputemployeeID"  disabled required>
               </div>
 
               <div class="mb-3">
