@@ -84,7 +84,11 @@ class AdminAttendsController extends Controller
 
         $user_memo = new UserMemo();
         $user_memo->user_id = $last_insert_id;
+        if(isset($request -> memo)){
         $user_memo -> memo = $request -> memo;
+        }else{
+            $user -> memo = '記入なし';
+        }
         $user_memo -> save();
         return redirect('/admin/attends');
     }
@@ -104,8 +108,12 @@ class AdminAttendsController extends Controller
         $user->save();
 
         $user_memo = UserMemo::where('user_id', '=', $request->id)->first();
-        $user_memo->memo = $request->memo;
-        $user_memo->save();
+        if(isset($request->memo)){
+            $user_memo->memo = $request->memo;
+        }else{
+            $user_memo->memo ='記入なし';
+        }
+        $user_memo -> save();
         return redirect('/admin/attends');
     }
 
