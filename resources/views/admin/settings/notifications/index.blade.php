@@ -25,7 +25,7 @@
             </div>
             <div class="col-md-6">
                 <a href="/admin/settings" class="btn btn-secondary"
-                   style="float: right; margin-right: 10px">ユーザー管理トップに戻る</a>
+                   style="float: right; margin-right: 10px">システム設定に戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
