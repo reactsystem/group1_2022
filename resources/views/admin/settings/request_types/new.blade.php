@@ -21,10 +21,10 @@
     <div class="container">
         <form>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h2 class="fw-bold">申請種別追加</h2>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <button type="button" onclick="createHolidayData()" class="btn btn-primary"
                             style="float: right; width: 150px;"
                             id="saveBtn">

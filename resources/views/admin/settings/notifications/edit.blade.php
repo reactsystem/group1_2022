@@ -20,10 +20,10 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h2 class="fw-bold">通知確認</h2>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <button class="btn btn-danger"
                         style="float: right;" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     削除
