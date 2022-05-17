@@ -109,7 +109,7 @@ class AttendanceManagementController extends Controller
         }
         $holidaysData = null;
         if ($year > $joinYear || ($year == $joinYear && $month >= $joinMonth)) {
-            $holidaysData = Holiday::where(function ($query) use ($year) {
+            $holidaysData = Holiday::where('deleted_at', null)->where(function ($query) use ($year) {
                 $query->where('year', '=', null)
                     ->orWhere('year', '=', $year);
             })->where(function ($query) use ($month) {
