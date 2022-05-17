@@ -20,7 +20,7 @@ class AdminTopPageController extends Controller
         if (!Auth::check()) {
             return redirect('/login');
         }
-        $requests = VariousRequest::where('status', 0)->orderByDesc('id')->paginate(3);
+        $requests = VariousRequest::where('status', 0)->where('related_id', null)->orderByDesc('id')->paginate(3);
         $data = Attendance::where("attendances.deleted_at", "=", null)->leftJoin('users', 'attendances.user_id', 'users.id')->select("attendances.*", "users.name as name")->orderByDesc('attendances.updated_at')->limit(15)->get();
         $related = [];
         foreach ($requests as $result) {
