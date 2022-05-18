@@ -18,12 +18,12 @@
     </style>
     <style>
         .card-hover {
-            box-shadow: 0 0 0;
-            transition-duration: 0.1s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+            transition-duration: 0.5s;
         }
 
         .card-hover:hover {
-            box-shadow: 0 0 10px #CCC;
+            box-shadow: 0 0 10px #AAA;
             transition-duration: 0.2s;
         }
     </style>

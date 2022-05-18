@@ -50,6 +50,7 @@ class AttendanceController extends Controller
                 $intervalTime = $created->diff($left);
                 //$intervalTime->set
             }
+            $leftTime = new DateTime($data->left_at ?? $data->update_at);
 
             $datArray = preg_split("/:/", $intervalTime->format("%h:%I"));
             $restData = preg_split("/:/", $data->rest ?? "00:00");
@@ -73,7 +74,7 @@ class AttendanceController extends Controller
             $date_now = $data->updated_at;
         }
         $createDate = new DateTime($data->created_at);
-        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime', 'restTime', 'config', 'origin'));
+        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime', 'restTime', 'config', 'origin', 'leftTime'));
     }
 
     public function attend(Request $request): Redirector|Application|RedirectResponse
