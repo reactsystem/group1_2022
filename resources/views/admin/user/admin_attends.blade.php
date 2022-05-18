@@ -9,7 +9,10 @@
                 <h2 class="fw-bold">社員一覧</h2>
             </div>
             <div class="col-md-6">
-                <a href='/admin/attends/new' class="btn btn-primary" style="float: right">新規登録</a>
+                <a href='/admin/attends/new' class="btn btn-primary" style="float: right ; margin-right: 10px">新規登録</a>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#searchModal" style="float: right; margin-right: 10px">
+                検索
+                </button>
                 <a href='/admin/attends/notify' class="btn btn-success"
                    style="float: right; margin-right: 10px">メッセージ送信</a>
             </div>
@@ -29,6 +32,55 @@
             @endif
         </div>
         <hr>
+        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="searchModalLabel">社員を検索</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/admin/attends" method='post'>
+
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="dateInput" class="form-label">社員番号</label>
+                                </div>
+                                <div class="mb-3 col-sm-12 col-md-9">
+                                    <input type = 'number' class="form-control" value='' name='id'>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <label for="dateInput" class="form-label">社員名</label>
+                                </div>
+                                <div class="mb-3 col-sm-12 col-md-9">
+                                    <input type = 'text' class="form-control" value='' name='name'>
+                                </div>
+
+
+                                <div class="col-sm-12">
+                                    <label for="status" class="form-label">部署</label>
+                                </div>
+                                <div class="mb-3 col-sm-12 col-md-9">
+                                    <select class="form-select" aria-label="部署" name='department'>
+                                        <option selected value="">ここから選択</option>
+                                      @foreach($departments as $item)
+                                        <option value="{{$item['id']}}">{{$item['name']}}</option>
+                                      @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                            <input type="submit" class="btn btn-primary" value='検索'>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <table class="table" id ="sort_table">
             <tr>
