@@ -33,16 +33,22 @@ class AttendanceController extends Controller
         $tempDate = new DateTime();
         $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         $date_now = new DateTime();
+        $date_now->s = 0;
         $interval = "";
         $restTime = (7 * 60 + 45) * 60;
-        $leftTime = "--:--";
         if ($data == null) {
             return view('front.attend.index', compact('request', 'data', 'baseTime', 'config'));
         } else {
 
-            $intervalTime = $data->created_at->diff($date_now);
+            $created = new DateTime($data->created_at->format("H:i:50"));
+            $created->s = 0;
+            $intervalTime = $created->diff($date_now);
             if ($data->mode == 1 && $data->left_at != null) {
-                $intervalTime = $data->created_at->diff($data->left_at);
+                $tempLeftDat = preg_split("/:/", $data->left_at);
+                $left = new DateTime($tempLeftDat[0] . ":" . $tempLeftDat[1] . ":50");
+                $left->s = 0;
+                $intervalTime = $created->diff($left);
+                //$intervalTime->set
             }
 
             $datArray = preg_split("/:/", $intervalTime->format("%h:%I"));
@@ -52,7 +58,7 @@ class AttendanceController extends Controller
             $rHours = intval($restData[0]);
             $rMinutes = intval($restData[1]);
             $xhours = max(0, $wHours - $rHours);
-            $xminutes = $wMinutes - $rMinutes + 1;
+            $xminutes = $wMinutes - $rMinutes;
             if ($xminutes < 0 && $xhours != 0) {
                 $xminutes = 60 - abs($xminutes);
                 $xhours -= 1;
@@ -61,13 +67,13 @@ class AttendanceController extends Controller
             }
             $restTime = ($rHours * 60 + $rMinutes) * 60;
             $interval = $xhours . ":" . sprintf("%02d", $xminutes);
+            $origin = $wHours . ":" . sprintf("%02d", $wMinutes);
         }
         if ($data->mode == 1) {
             $date_now = $data->updated_at;
-            $leftTime = new DateTime($data->left_at);
         }
         $createDate = new DateTime($data->created_at);
-        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime', 'restTime', 'config', 'leftTime'));
+        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime', 'restTime', 'config', 'origin'));
     }
 
     public function attend(Request $request): Redirector|Application|RedirectResponse
@@ -108,9 +114,16 @@ class AttendanceController extends Controller
         }
         $current = $tempDate->getTimestamp();
         $before = strtotime($data->created_at);
-        $diff = $current - $before + 60;
+        $diff = $current - $before;
         $hours = intval($diff / 60 / 60);
         $minutes = sprintf('%02d', intval($diff / 60) % 60);
+
+        $created = new DateTime($data->created_at->format("H:i:50"));
+        $created->s = 0;
+        $tempLeftDat = preg_split("/:/", $tempDate->format('H:i:50'));
+        $left = new DateTime($tempLeftDat[0] . ":" . $tempLeftDat[1] . ":50");
+        $left->s = 0;
+        $intervalTime = $created->diff($left);
 
         $restData = preg_split("/:/", $data->rest ?? "00:00");
         $wHours = $hours;
@@ -139,7 +152,7 @@ class AttendanceController extends Controller
             //$minutes = "$timeMinutes";
         }
 
-        Attendance::find($data->id)->update(['rest' => $data->rest ?? "00:00", 'mode' => 1, 'left_at' => $tempDate, 'time' => "$hours:$minutes"]);
+        Attendance::find($data->id)->update(['rest' => $data->rest ?? "00:00", 'mode' => 1, 'left_at' => $tempDate, 'time' => $intervalTime->format('%h:%I')]);
         if ($workTimeOver) {
             return redirect("/attends")->with('result', '退勤しました。 ');
         }

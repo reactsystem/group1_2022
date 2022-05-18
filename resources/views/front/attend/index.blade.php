@@ -67,7 +67,7 @@
                         </div>
                         <div class="col-6 col-md-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
-                            {{$data->time}}
+                            {{$origin}}
                         </div>
                     </div>
                 @else
