@@ -78,6 +78,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 
     /* 社員情報管理 */
     Route::get('/admin/attends', [AdminAttendsController::class, 'admin_attends']);
+    Route::post('/admin/attends', [AdminAttendsController::class, 'admin_search']);
     Route::get('/admin/attends/new', [AdminAttendsController::class, 'admin_new']);
     Route::get('/admin/attends/view', [AdminAttendsController::class, 'admin_view']);
     Route::get('/admin/attends/edit', [AdminAttendsController::class, 'admin_edit']);
