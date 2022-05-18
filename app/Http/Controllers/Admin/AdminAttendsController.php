@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Notification;
 use App\Models\User;
+
 use App\Models\UserMemo;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -19,21 +20,9 @@ use Illuminate\Support\Facades\Validator;
 class AdminAttendsController extends Controller
 {
     // メイン画面
-    function admin_attends(Request $request)
-    {
-        $sort = $request->sort;
-        if (empty($sort)) $sort = 'id';
-        $users = User::paginate(20);
-        // 最終出勤日
-
-
-        $users->join('attendance', 'id', '=', 'user_id');
-        $param =[
-            'users' => $users,
-            'sort' => $sort,
-        ];
-
-        return view('admin/user/admin_attends',$param);
+    function admin_attends(){
+        $users = User::orderBy('id' , 'asc')->get();
+        return view('admin/user/admin_attends',['users' => $users]);
     }
 
     // ユーザー新規登録
