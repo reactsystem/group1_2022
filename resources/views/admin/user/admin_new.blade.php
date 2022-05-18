@@ -100,7 +100,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="row">
         <div class="col">
           <div class="mb-3">
@@ -113,26 +113,27 @@
       <div class="row">
         <div class="col">
             <div class="mb-3">
-              <label for="InputEMail" class="form-label">メールアドレス</label>
-              <input type="email" class="form-control" id="InputEMail" name='email' required>
-          </div>
+                <label for="InputEMail" class="form-label">メールアドレス</label>
+                <input type="email" class="form-control" id="InputEMail" name='email' required>
+            </div>
         </div>
       </div>
 
-      <div class="row">
-        <div class="col">
-          <div class="mb-3">
-            <label for="InputJoined" class="form-label">入社日</label>
-            <input type="text" class="form-control" id="InputJoined" placeholder ='YYYY-MM-DD' name='joined_date' required>
-          </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="InputJoined" class="form-label">入社日</label>
+                    <input type="date" class="form-control" id="InputJoined" placeholder='YYYY-MM-DD' name='joined_date'
+                           required>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="InputHoliday" class="form-label">有給休暇</label>
+                    <input type="number" class="form-control" id="InputHoliday" name='paid_holiday' required>
+                </div>
+            </div>
         </div>
-        <div class="col">
-          <div class="mb-3">
-            <label for="InputHoliday" class="form-label">有給休暇</label>
-            <input type="number" class="form-control" id="InputHoliday" name='paid_holiday' required>
-          </div>
-        </div>
-      </div>
-    </form>
+  </form>
   </div>
 @endsection
