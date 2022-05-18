@@ -159,6 +159,51 @@
             overflow: overlay;
             transition-duration: 0.05s;
         }
+
+        @media only screen and (max-width: 561.99px) {
+            .calender-main {
+                transform: scale(0.5);
+                width: 200%;
+                margin-left: -50%;
+                margin-top: -150px;
+            }
+        }
+
+        @media only screen and (min-width: 562px) {
+            .calender-main {
+                transform: scale(0.6);
+                width: 170%;
+                margin-left: -35%;
+                margin-top: -120px;
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .calender-main {
+                transform: scale(0.8);
+                width: 125%;
+                margin-left: -13%;
+                margin-top: -70px;
+            }
+        }
+
+        @media only screen and (min-width: 992px) {
+            .calender-main {
+                transform: scale(0.7);
+                width: 145%;
+                margin-left: -23%;
+                margin-top: -85px;
+            }
+        }
+
+        @media only screen and (min-width: 1220px) {
+            .calender-main {
+                transform: scale(1.0);
+                width: 100%;
+                margin-left: 0;
+                margin-top: 0;
+            }
+        }
     </style>
 @endsection
 @section('pageTitle', "勤怠情報管理")
@@ -272,7 +317,9 @@
             </div>
         </div>
         <hr>
-        @include('front.components.calender')
+        <div class="calender-main">
+            @include('front.components.calender')
+        </div>
     </div>
     <!-- Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
