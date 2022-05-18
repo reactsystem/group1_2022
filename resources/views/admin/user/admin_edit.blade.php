@@ -111,15 +111,16 @@
               <div class="col">
                 <div class="mb-3">
                   <label for="InputemployeeID" class="form-label">社員番号</label>
-                  <input type="number" class="form-control" value="{{$user['employee_id']}}" name='employee_id' id="InputemployeeID" required>
-                </div>  
+                  <input type="number" class="form-control" value="{{$user['employee_id']}}" name='employee_id'
+                         id="InputemployeeID" required>
+                </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col">
-                <div class="mb-3">
-                  権限<select class="form-select" aria-label="権限" name='group_id' id='InputGroup_id' required>
-                    @if(0==$user['group_id'])
+              <div class="row">
+                  <div class="col">
+                      <div class="mb-3">
+                          権限<select class="form-select" aria-label="権限" name='group_id' id='InputGroup_id' required>
+                              @if(0==$user['group_id'])
                     <option value="">ここから選択</option>
                     <option selected value="0">一般ユーザー</option>
                     <option value="1">管理者</option>
@@ -138,7 +139,7 @@
               <div class="col">
                 <div class="mb-3">
                   部署<select class="form-select" aria-label="部署" name='department' id="InputDepartment" required>
-  
+
                       @foreach($departments as $item)
                   @if($item['id'] == $user['department'])
                   <option selected value = "{{$item['id']}}">{{$item['name']}}</option>
@@ -174,31 +175,33 @@
                   <input type="email" class="form-control" id="InputEMail" name='email' value = "{{$user ['email']}}" required>
               </div>
             </div>
-            <div class="row">
-            <div class="mb-3">
-                  <label for="InputHoliday" class="form-label">有給休暇</label>
-                  <input type="number" class="form-control" name='paid_holiday' id="InputHoliday" value = "{{$user ['paid_holiday']}}" required>
-                </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <div class="mb-3">
-                  <label for="InputJoined" class="form-label">入社日</label>
-                  <input type="text" class="form-control" name='joined_date' id="InputJoined" placeholder ='YYYY-MM-DD' value = "{{$user ['joined_date']}}" required>
-                </div>
+              <div class="row">
+                  <div class="mb-3">
+                      <label for="InputHoliday" class="form-label">有給休暇</label>
+                      <input type="number" class="form-control" name='paid_holiday' id="InputHoliday"
+                             value="{{$user ['paid_holiday']}}" required>
+                  </div>
               </div>
-              <div class="col">
-                <div class="mb-3" >
-                  <label for="InputAlive" class="form-label">退社日</label>
-                  <input type="text" class="form-control" name='left_date' id="InputAlive"  placeholder ='YYYY-MM-DD' value = "{{$user ['left_date']}}">
-                </div>
+              <div class="row">
+                  <div class="col">
+                      <div class="mb-3">
+                          <label for="InputJoined" class="form-label">入社日</label>
+                          <input type="date" class="form-control" name='joined_date' id="InputJoined"
+                                 placeholder='YYYY-MM-DD' value="{{$user ['joined_date']}}" required>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="mb-3">
+                          <label for="InputAlive" class="form-label">退社日</label>
+                          <input type="date" class="form-control" name='left_date' id="InputAlive"
+                                 placeholder='YYYY-MM-DD' value="{{$user ['left_date']}}">
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
 
 
-
-          </form>
+        </form>
 
     </div>
 @endsection
