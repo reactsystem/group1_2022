@@ -132,6 +132,45 @@
             overflow: overlay;
             transition-duration: 0.05s;
         }
+
+        @media only screen and (max-width: 767.999px) {
+            .calender-main {
+                transform: scale(0.7);
+                width: 145%;
+                margin-left: -23%;
+                margin-top: -40px;
+            }
+
+            .cards {
+                margin-top: 40px;
+            }
+        }
+
+        @media only screen and (min-width: 992px) {
+            .calender-main {
+                transform: scale(0.75);
+                width: 134%;
+                margin-left: -17%;
+                margin-top: -30px;
+            }
+
+            .cards {
+                margin-top: 40px;
+            }
+        }
+
+        @media only screen and (min-width: 1220px) {
+            .calender-main {
+                transform: scale(1.0);
+                width: 100%;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .cards {
+                margin-top: 20px;
+            }
+        }
     </style>
 @endsection
 @section('pageTitle', "勤怠情報確認")
@@ -206,14 +245,14 @@
             </div>
         </div>
         <hr>
-        <div>
+        <div class="cards">
             @if(count($attendData) == 0)
                 <div class="text-muted mt-5" style="width: 100%; text-align: center; font-size: 12pt">
                     この月の勤務情報がありません
                 </div>
             @endif
             @foreach($attendData as $data)
-                <div class="card work-card"
+                <div class="card work-card calender-main"
                      onclick="openDescModal({{$data->created_at->format('d')}})">
                     <div class="card-header" style="font-size: 12pt; background-color: #DDD">
                         {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span style=""><?php
@@ -293,7 +332,7 @@
                                 退勤
                             </div>
                             <div class="fw-bold"
-                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px;">{{$leftDate}}</div>
+                                 style="flex: 1.7; font-size: 20pt; height: 40px; line-height: 40px;">{{$leftDate}}</div>
                             <div class="text-muted"
                                  style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px; margin-left: 15px; margin-right: 15px; margin-top: -3px;">
                                 |
