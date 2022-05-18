@@ -165,6 +165,7 @@
         const _sleepX = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
         window.onload = async () => {
+            loading.style.pointerEvents = "none"
             await _sleepX(200)
             loading.style.opacity = 0.0
             await _sleepX(500)
