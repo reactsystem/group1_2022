@@ -13,6 +13,7 @@
                 </button>
                 <form action="/admin/request" method='post' style="float: right; margin-right: 10px">
                     @csrf
+                    <input type="hidden" name="mode" value="all">
                     <input type="submit" class="btn btn-success" value='全ての申請を表示'>
                 </form>
             </div>
@@ -288,7 +289,7 @@
             @endforeach
             </tbody>
         </table>
-        {{$all_requests->links()}}
+        {{$all_requests->appends($parameters)->links()}}
     </div>
 
     <!-- Modal -->
