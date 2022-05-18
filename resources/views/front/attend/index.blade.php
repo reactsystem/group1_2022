@@ -60,7 +60,7 @@
                         </div>
                         <div class="col-6 col-md-auto"
                              style="line-height: 40px; height: 40px; font-weight: bold; font-size: 26pt">
-                            {{$data->updated_at->format("G:i")}}
+                            {{$leftTime->format("G:i")}}
                         </div>
                         <div class="col-6 col-md-auto" style="line-height: 40px; height: 40px; padding-right: 0">
                             合計時間

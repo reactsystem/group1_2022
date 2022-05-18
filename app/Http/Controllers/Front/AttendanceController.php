@@ -35,6 +35,7 @@ class AttendanceController extends Controller
         $date_now = new DateTime();
         $interval = "";
         $restTime = (7 * 60 + 45) * 60;
+        $leftTime = "--:--";
         if ($data == null) {
             return view('front.attend.index', compact('request', 'data', 'baseTime', 'config'));
         } else {
@@ -51,7 +52,7 @@ class AttendanceController extends Controller
             $rHours = intval($restData[0]);
             $rMinutes = intval($restData[1]);
             $xhours = max(0, $wHours - $rHours);
-            $xminutes = $wMinutes - $rMinutes;
+            $xminutes = $wMinutes - $rMinutes + 1;
             if ($xminutes < 0 && $xhours != 0) {
                 $xminutes = 60 - abs($xminutes);
                 $xhours -= 1;
@@ -63,9 +64,10 @@ class AttendanceController extends Controller
         }
         if ($data->mode == 1) {
             $date_now = $data->updated_at;
+            $leftTime = new DateTime($data->left_at);
         }
         $createDate = new DateTime($data->created_at);
-        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime', 'restTime', 'config'));
+        return view('front.attend.index', compact('request', 'data', 'createDate', 'interval', 'baseTime', 'restTime', 'config', 'leftTime'));
     }
 
     public function attend(Request $request): Redirector|Application|RedirectResponse
@@ -106,7 +108,7 @@ class AttendanceController extends Controller
         }
         $current = $tempDate->getTimestamp();
         $before = strtotime($data->created_at);
-        $diff = $current - $before;
+        $diff = $current - $before + 60;
         $hours = intval($diff / 60 / 60);
         $minutes = sprintf('%02d', intval($diff / 60) % 60);
 
