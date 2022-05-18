@@ -26,18 +26,11 @@ class AdminAttendManagementController
     function index(Request $request)
     {
         $users = User::where('left_date', "=", null)->get();
-        $data = Attendance::where("attendances.deleted_at", "=", null)->leftJoin('users', 'attendances.user_id', 'users.id')->select("attendances.*", "users.name as name")->orderByDesc('attendances.updated_at')->paginate(20);
-        $title = "勤怠ログ";
-        $searchStr = "<span class='text-primary'>項目をクリックして確認・編集・削除画面に移動できます</span>";
-        return view('admin.attend-manage.index', compact('data', 'users', 'title', 'searchStr'));
-    }
-
-    function search(Request $request)
-    {
-        $users = User::where('left_date', "=", null)->get();
         $data = Attendance::where("attendances.deleted_at", "=", null)->leftJoin('users', 'attendances.user_id', 'users.id')->select("attendances.*", "users.name as name", "users.id as uid");
-        $searchArray = [];
+        $title = "勤怠ログ";
+        $parameters = [];
         if (isset($request->user)) {
+            $parameters['user'] = $request->user;
             $data = $data->where("users.id", $request->user);
             $user = User::find($request->user);
             if ($user != null) {
@@ -45,17 +38,49 @@ class AdminAttendManagementController
             }
         }
         if (isset($request->date)) {
+            $parameters['user'] = $request->date;
             $data = $data->where("date", $request->date);
             $searchArray[] = "<strong>日付: </strong>" . $request->date;
         }
         if (isset($request->status)) {
+            $parameters['user'] = $request->status;
             $data = $data->where("mode", $request->status);
             $searchArray[] = "<strong>状態: </strong>" . $request->status;
         }
+        $data = $data->orderByDesc('attendances.created_at')->paginate(15);
+        $searchStr = "<span class='text-primary'>項目をクリックして確認・編集・削除画面に移動できます</span>";
+        return view('admin.attend-manage.index', compact('data', 'users', 'title', 'searchStr', 'parameters'));
+    }
+
+    function search(Request $request)
+    {
+        $users = User::where('left_date', "=", null)->get();
+        $data = Attendance::where("attendances.deleted_at", "=", null)->leftJoin('users', 'attendances.user_id', 'users.id')->select("attendances.*", "users.name as name", "users.id as uid");
+        $searchArray = [];
+        $parameters = [];
+        if (isset($request->user)) {
+            $parameters['user'] = $request->user;
+            $data = $data->where("users.id", $request->user);
+            $user = User::find($request->user);
+            if ($user != null) {
+                $searchArray[] = "<strong>ユーザー: </strong>" . $user->name;
+            }
+        }
+        if (isset($request->date)) {
+            $parameters['user'] = $request->date;
+            $data = $data->where("date", $request->date);
+            $searchArray[] = "<strong>日付: </strong>" . $request->date;
+        }
+        if (isset($request->status)) {
+            $parameters['user'] = $request->status;
+            $data = $data->where("mode", $request->status);
+            $searchArray[] = "<strong>状態: </strong>" . $request->status;
+        }
+
         $title = "勤怠ログ | 検索";
-        $data = $data->orderByDesc('attendances.updated_at')->paginate(20);
+        $data = $data->orderByDesc('attendances.created_at')->paginate(15);
         $searchStr = join(" / ", $searchArray);
-        return view('admin.attend-manage.index', compact('data', 'users', 'title', 'searchStr'));
+        return view('admin.attend-manage.index', compact('data', 'users', 'title', 'searchStr', 'parameters'));
     }
 
     function view(Request $request)

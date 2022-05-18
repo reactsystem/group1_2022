@@ -26,6 +26,10 @@
             <div class="col-md-6">
                 <a class="btn btn-primary" href="/admin/attend-manage/new"
                    style="float: right; margin-left: 5px; width: 100px">追加</a>
+                @if(count($parameters) != 0)
+                    <a class="btn btn-success" href="/admin/attend-manage"
+                       style="float: right; margin-left: 5px; width: 100px">検索終了</a>
+                @endif
                 <button class="btn btn-secondary" style="float: right; margin-left: 5px; width: 100px"
                         data-bs-toggle="modal" data-bs-target="#searchModal">検索
                 </button>
@@ -106,7 +110,7 @@
                 </tr>
             @endforeach
         </table>
-        {{$data->links()}}
+        {{$data->appends($parameters)->links()}}
     </div>
 
     <!-- Modal -->

@@ -13,10 +13,28 @@ use Illuminate\Support\Str;
 class AdminRequestController extends Controller
 {
     // メイン
-    function request(){
-        $all_requests = VariousRequest::whereNull('related_id')->where('status', '=', 0)->orderByDesc('id')->paginate(10);
+    function request(Request $request)
+    {
+        if ($request->mode == 'all') {
+            $all_requests = VariousRequest::whereNull('related_id')->orderByDesc('id')->paginate(15);
+        } else {
+            $all_requests = VariousRequest::whereNull('related_id')->where('status', '=', 0)->orderByDesc('id')->paginate(10);
+        }
         $all_user = User::all();
-        return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $all_requests,]);
+        $parameters = [];
+        if (isset($request->mode)) {
+            $parameters['mode'] = $request->mode;
+        }
+        if (isset($request->status)) {
+            $parameters['status'] = $request->status;
+        }
+        if (isset($request->id)) {
+            $parameters['id'] = $request->id;
+        }
+        if (isset($request->dateInput)) {
+            $parameters['dateInput'] = $request->dateInput;
+        }
+        return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $all_requests, 'parameters' => $parameters]);
     }
 
     // 検索
@@ -30,18 +48,31 @@ class AdminRequestController extends Controller
         }
 
         // 条件：名前
-        if(isset($request->id)){
-            $all_requests = $all_requests -> where('user_id','=',$request->id);
+        if (isset($request->id)) {
+            $all_requests = $all_requests->where('user_id', '=', $request->id);
         }
 
         // 条件：日付
-        if(isset($request->dateInput)){
-            $requests = $all_requests->where('date', '=', $request->dateInput)->paginate(10);
-        }else{
-            $requests = $all_requests->whereNull('related_id')->paginate(10);
+        if (isset($request->dateInput)) {
+            $requests = $all_requests->where('date', '=', $request->dateInput)->paginate(15);
+        } else {
+            $requests = $all_requests->whereNull('related_id')->paginate(15);
+        }
+        $parameters = [];
+        if (isset($request->mode)) {
+            $parameters['mode'] = $request->mode;
+        }
+        if (isset($request->status)) {
+            $parameters['status'] = $request->status;
+        }
+        if (isset($request->id)) {
+            $parameters['id'] = $request->id;
+        }
+        if (isset($request->dateInput)) {
+            $parameters['dateInput'] = $request->dateInput;
         }
 
-        return view('/admin/request/admin_request',['users' => $all_user,'all_requests' => $requests,]);
+        return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $requests, 'parameters' => $parameters]);
     }
 
     // 詳細画面
