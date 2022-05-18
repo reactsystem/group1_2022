@@ -2,13 +2,28 @@
 
 @section('pageTitle', "ホーム")
 
+@section('styles')
+    <style>
+        .card-hover {
+            box-shadow: 0 0 0;
+            transition-duration: 0.1s;
+        }
+
+        .card-hover:hover {
+            box-shadow: 0 0 10px #CCC;
+            transition-duration: 0.2s;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         <h3 class="fw-bold">新着通知</h3>
         <hr>
         @if($notifications != null && count($notifications) != 0)
             @foreach($notifications as $notification)
-                <div class="card mb-3" onclick="href('/notification/{{$notification->id}}')" style="cursor: pointer">
+                <div class="card card-hover mb-3" onclick="href('/notification/{{$notification->id}}')"
+                     style="cursor: pointer">
                     <div class="card-body">
                         <span
                             style="color: #{{$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
