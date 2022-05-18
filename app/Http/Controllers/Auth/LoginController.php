@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Providers\RouteServiceProvider;
 use DateTime;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -66,6 +67,8 @@ class LoginController extends Controller
             $config = str_replace(array("\r\n", "\r"), "\n", $config);
             $configArray = collect(explode("\n", $config));
 
+            $holidays = 0;
+
             foreach ($configArray as $index => $dat) {
                 $item = preg_split("/,/", $dat);
                 if ($index == 0 || $dat == "") continue;
@@ -111,7 +114,12 @@ class LoginController extends Controller
                 if ($dat3 > $dat2) {
                     //echo "<br><strong>GET (".intval($item[1])." / ".($user->paid_holiday + intval($item[1])).")</strong><br>";
                     $user->paid_holiday = $user->paid_holiday + intval($item[1]);
+                    $holidays += intval($item[1]);
                 }
+            }
+
+            if ($holidays != 0) {
+                Notification::create(['user_id' => Auth::id(), 'title' => '有休が付与されました', 'data' => '有給休暇が' . $holidays . '日付与されました。', 'url' => '/account', 'status' => 0]);
             }
 
             $user->last_login = new \DateTime();
