@@ -34,7 +34,7 @@ class AdminRequestController extends Controller
         if (isset($request->dateInput)) {
             $parameters['dateInput'] = $request->dateInput;
         }
-        return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $all_requests, 'parameters' => $parameters]);
+        return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $all_requests, 'parameters' => $parameters, 'request' => $request]);
     }
 
     // 検索
@@ -72,7 +72,7 @@ class AdminRequestController extends Controller
             $parameters['dateInput'] = $request->dateInput;
         }
 
-        return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $requests, 'parameters' => $parameters]);
+        return view('/admin/request/admin_request', ['users' => $all_user, 'all_requests' => $requests, 'parameters' => $parameters, 'request' => $request]);
     }
 
     // 詳細画面
