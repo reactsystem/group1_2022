@@ -20,30 +20,9 @@ use Illuminate\Support\Facades\Validator;
 class AdminAttendsController extends Controller
 {
     // メイン画面
-
     function admin_attends(){
         $users = User::orderBy('id' , 'asc')->get();
-        $departments = Department::all();
-        return view('admin/user/admin_attends',['users' => $users,'departments' => $departments]);
-    }
-
-    function admin_search(Request $request){
-        $users = User::orderBy('id' , 'asc');
-
-        if(isset($request ->id)){
-            $users ->where('employee_id','LIKE','%'.$request->id.'%');
-        }
-        if(isset($request ->name)){
-            $users ->where('name','LIKE','%'.$request->name.'%');
-        }
-        if(isset($request ->department)){
-            $users ->where('department','=',$request->department);
-        }
-
-        $users = $users->get();
-
-        $departments = Department::all();
-        return view('admin/user/admin_attends',['users' => $users,'departments' => $departments]);
+        return view('admin/user/admin_attends',['users' => $users]);
     }
 
     // ユーザー新規登録
