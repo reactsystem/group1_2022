@@ -85,12 +85,20 @@
                     <td>
                         <?php
                         $date_now = new DateTime();
-                        if ($dat->mode == 1) {
-                            $date_now = $dat->left_at ?? $dat->updated_at;
-                        }
                         $interval = $dat->created_at->diff($date_now);
 
-                        $datArray = preg_split("/:/", $interval->format('%h:%I'));
+                        $created = new DateTime($dat->created_at->format("H:i:50"));
+                        $intervalTime = $created->diff($date_now);
+                        if ($dat->mode == 1 && $dat->left_at != null) {
+                            $tempLeftDat1 = preg_split("/ /", $dat->left_at);
+                            $tempLeftDat2 = preg_split("/:/", $tempLeftDat1[1]);
+                            $datx = $tempLeftDat2[0] . ":" . $tempLeftDat2[1] . ":50";
+                            $left = new DateTime($tempLeftDat2[0] . ":" . $tempLeftDat2[1] . ":50");
+                            $intervalTime = $created->diff($left);
+                            //$intervalTime->set
+                        }
+
+                        $datArray = preg_split("/:/", $intervalTime->format('%h:%I'));
                         $restData = preg_split("/:/", $dat->rest ?? "00:00");
                         $wHours = intval($datArray[0]);
                         $wMinutes = intval($datArray[1]);
