@@ -475,7 +475,8 @@
             if (modalData !== undefined) {
                 modalContext.innerHTML += `<?php
                 if ($confirmStatus) {
-                    echo '<h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+                    echo '<div class="col-md-12 mt-3" id="alert">
+                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr>
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="restInput" class="form-label">休憩時間</label>
                 <input type="time" class="form-control" id="restInput" placeholder="未設定"
@@ -483,7 +484,8 @@
                 >
             </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
                 } else {
-                    echo '<h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+                    echo '<div class="col-md-12 mt-3" id="alert">
+                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr>
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="restInput" class="form-label">休憩時間</label>
                 <input type="time" class="form-control" id="restInput" placeholder="未設定"
@@ -517,6 +519,7 @@
 
 
         function saveComment(date) {
+            let alert = document.getElementById("alert")
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             let saveBtn = document.getElementById("saveBtn")
@@ -524,6 +527,7 @@
             let textArea = document.getElementById("textArea")
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
+            alert.innerHTML = ""
 
             axios
                 .post("/api/v1/attends/comment/set", {
@@ -538,8 +542,23 @@
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success"
                         saveBtn.innerText = "保存しました"
-                        await _sleep(1500)
+                        alert.innerHTML = '<div class="alert alert-success" role="alert">' +
+                            '<strong>成功</strong> - ' + res.data.message +
+                            '</div>'
+                        await _sleep(1000)
+                        location = "/admin/attend-manage/calender/{{$user->id}}?year={{$year}}&month={{$month}}&mode=0"
+                        return
                     } else {
+                        let alertStr = '<div class="alert alert-danger" role="alert">' +
+                            '<strong>エラー</strong> - ' +
+                            res.data.message + '<br>'
+                        if (resultCode === 1) {
+                            Object.keys(res.data.errors).forEach(key => {
+                                alertStr += res.data.errors[key] + '<br>'
+                            });
+                        }
+                        alertStr += '</div>';
+                        alert.innerHTML = alertStr
                         saveBtn.className = "btn btn-danger"
                         saveBtn.innerText = "保存失敗"
                         await _sleep(2000)
