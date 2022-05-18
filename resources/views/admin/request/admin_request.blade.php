@@ -11,11 +11,16 @@
                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#searchModal"
                         style="float: right; margin-right: 10px">検索
                 </button>
-                <form action="/admin/request" method='post' style="float: right; margin-right: 10px">
-                    @csrf
-                    <input type="hidden" name="mode" value="all">
-                    <input type="submit" class="btn btn-success" value='全ての申請を表示'>
-                </form>
+                @if(!isset($request) || $request->mode != 'all')
+                    <form action="/admin/request" method='post' style="float: right; margin-right: 10px">
+                        @csrf
+                        <input type="hidden" name="mode" value="all">
+                        <input type="submit" class="btn btn-success" value='全ての申請を表示'>
+                    </form>
+                @else
+                    <a href="/admin/request" class="btn btn-warning"
+                       style="float: right; margin-right: 10px">申請中のみ表示</a>
+                @endif
             </div>
         </div>
         @if (session('error_message'))
