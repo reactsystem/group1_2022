@@ -110,7 +110,6 @@
             </div>
         </div>
         <hr>
-        <hr>
         <table class="table mb-5">
             <tr>
                 <th>日付</th>
