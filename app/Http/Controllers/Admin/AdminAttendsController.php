@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Notification;
 use App\Models\User;
-
 use App\Models\UserMemo;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -21,8 +20,8 @@ class AdminAttendsController extends Controller
 {
     // メイン画面
     function admin_attends(){
-        $users = User::orderBy('id' , 'asc')->get();
-        $departments = Department::all();
+        $users = User::orderBy('id', 'asc')->get();
+        $departments = Department::where('deleted_at', null)->get();
         return view('admin/user/admin_attends',['users' => $users,'departments' => $departments]);
     }
 
@@ -41,7 +40,7 @@ class AdminAttendsController extends Controller
 
         $users = $users->get();
 
-        $departments = Department::all();
+        $departments = Department::where('deleted_at', null)->get();
         return view('admin/user/admin_attends',['users' => $users,'departments' => $departments]);
     }
 
