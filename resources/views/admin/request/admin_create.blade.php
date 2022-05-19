@@ -112,6 +112,7 @@
         let workTimeAvailable = false
         let reasonAvailable = false
         let userSelected = false
+        let sendData = false
 
         const isNumber = function (value) {
             return ((typeof value === 'number') && (isFinite(value)));
@@ -132,8 +133,9 @@
         let checkPassed = false
 
         function submit() {
-            if (!checkPassed) return
+            if (!checkPassed || sendData) return
             checkPassed = false
+            sendData = true
             let submitButton = document.getElementById('submitButton');
             submitButton.setAttribute("disabled", "")
             submitButton.className = "btn btn-primary disabled"
