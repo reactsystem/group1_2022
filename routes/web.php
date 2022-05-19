@@ -63,6 +63,7 @@ Route::group(['middleware' => 'auth'], function () {
     /* ユーザー管理 */
     Route::get('/account', [UserEditController::class, 'account']);
     Route::get('/account/edit', [UserEditController::class, 'account_edit']);
+    Route::get('/account/holidays', [UserEditController::class, 'getHolidays']);
     Route::get('/account/notifications', [UserEditController::class, 'notifications']);
     Route::get('/account/notifications/{id}', [UserEditController::class, 'viewNotification']);
     Route::get('/account/notifications/delete/{id}', [UserEditController::class, 'deleteNotification']);

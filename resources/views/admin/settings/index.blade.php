@@ -63,19 +63,25 @@
             <div class="card-body">
                 <div>
                     <span>
-                        休日設定<br>
-                        <span class="text-muted">会社としての休日を設定します</span>
-                    </span>
-                    <a href="/admin/settings/holiday" style="float: right; margin-top: -19px"
-                       class="btn btn-primary">設定</a>
-                </div>
-                <hr>
-                <div>
-                    <span>
                         有給・定時・休憩設定<br>
                         <span class="text-muted">勤務時間や有給付与のタイミングを設定します</span>
                     </span>
                     <a href="/admin/settings/general" style="float: right; margin-top: -19px"
+                       class="btn btn-primary">設定</a>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3 mt-3">
+            <div class="card-header">
+                マスタ設定
+            </div>
+            <div class="card-body">
+                <div>
+                    <span>
+                        休日設定<br>
+                        <span class="text-muted">会社としての休日を設定します</span>
+                    </span>
+                    <a href="/admin/settings/holiday" style="float: right; margin-top: -19px"
                        class="btn btn-primary">設定</a>
                 </div>
                 <hr>

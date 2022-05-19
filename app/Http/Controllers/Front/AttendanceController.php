@@ -200,6 +200,20 @@ class AttendanceController extends Controller
             'text.min' => '業務詳細は1文字以上で入力してください',
             'text.max' => '業務詳細は2,000文字以下で入力してください',
         ];
+        if (env("ENABLE_EDIT_ATTENDANCE", false)) {
+            $rules = [
+                'text' => 'required|max:2000|min:1',
+                'start' => 'required',
+                'rest' => 'required',
+            ];
+            $messages = [
+                'start.required' => '出勤時間を入力してください',
+                'rest.required' => '休憩時間を入力してください',
+                'text.required' => '業務詳細を記入してください',
+                'text.min' => '業務詳細は1文字以上で入力してください',
+                'text.max' => '業務詳細は2,000文字以下で入力してください',
+            ];
+        }
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return response()->json(["error" => true, "code" => 1, "message" => "以下の項目を確認してください:", "errors" => $validator->errors()]);
@@ -222,16 +236,102 @@ class AttendanceController extends Controller
                 if ($data == null) {
                     return response()->json(["error" => true, "code" => 25, "message" => "勤務データが見つかりません。(${date})"]);
                 }
-                Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
+                if (env("ENABLE_EDIT_ATTENDANCE", false)) {
+
+                    $endTime = $request->end;
+                    $restTime = $request->rest;
+                    $startDate = $data->created_at;
+                    if (isset($request->start)) {
+                        $startTime = $request->start;
+                        $startDate = new DateTime($data->created_at->format("Y-m-d ${startTime}:00"));
+                    }
+                    $endDate = null;
+                    if ($endTime != "" && $endTime != "00:00") {
+                        if ($data->left_at == null) {
+                            $endDate = new DateTime($data->created_at->format("Y-m-d ${endTime}:00"));
+                        } else {
+                            $endDate = new DateTime($data->created_at->format("Y-m-d ${endTime}:00"));
+                        }
+                    } else {
+                        $endDate = new DateTime($data->left_at);
+                    }
+
+                    $workTime = "00:00";
+
+                    if ($endDate != null) {
+                        $current = strtotime($endDate->format("Y-m-d ${endTime}:00"));
+                        $before = strtotime($data->created_at->format("Y-m-d ${startTime}:00"));
+                        $diff = $current - $before;
+                        $hours = intval($diff / 60 / 60);
+                        $minutes = intval($diff / 60) % 60;
+                        $workTime = sprintf("%02d", $hours) . ":" . sprintf("%02d", $minutes);
+                    }
+
+                    $param = [
+                        'created_at' => $startDate,
+                        'left_at' => $endDate,
+                        'time' => $workTime,
+                        'rest' => $restTime,
+                        'text' => $request->text,
+                    ];
+
+                    Attendance::find($data->id)->update($param);
+                } else {
+                    Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
+                }
                 return response()->json(["code" => 0, "message" => "${year}年${month}月${day}日の業務メモを更新しました。"]);
             } catch (\Exception $e) {
-                return response()->json(["error" => true, "code" => 22, "message" => "日付の形式が不正です。(${date})"]);
+                return response()->json(["error" => true, "code" => 22, "message" => "日付の形式が不正です。(${date}) <br>" . $e->getTraceAsString()]);
             }
         }
         $tempDate = new DateTime();
         $data = Attendance::where("user_id", "=", $userId)->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         if ($data == null) {
             return response()->json(["error" => true, "code" => 21, "message" => "勤務データが見つかりません。"]);
+        }
+
+        if (env("ENABLE_EDIT_ATTENDANCE", false)) {
+
+            $endTime = $request->end;
+            $restTime = $request->rest;
+            $startDate = $data->created_at;
+            if (isset($request->start)) {
+                $startTime = $request->start;
+                $startDate = new DateTime($data->created_at->format("Y-m-d ${startTime}:00"));
+            }
+            $endDate = null;
+            if ($endTime != "" && $endTime != "00:00") {
+                if ($data->left_at == null) {
+                    $endDate = new DateTime($data->created_at->format("Y-m-d ${endTime}:00"));
+                } else {
+                    $endDate = new DateTime($data->created_at->format("Y-m-d ${endTime}:00"));
+                }
+            } else {
+                $endDate = new DateTime($data->left_at);
+            }
+
+            $workTime = "00:00";
+
+            if ($endDate != null) {
+                $current = strtotime($endDate->format("Y-m-d ${endTime}:00"));
+                $before = strtotime($data->created_at->format("Y-m-d ${startTime}:00"));
+                $diff = $current - $before;
+                $hours = intval($diff / 60 / 60);
+                $minutes = intval($diff / 60) % 60;
+                $workTime = sprintf("%02d", $hours) . ":" . sprintf("%02d", $minutes);
+            }
+
+            $param = [
+                'created_at' => $startDate,
+                'left_at' => $endDate,
+                'time' => $workTime,
+                'rest' => $restTime,
+                'text' => $request->text,
+            ];
+
+            Attendance::find($data->id)->update($param);
+        } else {
+            Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
         }
         Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
         return response()->json(["code" => 0, "message" => "勤務詳細を更新しました。しばらくお待ちください..."]);

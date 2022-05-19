@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use App\Models\PaidHoliday;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -126,5 +127,20 @@ class UserEditController extends Controller
         } catch (\Exception $e) {
             return redirect("/account/notifications")->with('error', '通知の削除に失敗しました。(E30)');
         }
+    }
+
+    function getHolidays()
+    {
+        $user = Auth::user();
+        if ($user == null) {
+            return redirect('/admin/attends')->with('error', '対象の社員は存在しません。');
+        }
+        $parameters = [];
+        $parameters['user_id'] = $user->id;
+        $days = PaidHoliday::getHolidays($user->id);
+        $searchStr = "<strong>合計有給残日数: </strong>{$days}日";
+        $data = PaidHoliday::where('user_id', $user->id)->orderByDesc('created_at')->paginate(20);
+        return view('front.account.holidays.index', compact('parameters', 'data', 'searchStr'));
+
     }
 }
