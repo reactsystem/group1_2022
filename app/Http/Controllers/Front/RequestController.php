@@ -38,7 +38,11 @@ class RequestController extends Controller
                 'date' => $dates
             ];
         }
-        return view('front.request.index', compact('results', 'related', 'mode'));
+        $parameters = [];
+        if (isset($request->mode)) {
+            $parameters['mode'] = $request->mode;
+        }
+        return view('front.request.index', compact('results', 'related', 'mode', 'parameters'));
     }
 
     function show(Request $request)

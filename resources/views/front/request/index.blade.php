@@ -77,6 +77,6 @@
                 </div>
             </div>
         @endforeach
-        {{$results->links()}}
+        {{$results->appends($parameters)->links()}}
     </div>
 @endsection
