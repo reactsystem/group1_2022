@@ -180,7 +180,7 @@
                 }
             }
             if (types[requestType.value - 1][1] === 2) {
-                if (reqDates.length > {{Auth::user()->paid_holiday}}) {
+                if (reqDates.length > {{Auth::id()}}) {
                     v1++
                     submitButton.className = "btn btn-danger disabled"
                     submitButton.innerText = "申請できません"

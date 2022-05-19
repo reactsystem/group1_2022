@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use App\Models\PaidHoliday;
 use App\Models\RequestType;
 use App\Models\VariousRequest;
 use DateTime;
@@ -84,9 +85,12 @@ class RequestController extends Controller
         if ($result->mode == 2) {
             $holidays = 1 + count($c1);
             if ($holidays > 0) {
-                $user = Auth::user();
-                $user->paid_holiday = $user->paid_holiday + $holidays;
-                $user->save();
+                if ($result->holidays_key != null) {
+                    PaidHoliday::revertHolidays(Auth::id(), $result->holidays_key);
+                }
+//                $user = Auth::user();
+//                $user->paid_holiday = PaidHoliday::getHolidays(Auth::id());
+//                $user->save();
             }
         }
         return redirect("/request")->with('result', '申請を取り消しました。');
@@ -130,7 +134,7 @@ class RequestController extends Controller
         if ($request->type == 2) {
             $holidays = count($dates);
         }
-        if ($holidays > Auth::user()->paid_holiday) {
+        if ($holidays > PaidHoliday::getHolidays(Auth::id())) {
             return redirect("/request")->with('error', '有給消費が残日数を超えています');
         }
         $reason = $request->reason;
@@ -144,12 +148,23 @@ class RequestController extends Controller
                 $timeStr = intval($time[0]) . ":" . sprintf("%02d", intval($time[1]));
             }
             if ($index == 0) {
+                $user = Auth::user();
+                $holidaysKey = null;
+                if ($holidays > 0) {
+                    $holidaysKey = PaidHoliday::useHolidays(Auth::id(), $holidays);
+                    if (!$holidaysKey[0]) {
+                        return redirect("/request")->with('error', '有給消費が残日数を超えています');
+                    }
+                    //$user->paid_holiday = PaidHoliday::getHolidays(Auth::id());
+                    $user->save();
+                }
                 $id = VariousRequest::create([
                     'uuid' => $uuid,
                     'user_id' => Auth::id(),
                     'type' => $type->id,
                     'date' => $item,
                     'status' => 0,
+                    'holidays_key' => $holidaysKey[1],
                     'time' => $timeStr,
                     'reason' => $request->reason ?? "",
                 ])->id;
@@ -165,11 +180,6 @@ class RequestController extends Controller
                     'related_id' => $uuid,
                 ]);
             }
-        }
-        $user = Auth::user();
-        if ($holidays > 0) {
-            $user->paid_holiday = $user->paid_holiday - $holidays;
-            $user->save();
         }
         Notification::create(['user_id' => 0, 'title' => '申請が行われました', 'data' => $user->name . 'が申請(' . $type->name . ')を行いました。', 'url' => '/admin/request/detail?id=' . $id, 'status' => 0]);
 

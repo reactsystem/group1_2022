@@ -88,6 +88,12 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/attends/notify', [AdminAttendsController::class, 'message']);
     Route::post('/admin/attends/notify', [AdminAttendsController::class, 'createMessage']);
 
+    Route::get('/admin/attends/holidays/{user_id}', [AdminAttendsController::class, 'viewHolidaysGet']);
+    Route::get('/admin/attends/holidays/{user_id}/edit/{id}', [AdminAttendsController::class, 'editHolidayGet']);
+    Route::get('/admin/attends/holidays/{user_id}/new', [AdminAttendsController::class, 'createHolidayGet']);
+    Route::post('/admin/attends/holidays/{user_id}/edit/{id}', [AdminAttendsController::class, 'editHolidayPost']);
+    Route::post('/admin/attends/holidays/{user_id}/new', [AdminAttendsController::class, 'createHolidayPost']);
+
     /* 勤怠情報管理 */
     Route::get('/admin/attend-manage/search', [AdminAttendManagementController::class, 'search']);
     Route::get('/admin/attend-manage/view/{id}', [AdminAttendManagementController::class, 'view']);

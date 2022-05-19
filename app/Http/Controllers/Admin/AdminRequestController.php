@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use App\Models\PaidHoliday;
 use App\Models\RequestType;
 use App\Models\User;
 use App\Models\VariousRequest;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AdminRequestController extends Controller
@@ -92,12 +94,17 @@ class AdminRequestController extends Controller
         $request_days = $this_request -> related_request() -> count() +1;
 
         // 前の状態が承認済みだった場合
-        if($this_request -> status == 2){
-            $user -> paid_holiday = $user->paid_holiday - $request_days;
-            $user ->save();
+        if ($this_request->status == 2) {
+            $holidayData = PaidHoliday::useHolidays($this_request->user_id, $request_days);
+            if (!$holidayData[0]) {
+                return redirect('/admin/request')->with('error', "有給消費が残日数を超えています");
+            }
+            //$user -> paid_holiday = $user->paid_holiday - $request_days;
+            $user->save();
+            VariousRequest::find($request->id)->update(['holidays_key' => $holidayData[1], 'status' => 1]);
+        } else {
+            VariousRequest::find($request->id)->update(['status' => 1]);
         }
-
-        VariousRequest::find($request ->id)->update(['status' => 1]);
         VariousRequest::where('related_id','=',$request ->uuid)->update(['status' => 1]);
         $message = '申請を承認しました。';
         Notification::create(['user_id' => $user->id, 'badge_color' => '00DD00', 'title' => '申請が承認されました', 'data' => '申請が承認されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
@@ -106,16 +113,25 @@ class AdminRequestController extends Controller
     }
 
     // 申請却下
-    function reject(Request $request){
-        VariousRequest::find($request->id)->update(['status' => 2]);
+    function reject(Request $request)
+    {
+        $requestData = VariousRequest::find($request->id);
         VariousRequest::where('related_id', '=', $request->uuid)->update(['status' => 2]);
         $this_request = VariousRequest::find($request->id);
         $request_days = $this_request->related_request()->count() + 1;
         $user = User::find($this_request->user_id);
 
         // 有給休暇を戻す
-        $user->paid_holiday = $user->paid_holiday + $request_days;
+
+        if ($requestData->holidays_key != null) {
+            PaidHoliday::revertHolidays($this_request->user_id, $requestData->holidays_key);
+        }
+        $user = Auth::user();
+        //$user->paid_holiday = PaidHoliday::getHolidays($this_request->user_id);
+        //$user->save();
+        //$user->paid_holiday = $user->paid_holiday + $request_days;
         $user->save();
+        $requestData->update(['status' => 2]);
 
         Notification::create(['user_id' => $user->id, 'badge_color' => 'DD0000', 'title' => '申請が却下されました', 'data' => '申請が却下されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
 
@@ -160,19 +176,29 @@ class AdminRequestController extends Controller
             if ($request->type == 2) {
                 $holidays = count($dates);
             }
-            if ($holidays > $user->paid_holiday) {
+            if ($holidays > PaidHoliday::getHolidays($request->user_id)) {
                 return redirect("/admin/request/create")->with('error', '有給消費が残日数を超えています');
             }
             $reason = $request->reason;
             $uuid = Str::uuid();
             foreach ($tempDate as $index => $item) {
                 if ($index == 0) {
+                    $holidaysKey = null;
+                    if ($holidays > 0) {
+                        $holidaysKey = PaidHoliday::useHolidays($request->user_id, $holidays);
+                        if (!$holidaysKey[0]) {
+                            return redirect("/request")->with('error', '有給消費が残日数を超えています');
+                        }
+                        //$user->paid_holiday = PaidHoliday::getHolidays($request->user_id);
+                        $user->save();
+                    }
                     VariousRequest::create([
                         'uuid' => $uuid,
                         'user_id' => $request->user_id,
                         'type' => $type->id,
                         'date' => $item,
                         'status' => 0,
+                        'holidays_key' => $holidaysKey,
                         'time' => $request->time,
                         'reason' => $request->reason ?? "",
                     ]);
@@ -189,10 +215,10 @@ class AdminRequestController extends Controller
                     ]);
                 }
             }
-            if ($holidays > 0) {
-                $user->paid_holiday = $user->paid_holiday - $holidays;
-                $user->save();
-            }
+//            if ($holidays > 0) {
+//                $user->paid_holiday = $user->paid_holiday - $holidays;
+//                $user->save();
+//            }
             return redirect("/admin/request")->with('result', '申請を行いました');
             //return view('front.request.check', compact('dates', 'type', 'holidays', 'reason', 'time'));
         }
