@@ -130,7 +130,7 @@
             <div class="col">
                 <div class="mb-3">
                     <label for="InputHoliday" class="form-label">有給休暇</label>
-                    <input type="number" class="form-control" id="InputHoliday" name='paid_holiday' required>
+                    <input type="number" min = "0" step="1" class="form-control" id="InputHoliday" name='paid_holiday' required>
                 </div>
             </div>
         </div>
