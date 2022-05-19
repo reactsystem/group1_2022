@@ -28,7 +28,7 @@ class TopPageController extends Controller
         $hoursReq = 0;
         $minutesReq = 0;
         foreach ($allData as $dat) {
-            if ($dat->time == null) {
+            if ($dat->time == null || $dat->time == "00:00") {
                 continue;
             }
             $datArray = preg_split("/:/", $dat->time);
@@ -48,14 +48,15 @@ class TopPageController extends Controller
             $hours += $xHours;
             $minutes += $xMinutes;
         }
-        $date_now = new DateTime();
+        $date_now = new DateTime($tempDate->format("H:i:50"));
         if ($data == null) {
             return view('front.index', compact('notifications', 'data', 'hours', 'minutes', 'hoursReq', 'minutesReq'));
         }
         if ($data->mode == 1) {
             $date_now = $data->updated_at;
         }
-        $interval = $data->created_at->diff($date_now);
+        $created = new DateTime($data->created_at->format('H:i:50'));
+        $interval = $created->diff($date_now);
         $createDate = new DateTime($data->created_at);
 
 
@@ -64,7 +65,8 @@ class TopPageController extends Controller
             $minutes += intval($interval->format('%i'));
         }
 
-        $datArray = preg_split("/:/", $data->time ?? "00:00");
+
+        $datArray = preg_split("/:/", $data->time ?? $interval->format("%h:%I"));
         $restData = preg_split("/:/", $data->rest ?? "00:00");
         $wHours = intval($datArray[0]);
         $wMinutes = intval($datArray[1]);

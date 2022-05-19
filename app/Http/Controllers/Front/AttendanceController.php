@@ -32,7 +32,7 @@ class AttendanceController extends Controller
 
         $tempDate = new DateTime();
         $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
-        $date_now = new DateTime();
+        $date_now = new DateTime($tempDate->format("H:i:50"));
         $date_now->s = 0;
         $interval = "";
         $restTime = (7 * 60 + 45) * 60;
@@ -54,8 +54,8 @@ class AttendanceController extends Controller
 
             $datArray = preg_split("/:/", $intervalTime->format("%h:%I"));
             $restData = preg_split("/:/", $data->rest ?? "00:00");
-            $wHours = $datArray[0];
-            $wMinutes = $datArray[1];
+            $wHours = intval($datArray[0]);
+            $wMinutes = intval($datArray[1]);
             $rHours = intval($restData[0]);
             $rMinutes = intval($restData[1]);
             $xhours = max(0, $wHours - $rHours);
@@ -98,6 +98,7 @@ class AttendanceController extends Controller
             'date' => $tempDate,
             'user_id' => Auth::id(),
             'mode' => 0,
+            'time' => "00:00",
             'comment' => '',
         ]);
         return redirect("/attends")->with('result', '出勤しました。');
@@ -170,7 +171,7 @@ class AttendanceController extends Controller
         if ($data->mode == 0) {
             return redirect("/attends")->with('error', 'まだ退勤していません。');
         }
-        Attendance::find($data->id)->update(['mode' => 0]);
+        Attendance::find($data->id)->update(['mode' => 0, 'left_at' => null, 'time' => null]);
         return redirect("/attends")->with('result', '退勤を取り消しました。');
     }
 

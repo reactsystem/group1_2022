@@ -85,6 +85,7 @@
         let timeAvailable = false
         let workTimeAvailable = false
         let reasonAvailable = false
+        let sendData = false
 
         const isNumber = function (value) {
             return ((typeof value === 'number') && (isFinite(value)));
@@ -103,7 +104,13 @@
         let checkPassed = false
 
         function submit() {
-            if (!checkPassed) return
+            if (!checkPassed || sendData) return
+            checkPassed = false
+            sendData = true
+            let submitButton = document.getElementById('submitButton');
+            submitButton.setAttribute("disabled", "")
+            submitButton.className = "btn btn-primary disabled"
+            submitButton.innerText = "申請しています..."
             requestForm.submit()
         }
 
@@ -144,13 +151,13 @@
                 }
             }
             if (types[requestType.value - 1][1] === 2) {
-                if (reqDates.length > {{Auth::user()->paid_holiday}}) {
+                if (reqDates.length > {{\App\Models\PaidHoliday::getHolidays(Auth::id())}}) {
                     v1++
                     submitButton.className = "btn btn-danger disabled"
                     submitButton.innerText = "申請できません"
-                    message += '<b>有給消費:</b> <span style="color: #FFF; background-color: #B33"> ' + reqDates.length + '日(残り{{Auth::user()->paid_holiday}}日) </span> <span style="color: #C00">&nbsp;有給消費が残日数を超えています</span><br>'
+                    message += '<b>有給消費:</b> <span style="color: #FFF; background-color: #B33"> ' + reqDates.length + '日(残り{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日) </span> <span style="color: #C00">&nbsp;有給消費が残日数を超えています</span><br>'
                 } else {
-                    message += '<b>有給消費:</b> ' + reqDates.length + '日(残り{{Auth::user()->paid_holiday}}日)<br>'
+                    message += '<b>有給消費:</b> ' + reqDates.length + '日(残り{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日)<br>'
                 }
             }
             if (types[requestType.value - 1][1] !== 2 && types[requestType.value - 1][1] !== 3 && requestReason.value === "") {

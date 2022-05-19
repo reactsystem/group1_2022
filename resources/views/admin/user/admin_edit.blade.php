@@ -13,7 +13,8 @@
                         data-bs-target="#Modal">
                     保存
                 </button>
-                <a href='/admin/attends' class="btn btn-secondary" style="float: right; margin-right: 10px;">社員一覧へ戻る</a>
+                <a href='/admin/attends/view?id={{$user->id}}' class="btn btn-secondary"
+                   style="float: right; margin-right: 10px;">社員情報確認へ戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
@@ -175,13 +176,6 @@
                   <input type="email" class="form-control" id="InputEMail" name='email' value = "{{$user ['email']}}" required>
               </div>
             </div>
-              <div class="row">
-                  <div class="mb-3">
-                      <label for="InputHoliday" class="form-label">有給休暇</label>
-                      <input type="number" class="form-control" name='paid_holiday' id="InputHoliday"
-                             value="{{$user ['paid_holiday']}}" required>
-                  </div>
-              </div>
               <div class="row">
                   <div class="col">
                       <div class="mb-3">

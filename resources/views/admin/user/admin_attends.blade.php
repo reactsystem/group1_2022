@@ -92,7 +92,7 @@
             </tr>
 
             @foreach($users as $user)
-            
+
                 @if($user->left_date != null)
                     <tr style="background-color: #BBB">
                 @else
@@ -118,6 +118,10 @@
                                         <a class="dropdown-item" href="/admin/attend-manage/calender/{{$user->id}}">勤怠情報確認</a>
                                     </li>
                                     <li>
+                                        <a class="dropdown-item"
+                                           href="/admin/attends/holidays/{{$user->id}}">有給データ確認・編集</a>
+                                    </li>
+                                    <li>
                                         <form action="/admin/request" method="post">
                                             @csrf
                                             <input type='hidden' value='{{$user -> id}}' name='id'>
@@ -130,6 +134,7 @@
                     </tr>
                     @endforeach
         </table>
+        {{$users->appends($parameters)->links()}}
     </div>
 
     <script>

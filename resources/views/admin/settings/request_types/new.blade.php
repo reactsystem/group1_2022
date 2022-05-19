@@ -105,7 +105,7 @@
                         saveBtn.className = "btn btn-success"
                         saveBtn.innerText = "保存しました"
                         alert.innerHTML = '<div class="alert alert-success" role="alert">' +
-                            '<strong>成功</strong> - 休日を追加しました。編集ページに移動しています...' +
+                            '<strong>成功</strong> - 申請種別を追加しました。編集ページに移動しています...' +
                             '</div>'
                         await _sleep(1000)
                         location = "/admin/settings/request-types/edit/" + res.data.id

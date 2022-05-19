@@ -19,7 +19,7 @@
         @endif
         <div>
             {{$user['name']}} さんとしてログイン中 <br>
-            有給休暇残：<strong>{{$user['paid_holiday']}}日</strong> <br>
+            有給休暇残：<strong>{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日</strong> <br>
         </div>
 
         <div class="card mb-3 mt-3">
