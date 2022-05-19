@@ -149,7 +149,7 @@ class RequestController extends Controller
             }
             if ($index == 0) {
                 $user = Auth::user();
-                $holidaysKey = null;
+                $holidaysKey = [true, null];
                 if ($holidays > 0) {
                     $holidaysKey = PaidHoliday::useHolidays(Auth::id(), $holidays);
                     if (!$holidaysKey[0]) {
