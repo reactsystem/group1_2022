@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Notification;
+use App\Models\PaidHoliday;
 use App\Models\User;
 use App\Models\UserMemo;
+use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -92,7 +94,6 @@ class AdminAttendsController extends Controller
         $user->employee_id = $request->employee_id;
         $user->group_id = $request->group_id;
         $user->joined_date = $request->joined_date;
-        $user->paid_holiday = $request->paid_holiday;
 
         $user->save();
         $last_insert_id = $user->id;
@@ -158,7 +159,6 @@ class AdminAttendsController extends Controller
         $user->group_id = $request->group_id;
         $user->joined_date = $request->joined_date;
         $user->left_date = $request->left_date;
-        $user->paid_holiday = $request->paid_holiday;
 
         $user->save();
 
@@ -203,6 +203,130 @@ class AdminAttendsController extends Controller
         Notification::create(['user_id' => $user->id, 'title' => $request->title, 'data' => $request->data, 'url' => $request->url ?? '/account/notifications/%%THIS%%', 'status' => 0]);
 
         return redirect('/admin/attends')->with('result', 'メッセージを送信しました。');
+    }
+
+    function viewHolidaysGet(Request $request)
+    {
+        $user_id = $request->user_id;
+        $user = User::find($user_id);
+        if ($user == null) {
+            return redirect('/admin/attends')->with('error', '対象の社員は存在しません。');
+        }
+        $parameters = [];
+        $parameters['user_id'] = $user_id;
+        $days = PaidHoliday::getHolidays($user_id);
+        $searchStr = "<strong>社員: </strong>{$user->name} <span class='text-muted'>/</span> <strong>残日数: </strong>{$days}日";
+        $data = PaidHoliday::where('user_id', $user_id)->orderByDesc('created_at')->paginate(20);
+        return view('admin.user.paid_holidays.index', compact('user_id', 'parameters', 'data', 'searchStr'));
+    }
+
+    function editHolidayGet(Request $request)
+    {
+        $user_id = $request->user_id;
+        $id = $request->id;
+        $data = PaidHoliday::find($id);
+        if ($data == null) {
+            return redirect('/admin/attends/holidays/' . $user_id)->with('error', '指定された有給は存在しません。');
+        }
+        $parameters = [];
+        $parameters['user_id'] = $user_id;
+        return view('admin.user.paid_holidays.edit', compact('user_id', 'parameters', 'data', 'id'));
+    }
+
+    function editHolidayPost(Request $request)
+    {
+        $rules = [
+            'amount' => 'required|numeric',
+            'created' => 'required',
+        ];
+        $messages = [
+            'amount.required' => '日を記入してください',
+            'amount.numeric' => '日を数値で記入してください',
+            'created.required' => '付与日を選択してください',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "必須項目が記入されていません", "errors" => $validator->errors()]);
+        }
+        $id = $request->id;
+        $data = PaidHoliday::find($id);
+        if ($data == null || $data->deleted_at != null) {
+            return response()->json(["error" => true, "code" => 20, "message" => "指定された有給データが見つかりません。"]);
+        }
+        try {
+            $amount = $request->amount;
+            $created = $request->created;
+            $param = [
+                'amount' => $amount,
+                'created_at' => $created,
+            ];
+            $data->update($param);
+            return response()->json(["error" => false, "code" => 0, "message" => "有給を更新しました。"]);
+        } catch (\Exception $e) {
+            return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
+        }
+    }
+
+    function createHolidayGet(Request $request)
+    {
+        $user_id = $request->user_id;
+        $parameters = [];
+        $parameters['user_id'] = $user_id;
+        return view('admin.user.paid_holidays.new', compact('user_id', 'parameters'));
+    }
+
+    function createHolidayPost(Request $request)
+    {
+        $user_id = $request->user_id;
+        $user = User::find($user_id);
+        if ($user == null) {
+            return response()->json(["error" => true, "code" => 27, "message" => "ユーザーが見つかりません。"]);
+        }
+        $rules = [
+            'amount' => 'required|numeric',
+            'created' => 'required',
+        ];
+        $messages = [
+            'amount.required' => '日を記入してください',
+            'amount.numeric' => '日を数値で記入してください',
+            'created.required' => '付与日を選択してください',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return response()->json(["error" => true, "code" => 1, "message" => "必須項目が記入されていません", "errors" => $validator->errors()]);
+        }
+        try {
+            $amount = $request->amount;
+            $created = $request->created;
+            $param = [
+                'user_id' => $user_id,
+                'amount' => $amount,
+                'created_at' => $created,
+            ];
+            $id = PaidHoliday::create($param)->id;
+            return response()->json(["error" => false, "code" => 0, "message" => "有給を追加しました。", "id" => $id]);
+        } catch (\Exception $e) {
+            return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
+        }
+    }
+
+    function deleteHoliday(Request $request)
+    {
+        $user_id = $request->user_id;
+        if (empty($request->id)) {
+            return redirect("/admin/attends/holidays/'.$user_id")->with('error', '指定された休日が見つかりません。(E20)');
+        }
+        $id = $request->id;
+        $data = PaidHoliday::find($id);
+        if ($data == null || $data->deleted_at != null) {
+            return redirect("/admin/attends/holidays/'.$user_id")->with('error', '指定された休日が見つかりません。(E21)');
+        }
+        try {
+            $data->update(['deleted_at' => new DateTime()]);
+            return redirect("/admin/attends/holidays/'.$user_id")->with('result', '休日を削除しました。');
+        } catch (\Exception $e) {
+            return redirect("/admin/attends/holidays/'.$user_id")->with('error', '休日の削除に失敗しました。(E30)');
+        }
     }
 
 }

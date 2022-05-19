@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
+use App\Models\PaidHoliday;
 use App\Providers\RouteServiceProvider;
 use DateTime;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -68,6 +69,7 @@ class LoginController extends Controller
             $configArray = collect(explode("\n", $config));
 
             $holidays = 0;
+            $getHolidays = 0;
 
             foreach ($configArray as $index => $dat) {
                 $item = preg_split("/,/", $dat);
@@ -112,9 +114,14 @@ class LoginController extends Controller
                 }
 
                 if ($dat3 > $dat2) {
+
                     //echo "<br><strong>GET (".intval($item[1])." / ".($user->paid_holiday + intval($item[1])).")</strong><br>";
-                    $user->paid_holiday = $user->paid_holiday + intval($item[1]);
+                    $dateDat = date("Y-m-d 00:00:00", $diffTime);
+                    PaidHoliday::createHoliday(Auth::id(), intval($item[1]), $dateDat);
+                    //$user->paid_holiday = $user->paid_holiday + intval($item[1]);
                     $holidays += intval($item[1]);
+                } else {
+                    $getHolidays += intval($item[1]);
                 }
             }
 

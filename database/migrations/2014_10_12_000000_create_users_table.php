@@ -26,7 +26,7 @@ return new class extends Migration
             $table->date('joined_date');
             $table->date('last_login')->nullable();
             $table->date('left_date')->nullable();
-            $table->integer('paid_holiday');
+            //$table->integer('paid_holiday');
             $table->timestamp('updated_at')->useCurrent()->nullable();
             $table->timestamp('created_at')->useCurrent()->nullable();
         });

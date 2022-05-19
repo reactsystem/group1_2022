@@ -10,8 +10,8 @@
             </div>
             <div class="col-md-6">
                 <a href='/admin/attends/edit?id={{$user['id']}}' class="btn btn-primary" style="float: right;">編集</a>
-                <a href='/admin/attend-manage/calender/{{$user->id}}' class="btn btn-success"
-                   style="float: right; margin-right: 10px;">この社員の勤怠カレンダー</a>
+                <a href='/admin/attends/holidays/{{$user->id}}' class="btn btn-success"
+                   style="float: right; margin-right: 10px;">有給管理</a>
                 <a href='/admin/attends' class="btn btn-secondary" style="float: right; margin-right: 10px;">社員一覧へ戻る</a>
             </div>
             @if (session('error'))
@@ -106,20 +106,21 @@
                 </div>
 
                     <div class="row">
-                    <div class="mb-3">
-                      <label for="InputEmail" class="form-label">メールアドレス</label>
-                      <input type="email" class="form-control" id="InputEMail" name='email' value = "{{$user ['email']}}"  disabled>
+                        <div class="mb-3">
+                            <label for="InputEmail" class="form-label">メールアドレス</label>
+                            <input type="email" class="form-control" id="InputEMail" name='email'
+                                   value="{{$user ['email']}}" disabled>
+                        </div>
                     </div>
-                  </div>
-                  <div class="row">
+                    <div class="row">
 
-                      <div class="mb-3">
-                          <label for="InputHoliday" class="form-label">有給休暇</label>
-                          <input type="number" class="form-control" name='paid_holiday' id="InputHoliday"
-                                 value="{{$user ['paid_holiday']}}" disabled>
-                      </div>
+                        <div class="mb-3">
+                            <label for="InputHoliday" class="form-label">有給休暇</label>
+                            <input type="text" class="form-control" name='paid_holiday' id="InputHoliday"
+                                   value="{{\App\Models\PaidHoliday::getHolidays($user->id)}}日" disabled>
+                        </div>
 
-                  </div>
+                    </div>
                     <div class="row">
                         <div class="col">
                             <div class="mb-3">

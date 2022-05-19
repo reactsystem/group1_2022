@@ -43,7 +43,8 @@
                 <div><strong>労働時間: </strong>{{$result->time}}</div>
             @endif
             @if($holidays != 0)
-                <div><strong>有給消費: </strong>{{$holidays}}日(残り{{Auth::user()->paid_holiday}}日)</div>
+                <div><strong>有給消費: </strong>{{$holidays}}日(残り{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日)
+                </div>
             @endif
             @if($result->reason != "")
                 <div><strong>理由: </strong>{{$result->reason}}</div>

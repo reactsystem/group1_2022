@@ -20,6 +20,7 @@ class VariousRequest extends Model
         'comment',
         'related_id',
         'time',
+        'holidays_key',
         'updated_at',
         'created_at'
     ];
