@@ -66,7 +66,8 @@
                     $status = "無効 - 使用済み";
                 }
                 ?>
-                <tr class="attends-row" style="{{$className}}">
+                <tr class="attends-row" style="{{$className}}"
+                    onclick="jump('/admin/attends/holidays/{{$user_id}}/edit/{{$dat->id}}')">
                     <td>{{$dat->amount}}日</td>
                     <td>{{$dat->created_at->format('Y年 n月 j日')}}</td>
                     <td>{{$status}}</td>
