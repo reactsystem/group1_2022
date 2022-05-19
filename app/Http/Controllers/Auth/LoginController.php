@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Notification;
-use App\Models\PaidHoliday;
 use App\Providers\RouteServiceProvider;
 use DateTime;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -63,6 +60,8 @@ class LoginController extends Controller
                 return redirect("/login")->with('error', 'このアカウントは退職済みの為ログイン出来ません。');
             }
         }
+        /*
+
         if (Storage::disk('local')->exists('config/paid_holidays.csv')) {
             $config = Storage::disk('local')->get('config/paid_holidays.csv');
             $config = str_replace(array("\r\n", "\r"), "\n", $config);
@@ -99,7 +98,7 @@ class LoginController extends Controller
                 $dat0 = intval($lYear . sprintf("%02d", $lMonth) . sprintf("%02d", $lDay));
                 $dat1 = intval($year . sprintf("%02d", $month) . sprintf("%02d", $day));
 
-                $target_day = date("Y-m-1", strtotime($joinDate->format("Y-m-d")));
+                $target_day = date("Y-m-d", strtotime($joinDate->format("Y-m-d")));
 //1ヶ月後の日時を取得
                 $diffTime = strtotime($target_day . "+" . $item[0] . " month");
                 $dat2 = intval(date("Y", $diffTime) . date("m", $diffTime) . date("d", $diffTime));
@@ -132,5 +131,7 @@ class LoginController extends Controller
             $user->last_login = new \DateTime();
             $user->save();
         }
+
+         */
     }
 }
