@@ -20,9 +20,11 @@ class AdminAttendsController extends Controller
 {
     // メイン画面
     function admin_attends(){
-        $users = User::orderBy('id', 'asc')->get();
+        $users = User::orderBy('id', 'asc')->paginate(10);
         $departments = Department::where('deleted_at', null)->get();
-        return view('admin/user/admin_attends',['users' => $users,'departments' => $departments]);
+        $parameters = '';
+
+        return view('admin/user/admin_attends',['users' => $users,'parameters' =>$parameters,'departments' => $departments]);
     }
 
     function admin_search(Request $request){
@@ -38,10 +40,10 @@ class AdminAttendsController extends Controller
             $users ->where('department','=',$request->department);
         }
 
-        $users = $users->get();
-
+        $users = $users->paginate(10);
+        $parameters = '';
         $departments = Department::where('deleted_at', null)->get();
-        return view('admin/user/admin_attends',['users' => $users,'departments' => $departments]);
+        return view('admin/user/admin_attends',['users' => $users,'parameters' =>$parameters ,'departments' => $departments]);
     }
 
     // ユーザー新規登録

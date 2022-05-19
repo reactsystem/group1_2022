@@ -130,6 +130,7 @@
                     </tr>
                     @endforeach
         </table>
+        {{$users->appends($parameters)->links()}}
     </div>
 
     <script>
