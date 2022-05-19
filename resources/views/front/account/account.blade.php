@@ -24,6 +24,21 @@
 
         <div class="card mb-3 mt-3">
             <div class="card-header">
+                データ管理
+            </div>
+            <div class="card-body">
+                <div>
+                    <span>
+                        有給管理<br>
+                        <span class="text-muted">有給の詳細な情報が確認できます</span>
+                    </span>
+                    <a href="/account/holidays" style="float: right; margin-top: -19px" class="btn btn-primary">有給管理</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3 mt-3">
+            <div class="card-header">
                 ユーザー情報
             </div>
             <div class="card-body">

@@ -183,7 +183,7 @@ class AdminRequestController extends Controller
             $uuid = Str::uuid();
             foreach ($tempDate as $index => $item) {
                 if ($index == 0) {
-                    $holidaysKey = null;
+                    $holidaysKey = [true, null];
                     if ($holidays > 0) {
                         $holidaysKey = PaidHoliday::useHolidays($request->user_id, $holidays);
                         if (!$holidaysKey[0]) {
@@ -198,7 +198,7 @@ class AdminRequestController extends Controller
                         'type' => $type->id,
                         'date' => $item,
                         'status' => 0,
-                        'holidays_key' => $holidaysKey,
+                        'holidays_key' => $holidaysKey[1],
                         'time' => $request->time,
                         'reason' => $request->reason ?? "",
                     ]);

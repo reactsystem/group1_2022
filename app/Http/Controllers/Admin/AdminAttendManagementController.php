@@ -416,8 +416,11 @@ class AdminAttendManagementController
 
         $user_id = $request->id;
         $tempDate = new DateTime();
-        $year = $requestData->year ?? intval($tempDate->format('Y'));
-        $month = $requestData->month ?? intval($tempDate->format('m'));
+        if (isset($request->year) && isset($request->month)) {
+            $tempDate = new DateTime($request->year . "-" . $request->month . "-01");
+        }
+        $year = $request->year ?? intval($tempDate->format('Y'));
+        $month = $request->month ?? intval($tempDate->format('m'));
         $cYear = intval($tempDate->format('Y'));
         $cMonth = intval($tempDate->format('m'));
 
@@ -425,16 +428,16 @@ class AdminAttendManagementController
         $data = MonthlyReport::where("user_id", "=", $user_id)->where("date", "=", $tempDate->format('Y-m'))->first();
         if ($data != null) {
             if ($data->status == 2) {
-                return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('error', '既に承認しています。');
+                return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('error', '既に承認しています。');
             } else if ($data->status != 1) {
-                return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('error', 'この月の月報は確定されていないため承認出来ません。');
+                return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('error', 'この月の月報は確定されていないため承認出来ません。');
             } else {
                 MonthlyReport::find($data->id)->update(['status' => 2]);
                 Notification::create(['user_id' => $data->user_id, 'title' => '月報が承認されました', 'data' => '月報(' . $year . '年' . $month . '月度)が承認されました。承認の解除については管理部までご連絡ください。', 'url' => 'attend-manage?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
-                return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('result', '月報を承認しました。');
+                return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('result', '月報を承認しました。');
             }
         }
-        return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('error', 'この月の月報は確定されていないため承認出来ません。');
+        return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('error', 'この月の月報は確定されていないため承認出来ません。');
     }
 
     public function unapproveReport(Request $request): Redirector|Application|RedirectResponse
@@ -442,8 +445,11 @@ class AdminAttendManagementController
 
         $user_id = $request->id;
         $tempDate = new DateTime();
-        $year = $requestData->year ?? intval($tempDate->format('Y'));
-        $month = $requestData->month ?? intval($tempDate->format('m'));
+        if (isset($request->year) && isset($request->month)) {
+            $tempDate = new DateTime($request->year . "-" . $request->month . "-01");
+        }
+        $year = $request->year ?? intval($tempDate->format('Y'));
+        $month = $request->month ?? intval($tempDate->format('m'));
         $cYear = intval($tempDate->format('Y'));
         $cMonth = intval($tempDate->format('m'));
 
@@ -452,12 +458,12 @@ class AdminAttendManagementController
         if ($data != null) {
             if ($data->status == 2) {
                 MonthlyReport::find($data->id)->update(['status' => 1]);
-                return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('result', '月報の承認を取り消しました。');
+                return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('result', '月報の承認を取り消しました。');
             } else {
-                return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('error', 'まだ月報が承認されていません。');
+                return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('error', 'まだ月報が承認されていません。');
             }
         }
-        return redirect("/admin/attend-manage/calender/" . $user_id . "&year=$year&month=$month")->with('error', 'まだ月報が承認されていません。');
+        return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('error', 'まだ月報が承認されていません。');
     }
 
 }
