@@ -382,14 +382,19 @@
             let
         works = {
             <?php foreach ($attendData as $data) {
+                $leftDate = $data->left_at;
+                if ($leftDate != null) {
+                    $datx = new DateTime($data->left_at);
+                    $leftDate = $datx->format('H:i');
+                }
                 echo "'" . $data->date . "': { date: '" . $data->date . "',";
                 echo "mode: " . $data->mode . ",";
                 echo "status: " . $data->status . ",";
                 echo "comment: '" . ($data->comment ?? "null") . "',";
                 echo "time: '" . ($data->time ?? "null") . "',";
                 echo "rest: '" . ($data->rest ?? '00:00:00') . "',";
-                echo "start: '" . ($data->created_at ?? "null") . "',";
-                echo "end: '" . ($data->left_at ?? "null") . "'},";
+                echo "start: '" . ($data->created_at->format("H:i") ?? "null") . "',";
+                echo "end: '" . ($leftDate ?? "00:00") . "'},";
             }?>
         }
 
@@ -517,22 +522,52 @@
                 modalContext.innerHTML += `<?php
                 if ($confirmStatus) {
                     echo '<div class="col-md-12 mt-3" id="alert">
-                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr><div class="row">';
+                    if (env("ENABLE_EDIT_ATTENDANCE", false)) {
+                        echo '<div class="mb-3 col-md-12 col-lg-6">
+                <label for="startInput" class="form-label">出勤時刻</label>
+                <input type="time" class="form-control" id="startInput" placeholder="未設定"
+                       value="`+modalData.start+`" disabled
+                >
+            </div>';
+                        echo '<div class="mb-3 col-md-12 col-lg-6">
+                <label for="endInput" class="form-label">退勤時刻</label>
+                <input type="time" class="form-control" id="endInput" placeholder="未設定"
+                       value="`+modalData.end+`" disabled
+                >
+            </div>';
+                    }
+                    echo '
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="restInput" class="form-label">休憩時間</label>
                 <input type="time" class="form-control" id="restInput" placeholder="未設定"
                        value="`+modalData.rest+`" disabled
                 >
-            </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
+            </div></div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
                 } else {
                     echo '<div class="col-md-12 mt-3" id="alert">
-                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr><div class="row">';
+                    if (env("ENABLE_EDIT_ATTENDANCE", false)) {
+                        echo '<div class="mb-3 col-md-12 col-lg-6">
+                <label for="startInput" class="form-label">出勤時刻</label>
+                <input type="time" class="form-control" id="startInput" placeholder="未設定"
+                       value="`+modalData.start+`"
+                >
+            </div>';
+                        echo '<div class="mb-3 col-md-12 col-lg-6">
+                <label for="endInput" class="form-label">退勤時刻</label>
+                <input type="time" class="form-control" id="endInput" placeholder="未設定"
+                       value="`+modalData.end+`"
+                >
+            </div>';
+                    }
+                    echo '
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="restInput" class="form-label">休憩時間</label>
                 <input type="time" class="form-control" id="restInput" placeholder="未設定"
                        value="`+modalData.rest+`"
                 >
-            </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px">`+modalData.comment+`</textarea><button class="btn btn-primary" id="saveBtn" style="float: right; margin-top: 7px" onclick="saveComment(\'`+keys+`\')">勤務詳細を保存</button>';
+            </div></div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px">`+modalData.comment+`</textarea><button class="btn btn-primary" id="saveBtn" style="float: right; margin-top: 7px" onclick="saveComment(\'`+keys+`\')">勤務詳細を保存</button>';
                 }
                 ?>`
             }
@@ -564,6 +599,12 @@
 
             let saveBtn = document.getElementById("saveBtn")
             let restTime = document.getElementById("restInput")
+
+            @if(env("ENABLE_EDIT_ATTENDANCE", false))
+            let startInput = document.getElementById("startInput")
+            let endInput = document.getElementById("endInput")
+            @endif
+
             let textArea = document.getElementById("textArea")
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
@@ -572,9 +613,17 @@
 
             axios
                 .post("/api/v1/attends/comment/set", {
+                    @if(env("ENABLE_EDIT_ATTENDANCE", false))
+                    text: textArea.value,
+                    rest: restTime.value,
+                    start: startInput.value,
+                    end: endInput.value,
+                    date: date
+                    @else
                     text: textArea.value,
                     rest: restTime.value,
                     date: date
+                    @endif
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code

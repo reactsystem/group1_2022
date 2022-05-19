@@ -127,11 +127,29 @@
                     </button>
                 </div>
             </div>
-            <div class="mb-3 col-md-12 col-lg-6">
-                <label for="restInput" class="form-label">休憩時間</label>
-                <input type="time" class="form-control" id="restInput" placeholder="未設定"
-                       value="{{substr(($data->rest ?? ($config->rest ?? "00:45:00")), 0, 5)}}"
-                >
+            <div class="row">
+                @if(env("ENABLE_EDIT_ATTENDANCE", false))
+                    <div class="mb-3 col-sm-12 col-md-6 col-lg-4">
+                        <label for="startInput" class="form-label">出勤時刻</label>
+                        <input type="time" class="form-control" id="startInput" placeholder="未設定"
+                               value="{{substr(($data->created_at->format("h:i") ?? "00:00:00"), 0, 5)}}"
+                        >
+                    </div>
+                    @if($data->mode == 1)
+                        <div class="mb-3 col-sm-12 col-md-6 col-lg-4">
+                            <label for="endInput" class="form-label">退勤時刻</label>
+                            <input type="time" class="form-control" id="endInput" placeholder="未設定"
+                                   value="{{substr(($data->left_at ?? "00:00:00"), 11, 5)}}"
+                            >
+                        </div>
+                    @endif
+                @endif
+                <div class="mb-3 col-md-12 col-sm-12 col-md-6 col-lg-4">
+                    <label for="restInput" class="form-label">休憩時間</label>
+                    <input type="time" class="form-control" id="restInput" placeholder="未設定"
+                           value="{{substr(($data->rest ?? ($config->rest ?? "00:45:00")), 0, 5)}}"
+                    >
+                </div>
             </div>
             <label for="textArea" class="form-label">勤務詳細</label>
             <textarea id="textArea" class="form-control" style="min-height: 70vh; width: 100%; height: 100%"
@@ -290,7 +308,12 @@
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             let saveBtn = document.getElementById("saveBtn")
+
             let restInput = document.getElementById("restInput")
+            @if(env("ENABLE_EDIT_ATTENDANCE", false))
+            let startInput = document.getElementById("startInput")
+            let endInput = document.getElementById("endInput")
+            @endif
             let textArea = document.getElementById("textArea")
             let alert = document.getElementById("alert")
 
@@ -301,6 +324,12 @@
 
             axios
                 .post("/api/v1/attends/comment/set", {
+                    @if(env("ENABLE_EDIT_ATTENDANCE", false))
+                    start: startInput.value,
+                    @if($data->mode == 1)
+                    end: endInput.value,
+                    @endif
+                        @endif
                     text: textArea.value,
                     rest: restInput.value
                 })

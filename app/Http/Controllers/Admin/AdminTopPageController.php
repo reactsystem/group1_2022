@@ -37,7 +37,7 @@ class AdminTopPageController extends Controller
                 'date' => $dates
             ];
         }
-        $notifications = Notification::where('user_id', 0)->where('status', 0)->orderByDesc('id')->paginate(10);
+        $notifications = Notification::where('user_id', 0)->where('status', 0)->orderByDesc('id')->paginate(5);
         return view('admin.index', compact('notifications', 'requests', 'related', 'data'));
     }
 

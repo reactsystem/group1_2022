@@ -1,21 +1,13 @@
-@extends('layouts.admin')
+@extends('layouts.main')
 
 @section('styles')
     <style>
         .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
+            cursor: default;
         }
     </style>
 @endsection
-@section('pageTitle', "社員情報管理")
+@section('pageTitle', "ユーザー管理")
 
 @section('content')
     <div class="container">
@@ -24,10 +16,8 @@
                 <h2 class="fw-bold">有給一覧</h2>
             </div>
             <div class="col-md-6">
-                <a href="/admin/attends/holidays/{{$user_id}}/new" class="btn btn-primary"
-                   style="float: right">有給を追加</a>
-                <a href="/admin/attends/view?id={{$user_id}}" class="btn btn-secondary"
-                   style="float: right; margin-right: 10px">社員情報に戻る</a>
+                <a href="/account" class="btn btn-secondary"
+                   style="float: right; margin-right: 10px">ユーザー管理へ戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
