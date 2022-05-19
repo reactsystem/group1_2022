@@ -175,13 +175,15 @@ class AttendanceManagementController extends Controller
         $joinDate = new DateTime(Auth::user()->joined_date);
         $joinYear = intval($joinDate->format('Y'));
         $joinMonth = intval($joinDate->format('m'));
+
         if ($year > $cYear || $month > $cMonth || $year < $joinYear || $month < $joinMonth) {
             $confirmStatus = -1;
         }
+        $user = Auth::user();
         if ($mode == 1) {
-            return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays'));
+            return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
         } else {
-            return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays'));
+            return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
         }
     }
 
@@ -189,8 +191,11 @@ class AttendanceManagementController extends Controller
     {
 
         $tempDate = new DateTime();
-        $year = $requestData->year ?? intval($tempDate->format('Y'));
-        $month = $requestData->month ?? intval($tempDate->format('m'));
+        if (isset($request->year) && isset($request->month)) {
+            $tempDate = new DateTime($request->year . "-" . $request->month . "-01");
+        }
+        $year = $request->year ?? intval($tempDate->format('Y'));
+        $month = $request->month ?? intval($tempDate->format('m'));
         $cYear = intval($tempDate->format('Y'));
         $cMonth = intval($tempDate->format('m'));
 
@@ -198,11 +203,11 @@ class AttendanceManagementController extends Controller
         $data = MonthlyReport::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-m'))->first();
         if ($data != null) {
             if ($data->status == 1) {
-                return redirect("/attend-manage")->with('error', '既に確定しています。');
+                return redirect("/attend-manage?year={$year}&month={$month}")->with('error', '既に確定しています。');
             } else {
                 MonthlyReport::find($data->id)->update(['status' => 1]);
                 Notification::create(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
-                return redirect("/attend-manage")->with('result', '月報を確定しました。');
+                return redirect("/attend-manage?year={$year}&month={$month}")->with('result', '月報を確定しました。');
             }
         }
         MonthlyReport::create([
@@ -211,15 +216,18 @@ class AttendanceManagementController extends Controller
             'status' => 1,
         ]);
         Notification::create(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
-        return redirect("/attend-manage")->with('result', '月報を確定しました。');
+        return redirect("/attend-manage?year={$year}&month={$month}")->with('result', '月報を確定しました。');
     }
 
     public function unconfirmReport(Request $request): Redirector|Application|RedirectResponse
     {
 
         $tempDate = new DateTime();
-        $year = $requestData->year ?? intval($tempDate->format('Y'));
-        $month = $requestData->month ?? intval($tempDate->format('m'));
+        if (isset($request->year) && isset($request->month)) {
+            $tempDate = new DateTime($request->year . "-" . $request->month . "-01");
+        }
+        $year = $request->year ?? intval($tempDate->format('Y'));
+        $month = $request->month ?? intval($tempDate->format('m'));
         $cYear = intval($tempDate->format('Y'));
         $cMonth = intval($tempDate->format('m'));
 
@@ -228,12 +236,12 @@ class AttendanceManagementController extends Controller
         if ($data != null) {
             if ($data->status == 1) {
                 MonthlyReport::find($data->id)->update(['status' => 0]);
-                return redirect("/attend-manage")->with('result', '月報の確定を解除しました。');
+                return redirect("/attend-manage?year={$year}&month={$month}")->with('result', '月報の確定を解除しました。');
             } else {
-                return redirect("/attend-manage")->with('error', '既に承認されています。');
+                return redirect("/attend-manage?year={$year}&month={$month}")->with('error', '既に承認されています。');
             }
         }
-        return redirect("/attend-manage")->with('error', 'まだ月報が確定されていません。');
+        return redirect("/attend-manage?year={$year}&month={$month}")->with('error', 'まだ月報が確定されていません。');
     }
 
 }

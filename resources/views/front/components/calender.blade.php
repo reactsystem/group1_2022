@@ -23,7 +23,7 @@
 </div>
 <div style="display: flex">
     <?php
-    $joinDate = new DateTime(Auth::user()->joined_date);
+    $joinDate = new DateTime($user->joined_date);
     $joinYear = intval($joinDate->format('Y'));
     $joinMonth = intval($joinDate->format('m'));
     $joinDay = intval($joinDate->format('d'));
@@ -126,14 +126,15 @@
     } catch (Exception $ex) {
     }
     $diffDayOfWeek = $daysCount % 7 - 1;
-    if ($noWorkFlag &&
-        ($year >= $joinYear && $month >= $joinMonth && $i >= $joinDay) &&
-        $diffDayOfWeek > 0 && $diffDayOfWeek < 6 &&
-        ($year <= $cYear && ($month <= $cMonth && ($year != $cYear || $month != $cMonth || $i < $day)))) {
-        echo '<div><span style="color: #888;">●</span> <strong>欠勤</strong></div>';
-    }
+
     if (!$isJoinedBeforeDay) {
         echo '<div>---</div>';
+    } else {
+        if ($noWorkFlag &&
+            $diffDayOfWeek > 0 && $diffDayOfWeek < 6 &&
+            ($year <= $cYear && ($month <= $cMonth && ($year != $cYear || $month != $cMonth || $i < $day)))) {
+            echo '<div><span style="color: #888;">●</span> <strong>欠勤</strong></div> ';
+        }
     }
     ?>
 </div>

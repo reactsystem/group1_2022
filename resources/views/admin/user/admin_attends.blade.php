@@ -2,6 +2,14 @@
 
 @section('pageTitle', "社員情報管理")
 
+@section('styles')
+    <style>
+        .pointer-cursor {
+            cursor: pointer;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row">
@@ -10,7 +18,8 @@
             </div>
             <div class="col-md-6">
                 <a href='/admin/attends/new' class="btn btn-primary" style="float: right ; margin-right: 10px">新規登録</a>
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#searchModal" style="float: right; margin-right: 10px">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#searchModal"
+                        style="float: right; margin-right: 10px">
                 検索
                 </button>
                 <a href='/admin/attends/notify' class="btn btn-success"
@@ -82,12 +91,12 @@
             </div>
         </div>
 
-        <table class="table" id ="sort_table">
+        <table class="table" id="sort_table">
             <tr>
-                <th scope="col">社員番号</a></th>
-                <th scope="col">社員名</a></th>
-                <th scope="col">部署</a></th>
-                <th scope="col">最終出勤</a></th>
+                <th class="pointer-cursor" scope="col">社員番号</th>
+                <th class="pointer-cursor" scope="col">社員名</th>
+                <th class="pointer-cursor" scope="col">部署</th>
+                <th class="pointer-cursor" scope="col">最終出勤</th>
                 <th scope="col">操作</th>
             </tr>
 
