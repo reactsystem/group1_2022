@@ -133,6 +133,11 @@
 
         function submit() {
             if (!checkPassed) return
+            checkPassed = false
+            let submitButton = document.getElementById('submitButton');
+            submitButton.setAttribute("disabled", "")
+            submitButton.className = "btn btn-primary disabled"
+            submitButton.innerText = "申請しています..."
             requestForm.submit()
         }
 
