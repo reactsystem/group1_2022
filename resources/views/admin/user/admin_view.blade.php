@@ -9,10 +9,9 @@
                 <h2 class="fw-bold">社員情報確認</h2>
             </div>
             <div class="col-md-6">
-                <a href='/admin/attends/edit?id={{$user['id']}}' class="btn btn-primary" style="float: right;">編集</a>
-                <a href='/admin/attends/holidays/{{$user->id}}' class="btn btn-success"
-                   style="float: right; margin-right: 10px;">有給管理</a>
-                <a href='/admin/attends' class="btn btn-secondary" style="float: right; margin-right: 10px;">社員一覧へ戻る</a>
+                <a href='/admin/attends/edit?id={{$user['id']}}' class="btn btn-primary float-right">編集</a>
+                <a href='/admin/attends/holidays/{{$user->id}}' class="btn btn-success float-right mr-10px">有給管理</a>
+                <a href='/admin/attends' class="btn btn-secondary float-right mr-10px">社員一覧へ戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">

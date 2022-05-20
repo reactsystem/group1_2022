@@ -1,20 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "勤怠情報管理")
 
 @section('content')
@@ -24,15 +9,13 @@
                 <h2 class="fw-bold">勤怠情報確認</h2>
             </div>
             <div class="col-md-6">
-                <a href="/admin/attend-manage/edit/{{$id}}" class="btn btn-primary" style="float: right">
+                <a href="/admin/attend-manage/edit/{{$id}}" class="btn btn-primary float-right">
                     編集
                 </a>
-                <button class="btn btn-danger"
-                        style="float: right; margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <button class="btn btn-danger float-right mr-10px" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     削除
                 </button>
-                <a href='/admin/attend-manage' class="btn btn-secondary"
-                   style="float: right; margin-right: 10px;">戻る</a>
+                <a href='/admin/attend-manage' class="btn btn-secondary float-right mr-10px">戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">

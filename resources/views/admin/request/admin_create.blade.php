@@ -10,7 +10,7 @@
                 <h2 class="fw-bold">新規申請</h2>
             </div>
             <div class="col-md-6">
-                <a href="/admin/request" class="btn btn-secondary" style="float: right">キャンセル</a>
+                <a href="/admin/request" class="btn btn-secondary float-right">キャンセル</a>
             </div>
         </div>
         @if (session('error'))
@@ -65,7 +65,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-3 col-lg-4 col-md-6 col-sm-12" style="display: none" id="workTime">
+                <div class="mb-3 col-lg-4 col-md-6 col-sm-12 d-none" id="workTime">
                     <label class="form-label">労働時間</label>
                     <input name="time" id="requestTime" type="time" class="form-control" placeholder="0:00"
                            value="{{old('time')}}"/>
@@ -73,12 +73,12 @@
                 </div>
                 <div class="mb-3 col-sm-12">
                     <label class="form-label">申請理由</label>
-                    <textarea name="reason" id="requestReason" class="form-control"
-                              style="height: 50vh">{{old('reason')}}</textarea>
+                    <textarea name="reason" id="requestReason"
+                              class="form-control height-50vh">{{old('reason')}}</textarea>
                 </div>
             </div>
         </form>
-        <div style="float: right">
+        <div class="float-right">
             <button id="proceedButton" class="btn btn-primary" onclick="check()" disabled>次へ</button>
         </div>
     </div>

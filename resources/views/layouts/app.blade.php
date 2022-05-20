@@ -18,40 +18,6 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <style>
-        .sidebarBtn {
-            cursor: pointer;
-            font-size: 1.25rem;
-            margin-top: -6px;
-            margin-right: 12px;
-            color: #888;
-            transition-duration: 0.4s;
-        }
-
-        .sidebarBtn:hover {
-            color: #fff;
-            transition-duration: 0.4s;
-        }
-
-        #sectionTitle2 {
-            transition-duration: 0.2s;
-            display: inline-block;
-            margin-top: -5px;
-        }
-
-        .noselect {
-            -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none; /* Safari */
-            -khtml-user-select: none; /* Konqueror HTML */
-            -moz-user-select: none; /* Old versions of Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none;
-        }
-
-        .modal {
-            z-index: 1055 !important;
-        }
-    </style>
 
     @yield('styles')
     @yield('styles_basic')
@@ -65,9 +31,8 @@
                 {{ config('app.name', 'Laravel') }}
             </a>
             @if (View::hasSection('pageTitle'))
-                <span class="d-none d-sm-inline"
-                      style="font-size: 1.25rem; margin-top: -6px; margin-right: 12px; color: #888">|</span>
-                <span class="d-none d-sm-inline text-white" style="font-size: 1.125rem;">@yield('pageTitle')</span>
+                <span class="d-none d-sm-inline title-section-splitter">|</span>
+                <span class="d-none d-sm-inline text-white title-fs">@yield('pageTitle')</span>
             @endif
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -84,8 +49,7 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item d-lg-inline d-md-none d-none">
-                        <span id="navCurrentTime" class="nav-link text-white fw-bold"
-                              style="font-size: 1.125rem;padding-bottom: 0;padding-top: 6px;">時刻取得中</span>
+                        <span id="navCurrentTime" class="nav-link text-white fw-bold clock">時刻取得中</span>
                     </li>
                     <!-- Authentication Links -->
                     @guest

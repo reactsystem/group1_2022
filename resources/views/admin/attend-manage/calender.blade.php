@@ -1,209 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .card-hover {
-            box-shadow: 0 0 0;
-            transition-duration: 0.1s;
-        }
-
-        .card-hover:hover {
-            box-shadow: 0 0 10px #CCC;
-            transition-duration: 0.2s;
-        }
-
-        .calender-doy {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-        }
-
-        .calender-body {
-            transition-duration: 0.2s;
-            min-height: 130px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-            cursor: pointer;
-            z-index: 1;
-        }
-
-        .calender-body2 {
-            transition-duration: 0.2s;
-            min-height: 130px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-            cursor: pointer;
-        }
-
-        .calender-disabled {
-            transition-duration: 0.2s;
-            min-height: 120px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-        }
-
-        .calender-body:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px;
-            min-height: 120px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-            z-index: 10;
-        }
-
-        .bg-gray {
-            background-color: #888;
-        }
-
-        .bg-gray2 {
-            background-color: #BBB;
-        }
-
-        .bg-green {
-            background-color: #BFB;
-        }
-
-        .bg-red {
-            background-color: #FBB;
-        }
-
-        .bg-blue {
-            background-color: #BBF;
-        }
-
-        .sunday {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            background-color: #F33;
-            color: #fff;
-        }
-
-        .saturday {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            background-color: #37F;
-            color: #fff
-        }
-
-        .type-scroll::-webkit-scrollbar {
-            display: block;
-            height: 6px;
-        }
-
-        .type-scroll::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .type-scroll::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.4);
-            border-right: none;
-            border-left: none;
-        }
-
-        .type-scroll::-webkit-scrollbar-track-piece:end {
-            margin-bottom: 10px;
-        }
-
-        .type-scroll::-webkit-scrollbar-track-piece:start {
-            margin-top: 10px;
-        }
-
-        .type-scroll {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            overflow-x: scroll;
-            height: 50px;
-        }
-
-        .type-scroll {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            overflow: hidden;
-            height: 50px;
-            transition-duration: 0.3s;
-        }
-
-        .type-scroll:hover {
-            overflow-x: scroll;
-            transition-duration: 0.05s;
-        }
-
-        @media only screen and (max-width: 561.99px) {
-            .calender-main {
-                transform: scale(0.5);
-                width: 200%;
-                margin-left: -50%;
-                margin-top: -150px;
-            }
-        }
-
-        @media only screen and (min-width: 562px) {
-            .calender-main {
-                transform: scale(0.6);
-                width: 170%;
-                margin-left: -35%;
-                margin-top: -120px;
-            }
-        }
-
-        @media only screen and (min-width: 768px) {
-            .calender-main {
-                transform: scale(0.8);
-                width: 125%;
-                margin-left: -13%;
-                margin-top: -70px;
-            }
-        }
-
-        @media only screen and (min-width: 992px) {
-            .calender-main {
-                transform: scale(0.7);
-                width: 145%;
-                margin-left: -23%;
-                margin-top: -85px;
-            }
-        }
-
-        @media only screen and (min-width: 1220px) {
-            .calender-main {
-                transform: scale(1.0);
-                width: 100%;
-                margin-left: 0;
-                margin-top: 0;
-            }
-        }
-    </style>
-@endsection
 @section('pageTitle', "勤怠情報管理")
 
 @section('content')
@@ -213,7 +9,7 @@
                 <h2 class="fw-bold">{{$user->name}}の勤怠情報</h2>
             </div>
             <div class="col-md-6 mb-3">
-                <div class="btn-group" role="group" style="float: right">
+                <div class="btn-group float-right" role="group">
                     <button id="btnGroupDrop1" type="button"
                             class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -246,25 +42,21 @@
                 </div>
             </div>
             <hr>
-            <div class="col-md-4" style="display: flex">
+            <div class="col-md-4 flex-view">
                 @if($month == 1)
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year - 1}}&month=12&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">◀</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
                 @else
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year}}&month={{$month - 1}}&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">◀</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
                 @endif
-                <h2 class="fw-bold mt-1" style="flex: 9; text-align: center">{{$year}}年 {{$month}}月</h2>
+                <h2 class="fw-bold mt-1 calender-year-month">{{$year}}年 {{$month}}月</h2>
                 @if($month == 12)
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year + 1}}&month=1&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @else
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year}}&month={{$month + 1}}&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @endif
             </div>
             <div class="col-md-4 type-scroll">
@@ -286,29 +78,27 @@
                         </span>欠勤&nbsp;
                 </div>
             </div>
-            <div class="col-md-4" style="display: flex; flex-direction: row-reverse; gap: 3px;">
+            <div class="col-md-4 header-flex-area">
                 @if($confirmStatus == -1)
-                    <button class="btn btn-secondary" style="height: 40px" disabled>
+                    <button class="btn btn-secondary height-40" disabled>
                         月報確定
                     </button>
                 @elseif($confirmStatus == 2)
                     <a href="/admin/attend-manage/cancel?id={{$user->id}}&year={{$year}}&month={{$month}}"
-                       class="btn btn-danger" style="height: 40px">
+                       class="btn btn-danger height-40">
                         承認取消
                     </a>
                 @elseif($confirmStatus == 1)
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal"
-                            style="height: 40px">
+                    <button type="button" class="btn btn-primary height-40" data-bs-toggle="modal"
+                            data-bs-target="#confirmModal">
                         月報承認
                     </button>
                 @else
-                    <button type="button" class="btn btn-warning"
-                            style="height: 40px" disabled>
+                    <button type="button" class="btn btn-warning height-40" disabled>
                         月報未確定
                     </button>
                 @endif
-                <a href="/admin/attends/view?id={{$user->id}}" class="btn btn-secondary"
-                   style="height: 40px">
+                <a href="/admin/attends/view?id={{$user->id}}" class="btn btn-secondary height-40">
                     社員情報に戻る
                 </a>
             </div>
@@ -327,23 +117,23 @@
                 </div>
             </div>
         @endif
-        <div style="display: flex; width: 100%; gap: 10px">
-            <div style="flex: 1.5; padding: 0">
-                <span class="text-muted" style="height: 40px; line-height: 40px">今月の労働時間</span>
+        <div class="w100-gap10 flex-view">
+            <div class="flex-1-5 padding-0">
+                <span class="text-muted vert-center-40">今月の労働時間</span>
             </div>
-            <div style="flex: 1">
-                <strong style="font-size: 20pt">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
+            <div class="flex-1">
+                <strong class="font-20">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
             </div>
-            <div style="flex: 1">
+            <div class="flex-1">
 
             </div>
-            <div style="flex: 1.5; padding: 0">
-                <span class="text-muted" style="height: 40px; line-height: 40px">今月の残業時間</span>
+            <div class="flex-1-5 padding-0">
+                <span class="text-muted vert-center-40">今月の残業時間</span>
             </div>
-            <div style="flex: 1">
-                <strong style="font-size: 20pt">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
+            <div class="flex-1">
+                <strong class="font-20">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
             </div>
-            <div style="flex: 4">
+            <div class="flex-4">
 
             </div>
         </div>
@@ -370,10 +160,7 @@
                        class="btn btn-primary">
                         月報を承認
                     </a>
-
-                    <form id='logout-form' action={{ route('logout')}} method="POST" style="display: none;">
                     @csrf
-
                 </div>
             </div>
         </div>

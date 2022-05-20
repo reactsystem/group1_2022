@@ -6,3 +6,416 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+// BASIC STYLES
+
+.card-hover {
+    box-shadow: 0 0 0;
+    transition-duration: 0.1s;
+}
+
+.card-hover:hover {
+    box-shadow: 0 0 10px #CCC;
+    transition-duration: 0.2s;
+}
+
+.bg-darken {
+    background-color: #222;
+}
+
+.bg-gray {
+    background-color: #888;
+}
+
+.bg-gray2 {
+    background-color: #BBB;
+}
+
+.bg-green {
+    background-color: #BFB;
+}
+
+.bg-red {
+    background-color: #FBB;
+}
+
+.bg-blue {
+    background-color: #BBF;
+}
+
+// CALENDER STYLES
+
+.calender-doy {
+    height: 30px;
+    line-height: 30px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1;
+    color: #222;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #666;
+}
+
+.calender-body {
+    transition-duration: 0.2s;
+    min-height: 130px;
+    padding: 10px;
+    flex: 1;
+    color: #222;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #666;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.calender-body2 {
+    transition-duration: 0.2s;
+    min-height: 130px;
+    padding: 10px;
+    flex: 1;
+    color: #222;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #666;
+    cursor: pointer;
+}
+
+.calender-disabled {
+    transition-duration: 0.2s;
+    min-height: 120px;
+    padding: 10px;
+    flex: 1;
+    color: #222;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #666;
+}
+
+.calender-body:hover {
+    transition-duration: 0.05s;
+    box-shadow: 0 0 10px;
+    min-height: 120px;
+    padding: 10px;
+    flex: 1;
+    color: #222;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #666;
+    z-index: 10;
+}
+
+.sunday {
+    height: 30px;
+    line-height: 30px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1;
+    background-color: #F33;
+    color: #fff;
+}
+
+.saturday {
+    height: 30px;
+    line-height: 30px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1;
+    background-color: #37F;
+    color: #fff
+}
+
+.type-scroll::-webkit-scrollbar {
+    display: block;
+    height: 6px;
+}
+
+.type-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.type-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.4);
+    border-right: none;
+    border-left: none;
+}
+
+.type-scroll::-webkit-scrollbar-track-piece:end {
+    margin-bottom: 10px;
+}
+
+.type-scroll::-webkit-scrollbar-track-piece:start {
+    margin-top: 10px;
+}
+
+.type-scroll {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow-x: scroll;
+    height: 50px;
+}
+
+.type-scroll {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow: hidden;
+    height: 50px;
+    transition-duration: 0.3s;
+}
+
+.type-scroll:hover {
+    height: 50px;
+    overflow-x: scroll;
+    overflow: overlay;
+    transition-duration: 0.05s;
+}
+
+@media only screen and (max-width: 561.99px) {
+    .calender-main {
+        transform: scale(0.5);
+        width: 200%;
+        margin-left: -50%;
+        margin-top: -150px;
+    }
+}
+
+@media only screen and (min-width: 562px) {
+    .calender-main {
+        transform: scale(0.6);
+        width: 170%;
+        margin-left: -35%;
+        margin-top: -120px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .calender-main {
+        transform: scale(0.8);
+        width: 125%;
+        margin-left: -13%;
+        margin-top: -70px;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .calender-main {
+        transform: scale(0.7);
+        width: 145%;
+        margin-left: -23%;
+        margin-top: -85px;
+    }
+}
+
+@media only screen and (min-width: 1220px) {
+    .calender-main {
+        transform: scale(1.0);
+        width: 100%;
+        margin-left: 0;
+        margin-top: 0;
+    }
+}
+
+.flex-view {
+    display: flex;
+}
+
+.btn-calender-month {
+    height: 45px;
+    flex: 1;
+    margin-top: 0;
+    font-size: 18pt;
+}
+
+.calender-year-month {
+    flex: 9;
+    text-align: center;
+}
+
+.header-flex-area {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 3px;
+}
+
+.height-40 {
+    height: 40px;
+}
+
+.float-right {
+    float: right;
+}
+
+.w100-gap10 {
+    width: 100%;
+    gap: 10px;
+}
+
+.pointer-cursor {
+    cursor: pointer;
+}
+
+.flex-4 {
+    flex: 4;
+}
+
+.flex-3-5 {
+    flex: 3.5;
+}
+
+.flex-3 {
+    flex: 3;
+}
+
+.flex-2-5 {
+    flex: 2.5;
+}
+
+.flex-2 {
+    flex: 2;
+}
+
+.flex-1-5 {
+    flex: 1.5;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.padding-0 {
+    padding: 0;
+}
+
+.vert-center-40 {
+    height: 40px;
+    line-height: 40px;
+}
+
+.font-20 {
+    font-size: 20pt;
+}
+
+.display-none {
+    display: none;
+}
+
+.mt--19 {
+    margin-top: -19px
+}
+
+.mr-10px {
+    margin-right: 10px;
+}
+
+.attends-row {
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+
+.attends-row:hover {
+    transition-duration: 0.05s;
+    box-shadow: 0 0 10px #999;
+    background-color: #0b5ed7;
+    color: #fff;
+}
+
+.width-100 {
+    width: 100px;
+}
+
+.width-100pct {
+    width: 100%;
+}
+
+.width-150 {
+    width: 150px;
+}
+
+.ml-5px {
+    margin-left: 5px;
+}
+
+.height-50vh {
+    height: 50vh;
+}
+
+.height-100vh {
+    height: 100vh;
+}
+
+.height-400 {
+    height: 400px;
+}
+
+.text-right {
+    text-align: right
+}
+
+.overflow-auto {
+    overflow: auto
+}
+
+// MAIN PAGE
+
+.sidebarBtn {
+    cursor: pointer;
+    font-size: 1.25rem;
+    margin-top: -6px;
+    margin-right: 12px;
+    color: #888;
+    transition-duration: 0.4s;
+}
+
+.sidebarBtn:hover {
+    color: #fff;
+    transition-duration: 0.4s;
+}
+
+#sectionTitle2 {
+    transition-duration: 0.2s;
+    display: inline-block;
+    margin-top: -5px;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+.modal {
+    z-index: 1055 !important;
+}
+
+.title-section-splitter {
+    font-size: 1.25rem;
+    margin-top: -6px;
+    margin-right: 12px;
+    color: #888;
+}
+
+.title-fs {
+    font-size: 1.125rem;
+}
+
+.clock {
+    font-size: 1.125rem;
+    padding-bottom: 0;
+    padding-top: 6px;
+}
+
+.basement-padding {
+    padding-top: 5rem;
+}
+
+.basement-row {
+    position: fixed;
+    width: 100%;
+    z-index: -100;
+}

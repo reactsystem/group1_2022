@@ -1,20 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "勤怠情報管理")
 
 @section('content')
@@ -24,13 +9,11 @@
                 <h2 class="fw-bold">{{$title}}</h2>
             </div>
             <div class="col-md-6">
-                <a class="btn btn-primary" href="/admin/attend-manage/new"
-                   style="float: right; margin-left: 5px; width: 100px">追加</a>
+                <a class="btn btn-primary float-right width-100 ml-5px" href="/admin/attend-manage/new">追加</a>
                 @if(count($parameters) != 0)
-                    <a class="btn btn-success" href="/admin/attend-manage"
-                       style="float: right; margin-left: 5px; width: 100px">検索終了</a>
+                    <a class="btn btn-success float-right width-100 ml-5px" href="/admin/attend-manage">検索終了</a>
                 @endif
-                <button class="btn btn-secondary" style="float: right; margin-left: 5px; width: 100px"
+                <button class="btn btn-secondary float-right width-100 ml-5px"
                         data-bs-toggle="modal" data-bs-target="#searchModal">検索
                 </button>
             </div>

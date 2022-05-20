@@ -9,7 +9,7 @@
             <div class="col-md-6">
 
                 {{-- 承認ボタン --}}
-                <form action='/admin/request/approve' method='post' style="float: right;">
+                <form action='/admin/request/approve' method='post' class="float-right">
                     @csrf
                     @if($this_request->status == 0) {{-- 設定待ち--}}
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal1">承認
@@ -55,7 +55,7 @@
                 </form>
 
                 {{-- 却下ボタン --}}
-                <form action='/admin/request/reject' method='post' style="float: right; margin-right: 10px">
+                <form action='/admin/request/reject' method='post' class="float-right mr-10px">
                     @csrf
 
                     @if($this_request->status == 0) {{-- 設定待ち--}}
@@ -106,7 +106,7 @@
                     </div>
                 </form>
                 {{-- 一覧に戻るボタン --}}
-                <a href="/admin/request" class="btn btn-secondary" style="float: right; margin-right: 10px">一覧に戻る</a>
+                <a href="/admin/request" class="btn btn-secondary float-right mr-10px">一覧に戻る</a>
             </div>
         </div>
 
