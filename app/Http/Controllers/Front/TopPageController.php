@@ -65,8 +65,12 @@ class TopPageController extends Controller
             $minutes += intval($interval->format('%i'));
         }
 
+        $datTime = $data->time;
+        if ($data->time == null || $data->time == "00:00") {
+            $datTime = $interval->format("%h:%I");
+        }
 
-        $datArray = preg_split("/:/", $data->time ?? $interval->format("%h:%I"));
+        $datArray = preg_split("/:/", $datTime);
         $restData = preg_split("/:/", $data->rest ?? "00:00");
         $wHours = intval($datArray[0]);
         $wMinutes = intval($datArray[1]);

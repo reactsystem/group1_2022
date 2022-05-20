@@ -383,15 +383,61 @@
         works = {
             <?php foreach ($attendData as $data) {
                 $leftDate = $data->left_at;
+                $hours = 0;
+                $minutes = 0;
                 if ($leftDate != null) {
                     $datx = new DateTime($data->left_at);
+                    $dateData = new DateTime($leftDate);
+                    $dateData = $dateData->format("G:i");
+                    $noWorkFlag = false;
+                    $workData = preg_split("/:/", $data->time);
+                    $restData = preg_split("/:/", $data->rest);
+                    $wHours = intval($workData[0]);
+                    $wMinutes = intval($workData[1]);
+                    $rHours = intval($restData[0]);
+                    $rMinutes = intval($restData[1]);
+                    $hours = max(0, $wHours - $rHours);
+                    $minutes = $wMinutes - $rMinutes;
+                    if ($minutes < 0 && $hours != 0) {
+                        $minutes = 60 - abs($minutes);
+                        $hours -= 1;
+                    } else if ($minutes < 0) {
+                        $minutes = 0;
+                    }
                     $leftDate = $datx->format('H:i');
+                } else {
+                    $dateDatax = new DateTime();
+                    $dateData = $dateDatax->format("G:i");
+                    $noWorkFlag = false;
+
+                    $current = strtotime($dateDatax->format("Y-m-d H:i:00"));
+                    $before = strtotime($data->created_at->format("Y-m-d {$data->created_at->format('H:i')}:00"));
+                    $diff = $current - $before;
+                    $hours = intval($diff / 60 / 60);
+                    $minutes = intval($diff / 60) % 60;
+                    $workTime = sprintf("%02d", $hours) . ":" . sprintf("%02d", $minutes);
+
+                    $workData = preg_split("/:/", $workTime);
+                    $restData = preg_split("/:/", $data->rest ?? "00:00");
+                    $wHours = intval($workData[0]);
+                    $wMinutes = intval($workData[1]);
+                    $rHours = intval($restData[0]);
+                    $rMinutes = intval($restData[1]);
+                    $hours = max(0, $wHours - $rHours);
+                    $minutes = $wMinutes - $rMinutes;
+                    if ($minutes < 0 && $hours != 0) {
+                        $minutes = 60 - abs($minutes);
+                        $hours -= 1;
+                    } else if ($minutes < 0) {
+                        $minutes = 0;
+                    }
                 }
                 echo "'" . $data->date . "': { date: '" . $data->date . "',";
                 echo "mode: " . $data->mode . ",";
                 echo "status: " . $data->status . ",";
                 echo "comment: '" . ($data->comment ?? "null") . "',";
                 echo "time: '" . ($data->time ?? "null") . "',";
+                echo "rtime: '" . $hours . ":" . sprintf("%02d", $minutes) . "',";
                 echo "rest: '" . ($data->rest ?? '00:00:00') . "',";
                 echo "start: '" . ($data->created_at->format("H:i") ?? "null") . "',";
                 echo "end: '" . ($leftDate ?? "00:00") . "'},";
@@ -478,7 +524,7 @@
                 if (modalData.time === 'null') {
                     modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #F11;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>退勤情報未入力</span><h2 class="fw-bold">勤務中</h2></span></div></div>`
                 } else {
-                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + hours + `:` + ('00' + minutes).slice(-2) + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
+                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + modalData.rtime + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
                 }
             }
             if (requestsData !== undefined) {
@@ -530,12 +576,12 @@
                        value="`+modalData.start+`" disabled
                 >
             </div>';
-                        echo '<div class="mb-3 col-md-12 col-lg-6">
+                        echo '` + (modalData.mode == 1 ? `<div class="mb-3 col-md-12 col-lg-6">
                 <label for="endInput" class="form-label">退勤時刻</label>
                 <input type="time" class="form-control" id="endInput" placeholder="未設定"
                        value="`+modalData.end+`" disabled
                 >
-            </div>';
+            </div> ` : ``) + `';
                     }
                     echo '
             <div class="mb-3 col-md-12 col-lg-6">
@@ -554,12 +600,12 @@
                        value="`+modalData.start+`"
                 >
             </div>';
-                        echo '<div class="mb-3 col-md-12 col-lg-6">
+                        echo '` + (modalData.mode == 1 ? `<div class="mb-3 col-md-12 col-lg-6">
                 <label for="endInput" class="form-label">退勤時刻</label>
                 <input type="time" class="form-control" id="endInput" placeholder="未設定"
                        value="`+modalData.end+`"
                 >
-            </div>';
+            </div> ` : ``) + `';
                     }
                     echo '
             <div class="mb-3 col-md-12 col-lg-6">
@@ -602,7 +648,12 @@
 
             @if(env("ENABLE_EDIT_ATTENDANCE", false))
             let startInput = document.getElementById("startInput")
-            let endInput = document.getElementById("endInput")
+            let endValue = null
+            try {
+                let endInput = document.getElementById("endInput")
+                endValue = endInput.value
+            } catch (error) {
+            }
             @endif
 
             let textArea = document.getElementById("textArea")
@@ -617,7 +668,7 @@
                     text: textArea.value,
                     rest: restTime.value,
                     start: startInput.value,
-                    end: endInput.value,
+                    end: endValue,
                     date: date
                     @else
                     text: textArea.value,

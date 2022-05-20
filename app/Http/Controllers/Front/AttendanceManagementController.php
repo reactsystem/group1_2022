@@ -28,8 +28,8 @@ class AttendanceManagementController extends Controller
         $mode = $requestData->mode ?? 0;
 
         $tempDate = new DateTime();
-        $year = $requestData->year ?? intval($tempDate->format('Y'));
-        $month = $requestData->month ?? intval($tempDate->format('m'));
+        $year = min(9999, max(0, $requestData->year ?? intval($tempDate->format('Y'))));
+        $month = min(12, max(1, $requestData->month ?? intval($tempDate->format('m'))));
         $cYear = intval($tempDate->format('Y'));
         $cMonth = intval($tempDate->format('m'));
         $day = intval($tempDate->format('d'));
