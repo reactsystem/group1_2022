@@ -560,7 +560,7 @@
                 } else if (minutes < 0) {
                     minutes = 0
                 }
-                if (modalData.time === 'null' || modalData.end === 'null') {
+                if (modalData.time === 'null' || modalData.end === 'null' || modalData.mode !== 1) {
                     modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #F22;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間 (未退勤)</span><h2 class="fw-bold">` + modalData.rtime + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
                 } else {
                     modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + modalData.rtime + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
