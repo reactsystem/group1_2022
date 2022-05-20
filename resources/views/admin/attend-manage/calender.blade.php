@@ -215,14 +215,37 @@
                 <h2 class="fw-bold">{{$user->name}}の勤怠情報</h2>
             </div>
             <div class="col-md-6 mb-3">
-                @if($attendData != null && count($attendData) != 0)
-                    <a class="btn btn-primary" style="float: right;"
-                       href="/admin/attend-manage/download/{{$user->id}}/{{$year}}/{{$month}}">当月勤務データ出力</a>
-                    <a class="btn btn-success" style="float: right; margin-right: 5px;"
-                       href="/admin/attend-manage/download-requests/{{$user->id}}/{{$year}}/{{$month}}">当月申請データ出力</a>
-                @else
-                    <a class="btn btn-outline-primary disabled" style="float: right">勤務実績がありません</a>
-                @endif
+                <div class="btn-group" role="group" style="float: right">
+                    <button id="btnGroupDrop1" type="button"
+                            class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <span class="sr-only">CSVデータ出力</span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        @if($attendData != null && count($attendData) != 0)
+                            <li><a class="dropdown-item"
+                                   href="/admin/attend-manage/download/{{$user->id}}/{{$year}}/{{$month}}">当月勤務データ出力</a>
+                            </li>
+                        @else
+                            <li><a class="dropdown-item disabled">当月勤務データ出力</a>
+                            </li>
+                        @endif
+                        <li><a class="dropdown-item"
+                               href="/admin/attend-manage/download/{{$user->id}}/{{$year}}/-1">年度勤務データ出力</a>
+                        </li>
+                        @if($reqData != null && count($reqData) != 0)
+                            <li><a class="dropdown-item"
+                                   href="/admin/attend-manage/download-requests/{{$user->id}}/{{$year}}/{{$month}}">当月申請データ出力</a>
+                            </li>
+                        @else
+                            <li><a class="dropdown-item disabled">当月申請データ出力</a>
+                            </li>
+                        @endif
+                        <li><a class="dropdown-item"
+                               href="/admin/attend-manage/download-requests/{{$user->id}}/{{$year}}/-1">年度申請データ出力</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <hr>
             <div class="col-md-4" style="display: flex">

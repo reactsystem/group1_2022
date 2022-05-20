@@ -491,7 +491,13 @@ class AdminAttendManagementController
             $data .= "\n{$dat->date},{$status},{$dat->comment},{$dat->time},{$rest},{$dat->created_at},{$dat->left_at}";
         }
         $data = mb_convert_encoding($data, "SJIS", "UTF-8");
-        DownloadUtil::downloadData($data, "勤怠データ({$user->name}/{$year}年{$month}月).csv", 'text/csv');
+        $fileName = "";
+        if ($month == -1) {
+            $fileName = "{$user->name} 勤務データ({$year}年度).csv";
+        } else {
+            $fileName = "{$user->name} 勤務データ({$year}年{$month}月).csv";
+        }
+        DownloadUtil::downloadData($data, $fileName, 'text/csv');
     }
 
     function exportRequestDataCsv(Request $request, int $user_id, int $year, int $month = -1)
@@ -518,7 +524,13 @@ class AdminAttendManagementController
             $data .= "\n{$dat->date},{$dat->uuid},{$dat->rname},{$dat->type},{$dat->status},{$dat->reason},{$dat->related_id},{$dat->time},{$dat->created_at},{$dat->updated_at}";
         }
         $data = mb_convert_encoding($data, "SJIS", "UTF-8");
-        DownloadUtil::downloadData($data, "{$user->name} 申請データ({$year}年{$month}月).csv", 'text/csv');
+        $fileName = "";
+        if ($month == -1) {
+            $fileName = "{$user->name} 申請データ({$year}年度).csv";
+        } else {
+            $fileName = "{$user->name} 申請データ({$year}年{$month}月).csv";
+        }
+        DownloadUtil::downloadData($data, $fileName, 'text/csv');
     }
 
 }
