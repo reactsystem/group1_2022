@@ -32,7 +32,7 @@
                         有給管理<br>
                         <span class="text-muted">有給の詳細な情報が確認できます</span>
                     </span>
-                    <a href="/account/holidays" style="float: right; margin-top: -19px" class="btn btn-primary">有給管理</a>
+                    <a href="/account/holidays" class="btn btn-primary float-right mt--19">有給管理</a>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
                         通知管理<br>
                         <span class="text-muted">通知の再表示と削除が行えます</span>
                     </span>
-                    <a href="/account/notifications" style="float: right; margin-top: -19px" class="btn btn-primary">通知管理</a>
+                    <a href="/account/notifications" class="btn btn-primary float-right mt--19">通知管理</a>
                 </div>
                 <hr>
                 <div>
@@ -55,7 +55,7 @@
                         ユーザー情報確認・編集<br>
                         <span class="text-muted">ユーザー情報の確認と編集が行えます。</span>
                     </span>
-                    <a href="/account/edit" style="float: right; margin-top: -19px" class="btn btn-primary">確認・編集</a>
+                    <a href="/account/edit" class="btn btn-primary float-right mt--19">確認・編集</a>
                 </div>
                 <hr>
                 <div>
@@ -63,13 +63,13 @@
                         パスワード変更<br>
                         <span class="text-muted">パスワードを変更します</span>
                     </span>
-                    <a href="/account/password_update" style="float: right; margin-top: -19px" class="btn btn-primary">変更</a>
+                    <a href="/account/password_update" class="btn btn-primary float-right mt--19">変更</a>
                 </div>
             </div>
         </div>
 
-        <div style="width: 100%">
-            <div style="margin: 0 auto; display: flex">
+        <div class="width-100pct">
+            <div class="margin-0-auto flex-view">
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
                     ログアウト
                 </button>
@@ -94,7 +94,7 @@
                             ログアウト
                         </a>
 
-                        <form id='logout-form' action={{ route('logout')}} method="POST" style="display: none;">
+                        <form id='logout-form' action={{ route('logout')}} method="POST" class="d-none">
                         @csrf
 
                     </div>

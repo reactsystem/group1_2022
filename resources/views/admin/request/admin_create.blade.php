@@ -65,7 +65,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-3 col-lg-4 col-md-6 col-sm-12 d-none" id="workTime">
+                <div class="mb-3 col-lg-4 col-md-6 col-sm-12" style="display: none" id="workTime">
                     <label class="form-label">労働時間</label>
                     <input name="time" id="requestTime" type="time" class="form-control" placeholder="0:00"
                            value="{{old('time')}}"/>

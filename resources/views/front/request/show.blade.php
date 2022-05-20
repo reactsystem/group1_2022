@@ -9,18 +9,17 @@
             </div>
             <div class="col-md-6">
                 @if($result->status === 0)
-                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#cancelModal"
-                            style="float: right; ">申請取消
+                    <button class="btn btn-danger float-right" type="button" data-bs-toggle="modal"
+                            data-bs-target="#cancelModal">申請取消
                     </button>
                 @else
-                    <button class="btn btn-danger disabled" style="float: right;">申請取消</button>
+                    <button class="btn btn-danger disabled float-right">申請取消</button>
                 @endif
-                <a class="btn btn-outline-secondary" href="/request"
-                   style="float: right; margin-right: 10px">申請一覧に戻る</a>
+                <a class="btn btn-outline-secondary float-right mr-10px" href="/request">申請一覧に戻る</a>
             </div>
         </div>
         <hr>
-        <div style="font-size: 14pt">
+        <div class="font-14">
             <?php
             // CHECK STATUS
             $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
@@ -64,7 +63,7 @@
                         この申請を取り消します。<br>よろしいですか?
                     </div>
                     <div class="modal-footer">
-                        <div style="margin: 0 auto;">
+                        <div class="margin-0-auto">
                             <a type="button" class="btn btn-danger" href="/request/{{$result->id}}/cancel">取消実行</a>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
                         </div>

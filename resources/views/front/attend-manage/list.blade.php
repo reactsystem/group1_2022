@@ -2,136 +2,6 @@
 
 @section('styles')
     <style>
-        .card-hover {
-            box-shadow: 0 0 0;
-            transition-duration: 0.1s;
-        }
-
-        .card-hover:hover {
-            box-shadow: 0 0 10px #CCC;
-            transition-duration: 0.2s;
-        }
-
-        .calender-doy {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-        }
-
-        .calender-body {
-            transition-duration: 0.2s;
-            min-height: 130px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-        }
-
-        .calender-disabled {
-            transition-duration: 0.2s;
-            min-height: 120px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-        }
-
-        .calender-body:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px;
-            min-height: 120px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-        }
-
-        .bg-gray {
-            background-color: #888;
-        }
-
-        .sunday {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            background-color: #F33;
-            color: #fff;
-        }
-
-        .saturday {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            background-color: #37F;
-            color: #fff
-        }
-
-        .work-card {
-            height: 120px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition-duration: 0.2s;
-        }
-
-
-        .work-card:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #888;
-        }
-
-        .type-scroll::-webkit-scrollbar {
-            display: block;
-            height: 6px;
-        }
-
-        .type-scroll::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .type-scroll::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.4);
-            border-right: none;
-            border-left: none;
-        }
-
-        .type-scroll::-webkit-scrollbar-track-piece:end {
-            margin-bottom: 10px;
-        }
-
-        .type-scroll::-webkit-scrollbar-track-piece:start {
-            margin-top: 10px;
-        }
-
-        .type-scroll {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            overflow: hidden;
-            height: 50px;
-            transition-duration: 0.3s;
-        }
-
-        .type-scroll:hover {
-            overflow-x: scroll;
-            transition-duration: 0.05s;
-        }
-
         @media only screen and (max-width: 767.999px) {
             .calender-main {
                 transform: scale(0.7);
@@ -207,25 +77,21 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-4" style="display: flex">
+            <div class="col-md-4 flex-view">
                 @if($month == 1)
                     <a href="/attend-manage?year={{$year - 1}}&month=12&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">◀</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
                 @else
                     <a href="/attend-manage?year={{$year}}&month={{$month - 1}}&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">◀</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
                 @endif
-                <h2 class="fw-bold mt-1" style="flex: 9; text-align: center">{{$year}}年 {{$month}}月</h2>
+                <h2 class="fw-bold mt-1 calender-year-month">{{$year}}年 {{$month}}月</h2>
                 @if($month == 12)
                     <a href="/attend-manage?year={{$year + 1}}&month=1&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @else
                     <a href="/attend-manage?year={{$year}}&month={{$month + 1}}&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @endif
             </div>
             <div class="col-md-4 type-scroll">
@@ -247,28 +113,25 @@
                         </span>欠勤&nbsp;
                 </div>
             </div>
-            <div class="col-md-4" style="display: flex; flex-direction: row-reverse; gap: 3px;">
+            <div class="col-md-4 header-flex-area">
                 @if($confirmStatus == -1)
-                    <button class="btn btn-secondary" style="height: 40px" disabled>
+                    <button class="btn btn-secondary height-40" disabled>
                         月報確定
                     </button>
                 @elseif($confirmStatus == 2)
-                    <button class="btn btn-success" style="height: 40px" disabled>
+                    <button class="btn btn-success height-40" disabled>
                         承認済み
                     </button>
                 @elseif($confirmStatus == 1)
-                    <a href="/attend-manage/unconfirm?year={{$year}}&month={{$month}}" class="btn btn-danger"
-                       style="height: 40px">
+                    <a href="/attend-manage/unconfirm?year={{$year}}&month={{$month}}" class="btn btn-danger height-40">
                         確定解除
                     </a>
                 @else
-                    <a href="/attend-manage/confirm?year={{$year}}&month={{$month}}" class="btn btn-primary"
-                       style="height: 40px">
+                    <a href="/attend-manage/confirm?year={{$year}}&month={{$month}}" class="btn btn-primary height-40">
                         月報確定
                     </a>
                 @endif
-                <a href="/attend-manage?year={{$year}}&month={{$month}}&mode=0" class="btn btn-secondary"
-                   style="height: 40px">
+                <a href="/attend-manage?year={{$year}}&month={{$month}}&mode=0" class="btn btn-secondary height-40">
                     カレンダー表示
                 </a>
             </div>
@@ -276,15 +139,15 @@
         <hr>
         <div class="cards">
             @if(count($attendData) == 0)
-                <div class="text-muted mt-5" style="width: 100%; text-align: center; font-size: 12pt">
+                <div class="text-muted mt-5 calender-list-empty">
                     この月の勤務情報がありません
                 </div>
             @endif
             @foreach($attendData as $data)
                 <div class="card work-card calender-main"
                      onclick="openDescModal({{$data->created_at->format('d')}})">
-                    <div class="card-header" style="font-size: 12pt; background-color: #DDD">
-                        {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span style=""><?php
+                    <div class="card-header calender-card-header">
+                        {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span><?php
                             try {
                             /* @var $data */
                             if($data->left_at != null){
@@ -347,43 +210,32 @@
                         </span>
                     </div>
                     <div class="card-body">
-                        <div style="display: flex; flex-direction: row; text-align: center">
-                            <div class="text-muted"
-                                 style="flex: 1; font-size: 12pt; height: 40px; line-height: 40px; margin-right: 10px">
+                        <div class="calender-card-body">
+                            <div class="text-muted calender-card-labels">
                                 出勤
                             </div>
-                            <div class="fw-bold"
-                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px;">{{$data->created_at->format('G:i')}}</div>
-                            <div class="text-muted"
-                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px; margin-left: 10px; margin-right: 10px;">
+                            <div class="fw-bold calender-card-text">{{$data->created_at->format('G:i')}}</div>
+                            <div class="text-muted calender-card-symbols">
                                 ▶
                             </div>
-                            <div class="text-muted"
-                                 style="flex: 1; font-size: 12pt; height: 40px; line-height: 40px; margin-right: 10px">
+                            <div class="text-muted calender-card-labels">
                                 退勤
                             </div>
-                            <div class="fw-bold"
-                                 style="flex: 1.7; font-size: 20pt; height: 40px; line-height: 40px;">{{$leftDate}}</div>
-                            <div class="text-muted"
-                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px; margin-left: 15px; margin-right: 15px; margin-top: -3px;">
+                            <div class="fw-bold calender-card-text">{{$leftDate}}</div>
+                            <div class="text-muted calender-card-splitter">
                                 |
                             </div>
-                            <div class="text-muted"
-                                 style="flex: 1; font-size: 12pt; height: 40px; line-height: 40px; margin-right: 10px">
+                            <div class="text-muted calender-card-labels">
                                 勤務
                             </div>
-                            <div class="fw-bold"
-                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px;">{{$hours.":".sprintf("%02d", $minutes)}}</div>
-                            <div class="text-muted"
-                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px; margin-left: 10px; margin-right: 10px;">
+                            <div class="fw-bold calender-card-text">{{$hours.":".sprintf("%02d", $minutes)}}</div>
+                            <div class="text-muted calender-card-symbols">
                                 ▶
                             </div>
-                            <div class="text-muted"
-                                 style="flex: 1; font-size: 12pt; height: 40px; line-height: 40px; margin-right: 10px">
+                            <div class="text-muted calender-card-labels">
                                 休憩
                             </div>
-                            <div class="fw-bold"
-                                 style="flex: 1; font-size: 20pt; height: 40px; line-height: 40px;">{{$restTime}}</div>
+                            <div class="fw-bold calender-card-text">{{$restTime}}</div>
                         </div>
                     </div>
 
@@ -414,7 +266,7 @@
                     <div id="checkForm"></div>
                 </div>
                 <div class="modal-footer">
-                    <div style="margin: 0 auto;">
+                    <div class="margin-0-auto">
                         <button type="button" class="btn btn-primary" id="primaryButton" onclick="primary()">PRIMARY
                         </button>
                         <button type="button" class="btn btn-secondary" id="secondaryButton" onclick="secondary()">

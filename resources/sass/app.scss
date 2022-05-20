@@ -257,6 +257,30 @@
     cursor: pointer;
 }
 
+.pointer-no-drop {
+    cursor: no-drop;
+}
+
+.pointer-default {
+    cursor: default;
+}
+
+.pointer-default-i {
+    cursor: default !important;
+}
+
+.pointer-nonevent {
+    pointer-events: none;
+}
+
+.pr-0 {
+    padding-right: 0;
+}
+
+.pl-0 {
+    padding-left: 0;
+}
+
 .flex-4 {
     flex: 4;
 }
@@ -285,6 +309,10 @@
     flex: 1;
 }
 
+.margin-0-auto {
+    margin: 0 auto;
+}
+
 .padding-0 {
     padding: 0;
 }
@@ -294,8 +322,16 @@
     line-height: 40px;
 }
 
+.line-height-40 {
+    line-height: 40px;
+}
+
 .font-20 {
     font-size: 20pt;
+}
+
+.font-26 {
+    font-size: 26pt;
 }
 
 .display-none {
@@ -418,4 +454,90 @@
     position: fixed;
     width: 100%;
     z-index: -100;
+}
+
+.work-description {
+    min-height: 50vh !important;
+    width: 100%;
+    height: 100%;
+}
+
+.calender-list-empty {
+    width: 100%;
+    text-align: center;
+    font-size: 12pt;
+}
+
+.calender-card-header {
+    font-size: 12pt;
+    background-color: #DDD;
+}
+
+.calender-card-body {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+
+.calender-card-labels {
+    flex: 1;
+    font-size: 12pt;
+    height: 40px;
+    line-height: 40px;
+    margin-right: 10px;
+}
+
+.calender-card-text {
+    flex: 1;
+    font-size: 20pt;
+    height: 40px;
+    line-height: 40px;
+}
+
+.calender-card-symbols {
+    flex: 1;
+    font-size: 20pt;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.calender-card-splitter {
+    flex: 1;
+    font-size: 20pt;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -3px;
+}
+
+.mb-10px {
+    margin-bottom: 10px;
+}
+
+.font-13 {
+    font-size: 13pt;
+}
+
+.font-14 {
+    font-size: 14pt;
+}
+
+.dashboard-non-attends {
+    flex: 1;
+    line-height: 40px;
+    height: 40px;
+}
+
+.dashboard-data-basement {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.font-40 {
+    font-size: 40pt;
 }

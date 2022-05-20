@@ -21,7 +21,7 @@
         土
     </div>
 </div>
-<div style="display: flex">
+<div class="flex-view">
     <?php
     /* @var $user */
     $joinDate = new DateTime($user->joined_date);
