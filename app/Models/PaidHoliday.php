@@ -31,7 +31,7 @@ class PaidHoliday extends Model
     public static function useHolidays(int $userId, int $amount): array
     {
         $twoYearAgo = date("Y-m-d H:i:s", strtotime("-2 year"));
-        $data = PaidHoliday::where('user_id', $userId)->where('deleted_at', null)->where('created_at', '>=', $twoYearAgo)->get();
+        $data = PaidHoliday::where('user_id', $userId)->where('deleted_at', null)->where('created_at', '>=', $twoYearAgo)->orderBy('created_at')->get();
         $usedHolidays = [];
         foreach ($data as $dat) {
             if ($dat->amount < $amount) {
