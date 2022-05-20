@@ -26,7 +26,7 @@
                      style="cursor: pointer">
                     <div class="card-body">
                         <span
-                            style="color: #{{$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
+                            style="color: {{"#".$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
                             class="text-muted"> - </span>
                         {!! $notification->data !!}
                     </div>

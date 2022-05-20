@@ -89,9 +89,9 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                        <a href={{ route('logout') }} onclick="event.preventDefault();
-                           document.getElementById('logout-form').submit();" class="btn btn-danger">
-                        ログアウト
+                        <a href={{ route('logout') }} onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                           class="btn btn-danger">
+                            ログアウト
                         </a>
 
                         <form id='logout-form' action={{ route('logout')}} method="POST" style="display: none;">

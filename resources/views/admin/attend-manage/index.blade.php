@@ -66,6 +66,7 @@
                 <tr class="attends-row" onclick="jump('/admin/attend-manage/view/{{$dat->id}}')">
                     <td>
                         <?php
+                        /* @var $dat */
                         $date_now = new DateTime($dat->date);
                         echo $date_now->format('Y年m月d日');
                         ?>

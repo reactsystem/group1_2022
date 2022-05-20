@@ -29,8 +29,8 @@
                     @endif
 
 
-                    <input type='hidden' value={{$this_request->id}} name = id>
-                    <input type='hidden' value={{$this_request->uuid}} name = uuid>
+                    <input type='hidden' value='{{$this_request->id}}' name='id'>
+                    <input type='hidden' value='{{$this_request->uuid}}' name='uuid'>
 
                     {{--modal--}}
                     <div class="modal fade" id="Modal1" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
@@ -79,8 +79,8 @@
                     @else
                     @endif
 
-                    <input type='hidden' value={{$this_request->id}} name = id>
-                    <input type='hidden' value={{$this_request->uuid}} name = uuid>
+                    <input type='hidden' value='{{$this_request->id}}' name='id'>
+                    <input type='hidden' value='{{$this_request->uuid}}' name='uuid'>
 
                     {{--modal--}}
                     <div class="modal fade" id="Modal2" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
@@ -115,6 +115,7 @@
         <?php
         // CHECK STATUS
         $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
+        /* @var $this_request */
         switch ($this_request->status) {
             case 1:
                 $statusText = '<span style="color: #0E0">●</span> <strong>承認</strong>';

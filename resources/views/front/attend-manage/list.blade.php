@@ -129,7 +129,6 @@
 
         .type-scroll:hover {
             overflow-x: scroll;
-            overflow: overlay;
             transition-duration: 0.05s;
         }
 
@@ -287,6 +286,7 @@
                     <div class="card-header" style="font-size: 12pt; background-color: #DDD">
                         {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span style=""><?php
                             try {
+                            /* @var $data */
                             if($data->left_at != null){
                             $dateData = new DateTime($data->left_at);
                             $dateData = $dateData->format("G:i");
@@ -296,6 +296,7 @@
                             } catch (Exception $ex) {
                             }
                             try {
+                                /* @var $reqData */
                                 $reqHtml = $reqData[$data->date][1];
                                 echo $reqHtml;
                             } catch (Exception $ex) {
@@ -437,7 +438,9 @@
 
             let
         works = {
-            <?php foreach ($attendData as $data) {
+            <?php
+            /* @var $attendData */
+            foreach ($attendData as $data) {
                 $leftDate = $data->left_at;
                 $hours = 0;
                 $minutes = 0;
@@ -513,6 +516,7 @@
                     echo "time: '" . ($dat->time ?? "null") . "'},";
                 }
                 $dayKey = intval(preg_split("/-/", $key)[2]);
+                /* @var $holidays */
                 if (array_key_exists($dayKey, $holidays)) {
                     $found[$dayKey] = true;
                     foreach ($holidays[$dayKey] as $holiday) {
@@ -528,6 +532,8 @@
                 echo "],";
             }
             for ($i = 1; $i <= 31; $i++) {
+                /* @var $year */
+                /* @var $month */
                 if (!array_key_exists($i, $found) && array_key_exists($i, $holidays)) {
                     $dxKey = $year . "-" . sprintf("%02d", $month) . "-" . sprintf("%02d", $i);
                     echo "'" . $dxKey . "': [";
@@ -622,6 +628,7 @@
 
             if (modalData !== undefined) {
                 modalContext.innerHTML += `<?php
+                /* @var $confirmStatus */
                 if ($confirmStatus) {
                     echo '<div class="col-md-12 mt-3" id="alert">
                 </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr><div class="row">';

@@ -141,7 +141,6 @@
             flex-direction: column;
             flex-wrap: wrap;
             overflow-x: scroll;
-            overflow: overlay;
             height: 50px;
         }
 
@@ -156,7 +155,6 @@
 
         .type-scroll:hover {
             overflow-x: scroll;
-            overflow: overlay;
             transition-duration: 0.05s;
         }
 
@@ -381,7 +379,8 @@
 
             let
         works = {
-            <?php foreach ($attendData as $data) {
+            <?php /* @var $attendData */
+            foreach ($attendData as $data) {
                 $leftDate = $data->left_at;
                 $hours = 0;
                 $minutes = 0;
@@ -446,6 +445,7 @@
 
         let requests = {<?php
             $found = [];
+            /* @var $reqData */
             foreach ($reqData as $key => $data) {
                 echo "'" . $key . "': [";
                 foreach ($data[0] as $dat) {
@@ -457,6 +457,7 @@
                     echo "time: '" . ($dat->time ?? "null") . "'},";
                 }
                 $dayKey = intval(preg_split("/-/", $key)[2]);
+                /* @var $holidays */
                 if (array_key_exists($dayKey, $holidays)) {
                     $found[$dayKey] = true;
                     foreach ($holidays[$dayKey] as $holiday) {
@@ -472,6 +473,8 @@
                 echo "],";
             }
             for ($i = 1; $i <= 31; $i++) {
+                /* @var $year */
+                /* @var $month */
                 if (!array_key_exists($i, $found) && array_key_exists($i, $holidays)) {
                     $dxKey = $year . "-" . sprintf("%02d", $month) . "-" . sprintf("%02d", $i);
                     echo "'" . $dxKey . "': [";
@@ -566,6 +569,7 @@
 
             if (modalData !== undefined) {
                 modalContext.innerHTML += `<?php
+                /* @var $confirmStatus */
                 if ($confirmStatus) {
                     echo '<div class="col-md-12 mt-3" id="alert">
                 </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr><div class="row">';

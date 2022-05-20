@@ -58,6 +58,7 @@
                 $twoYearAgo = date("Y-m-d H:i:s", strtotime("-2 year"));
                 $status = "有効";
                 $className = "";
+                /* @var $dat */
                 if ($dat->created_at < $twoYearAgo) {
                     $className = "background-color: #999;";
                     $status = "失効 - 期限切れ";

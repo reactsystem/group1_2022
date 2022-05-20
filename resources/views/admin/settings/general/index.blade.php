@@ -89,7 +89,9 @@
                                     @if($item == "")
                                         @continue
                                     @endif
-                                    <?php $dat = preg_split("/,/", $item);?>
+                                    <?php
+                                    /* @var $item */
+                                    $dat = preg_split("/,/", $item);?>
                                     @if($index != 0)
                                         <tr>
                                             <td>

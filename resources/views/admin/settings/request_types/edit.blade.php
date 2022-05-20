@@ -64,7 +64,10 @@
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="status" class="form-label">タイプ</label>
                 <select class="form-select" aria-label="" id="typeName">
-                    <option value="1" <?php if($data->type == 1){?>selected<?php }?>>時間指定</option>
+                    <option value="1" <?php
+                    /* @var $data */
+                    if($data->type == 1){?>selected<?php }?>>時間指定
+                    </option>
                     <option value="2" <?php if($data->type == 2){?>selected<?php }?>>有給消費(理由不要)</option>
                     <option value="0" <?php if($data->type == 0){?>selected<?php }?>>理由必要</option>
                     <option value="3" <?php if($data->type == 3){?>selected<?php }?>>理由不要</option>

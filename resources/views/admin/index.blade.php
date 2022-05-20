@@ -41,7 +41,7 @@
                      style="cursor: pointer">
                     <div class="card-body">
                         <span
-                            style="color: #{{$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
+                            style="color: {{"#".$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
                             class="text-muted"> - </span>
                         {!! $notification->data !!}
                     </div>
@@ -70,6 +70,7 @@
                         <?php
 
                         // CHECK STATUS
+                        /* @var $request */
                         $statusText = '<span style="color: #E80">●</span> <span>申請中 / </span>';
                         switch ($request->status) {
                             case 1:
@@ -123,6 +124,7 @@
                 <tr class="attends-row" onclick="jump('/admin/attend-manage/view/{{$dat->id}}')">
                     <td>
                         <?php
+                        /* @var $dat */
                         $date_now = new DateTime($dat->date);
                         echo $date_now->format('Y年m月d日');
                         ?>

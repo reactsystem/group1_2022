@@ -75,6 +75,7 @@
                 <div class="mb-3 col-md-12 col-lg-6">
                     <label for="dateInput" class="form-label">退勤時刻</label>
                     <input type="time" class="form-control" id="dateInput" placeholder="--:--" value="<?php
+                    /* @var $data */
                     if ($data->left_at != null) {
                         $dateTime = new DateTime($data->left_at);
                         echo $dateTime->format("H:i");

@@ -65,7 +65,10 @@
                 <div class="mb-3 col-md-12 col-lg-6">
                     <label for="status" class="form-label">状態</label>
                     <select class="form-select" aria-label="" id="status">
-                        <option value="0" <?php if($data->mode == 0){?>selected<?php }?>>出勤中</option>
+                        <option value="0" <?php
+                        /* @var $data */
+                        if($data->mode == 0){?>selected<?php }?>>出勤中
+                        </option>
                         <option value="1" <?php if($data->mode == 1){?>selected<?php }?>>退勤済み</option>
                     </select>
                 </div>

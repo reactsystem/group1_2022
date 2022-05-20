@@ -49,6 +49,7 @@
             <?php
 
             // CHECK STATUS
+            /* @var $result */
             $statusText = '<span style="color: #E80">●</span> <span>申請中 / </span>';
             switch ($result->status) {
                 case 1:

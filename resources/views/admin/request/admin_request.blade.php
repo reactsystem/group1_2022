@@ -133,7 +133,8 @@
                 <tr>
                     @if($request -> related_id != NULL)
                         @php
-                            $request = $request ->pair_request();
+                            /* @var $request */
+                                        $request = $request ->pair_request();
                         @endphp
                     @endif
 
@@ -156,6 +157,7 @@
 
                             <?php
                             // CHECK STATUS
+                            /* @var $request */
                             $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
                             switch ($request->status) {
                                 case 1:

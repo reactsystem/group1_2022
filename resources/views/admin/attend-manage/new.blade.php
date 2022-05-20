@@ -62,6 +62,7 @@
                         @foreach($users as $user)
                             <?php
                             $selected = "";
+                            /* @var $user */
                             if ($user->id == intval(old("user"))) {
                                 $selected = "selected";
                             }

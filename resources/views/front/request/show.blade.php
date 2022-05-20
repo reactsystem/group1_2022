@@ -24,6 +24,7 @@
             <?php
             // CHECK STATUS
             $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
+            /* @var $result */
             switch ($result->status) {
                 case 1:
                     $statusText = '<span style="color: #0E0">●</span> <strong>承認</strong>';
