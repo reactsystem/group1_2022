@@ -34,6 +34,7 @@
             <tr>
                 <th>残日数</th>
                 <th>付与日</th>
+                <th>ステータス</th>
             </tr>
             @foreach($data as $dat)
                 <?php
