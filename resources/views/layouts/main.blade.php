@@ -31,7 +31,7 @@
             padding-bottom: 2px;
             border-radius: 4px;
             padding-left: 10px;
-            padding-right: 20px;
+            padding-right: 52px;
         }
 
         .sidebar-list:hover {
