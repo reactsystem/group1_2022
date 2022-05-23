@@ -9,12 +9,12 @@
                 <h2 class="fw-bold">社員情報編集</h2>
             </div>
             <div class="col-md-6">
-                <button type="button" class="btn btn-primary" style="float: right" data-bs-toggle="modal"
+                <button type="button" class="btn btn-primary float-right" data-bs-toggle="modal"
                         data-bs-target="#Modal">
                     保存
                 </button>
-                <a href='/admin/attends/view?id={{$user->id}}' class="btn btn-secondary"
-                   style="float: right; margin-right: 10px;">社員情報確認へ戻る</a>
+                <a href='/admin/attends/view?id={{$user->id}}'
+                   class="btn btn-secondary float-right mr-10px">社員情報確認へ戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">

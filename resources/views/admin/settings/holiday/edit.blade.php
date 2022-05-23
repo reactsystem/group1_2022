@@ -1,20 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "システム設定")
 
 @section('content')
@@ -24,17 +9,14 @@
                 <h2 class="fw-bold">休日編集</h2>
             </div>
             <div class="col-md-8">
-                <button type="button" onclick="saveHolidayData()" class="btn btn-primary"
-                        style="float: right; width: 150px;"
+                <button type="button" onclick="saveHolidayData()" class="btn btn-primary float-right width-150"
                         id="saveBtn">
                     保存
                 </button>
-                <button class="btn btn-danger"
-                        style="float: right; margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <button class="btn btn-danger float-right mr-10px" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     削除
                 </button>
-                <a href="/admin/settings/holiday" class="btn btn-secondary"
-                   style="float: right; margin-right: 10px;">休日一覧に戻る</a>
+                <a href="/admin/settings/holiday" class="btn btn-secondary float-right mr-10px">休日一覧に戻る</a>
             </div>
             <div class="col-md-12 mt-3" id="alert">
             </div>
@@ -79,7 +61,10 @@
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="status" class="form-label">種別</label>
                 <select class="form-select" aria-label="" id="status">
-                    <option value="0" <?php if($data->mode == 0){?>selected<?php }?>>有給</option>
+                    <option value="0" <?php
+                    /* @var $data */
+                    if($data->mode == 0){?>selected<?php }?>>有給
+                    </option>
                     <option value="1" <?php if($data->mode == 1){?>selected<?php }?>>無給</option>
                 </select>
             </div>

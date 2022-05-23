@@ -1,20 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "システム設定")
 
 @section('content')
@@ -24,10 +9,9 @@
                 <h2 class="fw-bold">各種情報編集</h2>
             </div>
             <div class="col-md-7">
-                <button onclick="saveGeneralConfig()" id="saveBtn" class="btn btn-primary"
-                        style="float: right; width: 150px">保存
+                <button onclick="saveGeneralConfig()" id="saveBtn" class="btn btn-primary float-right width-150">保存
                 </button>
-                <a href="/admin/settings/general" class="btn btn-secondary" style="float: right; margin-right: 10px">設定確認へ戻る</a>
+                <a href="/admin/settings/general" class="btn btn-secondary float-right mr-10px">設定確認へ戻る</a>
             </div>
             <div class="col-md-12 mt-3" id="alert">
             </div>

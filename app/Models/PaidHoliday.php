@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,14 +39,14 @@ class PaidHoliday extends Model
                 $usedHolidays[] = $dat->id . ":" . $dat->amount;
                 $amount -= $dat->amount;
                 $dat->amount = 0;
-                $dat->deleted_at = new \DateTime();
+                $dat->deleted_at = new DateTime();
                 $dat->save();
                 continue;
             }
             $usedHolidays[] = $dat->id . ":" . $amount;
             $dat->amount -= $amount;
             if ($dat->amount == 0) {
-                $dat->deleted_at = new \DateTime();
+                $dat->deleted_at = new DateTime();
             }
             $amount = 0;
             $dat->save();

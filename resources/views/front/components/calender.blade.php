@@ -21,13 +21,17 @@
         土
     </div>
 </div>
-<div style="display: flex">
+<div class="flex-view">
     <?php
+    /* @var $user */
     $joinDate = new DateTime($user->joined_date);
     $joinYear = intval($joinDate->format('Y'));
     $joinMonth = intval($joinDate->format('m'));
     $joinDay = intval($joinDate->format('d'));
 
+    /* @var $dt */
+    /* @var $year */
+    /* @var $month */
     $daysInMonth = $dt->daysInMonth;
     $dayOfWeek = date('w', strtotime(date($year . '-' . $month . '-01')));
     $daysCount = $dayOfWeek;
@@ -48,6 +52,10 @@
             $joinStr = ' / 入社日';
         }
         $style = "";
+        /* @var $confirmStatus */
+        /* @var $cYear */
+        /* @var $cMonth */
+        /* @var $cDay */
         if ($confirmStatus != 0) {
             $style = "calender-body2 bg-gray2";
         } else if ($year == $cYear && $month == $cMonth && $i == $cDay) {
@@ -66,6 +74,7 @@
     $key = $year . '-' . sprintf("%02d", $month) . '-' . str_pad($i, 2, 0, STR_PAD_LEFT);
     $noWorkFlag = true;
     try {
+    /* @var $holidays */
     if(array_key_exists($i, $holidays)){
     $noWorkFlag = false;
     foreach ($holidays[$i] as $holiday) {
@@ -77,6 +86,7 @@
     <?php
     }
     }
+    /* @var $attendData */
     $data = $attendData[$key];
     if($data->left_at != null){
     $dateData = new DateTime($data->left_at);
@@ -120,6 +130,7 @@
 
     }
     try {
+        /* @var $reqData */
         $reqHtml = $reqData[$key][1];
         $noWorkFlag = false;
         echo $reqHtml;
@@ -130,6 +141,7 @@
     if (!$isJoinedBeforeDay) {
         echo '<div>---</div>';
     } else {
+        /* @var $day */
         if ($noWorkFlag &&
             $diffDayOfWeek > 0 && $diffDayOfWeek < 6 &&
             ($year <= $cYear && ($month <= $cMonth && ($year != $cYear || $month != $cMonth || $i < $day)))) {

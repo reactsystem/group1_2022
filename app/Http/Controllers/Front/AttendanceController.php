@@ -252,8 +252,6 @@ class AttendanceController extends Controller
                         } else {
                             $endDate = new DateTime($data->created_at->format("Y-m-d ${endTime}:00"));
                         }
-                    } else {
-                        $endDate = new DateTime($data->left_at);
                     }
 
                     $workTime = "00:00";
@@ -306,8 +304,6 @@ class AttendanceController extends Controller
                 } else {
                     $endDate = new DateTime($data->created_at->format("Y-m-d ${endTime}:00"));
                 }
-            } else {
-                $endDate = new DateTime($data->left_at);
             }
 
             $workTime = "00:00";

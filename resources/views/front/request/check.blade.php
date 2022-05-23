@@ -18,7 +18,7 @@
         @endif
         <div>理由: <strong>{{$reason}}</strong></div>
 
-        <div style="float: right">
+        <div class="float-right">
             <button type="submit" class="btn btn-primary">申請</button>
             <a href="/request/create/back" class="btn btn-secondary">キャンセル</a>
         </div>

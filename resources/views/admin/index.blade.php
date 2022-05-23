@@ -2,33 +2,6 @@
 
 @section('pageTitle', "管理者コントロールパネル")
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-    <style>
-        .card-hover {
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0);
-            transition-duration: 0.5s;
-        }
-
-        .card-hover:hover {
-            box-shadow: 0 0 10px #AAA;
-            transition-duration: 0.2s;
-        }
-    </style>
-@endsection
-
 @section('content')
     <div class="container">
         <h2 class="fw-bold">ダッシュボード</h2>
@@ -37,11 +10,10 @@
         <hr>
         @if($notifications != null && count($notifications) != 0)
             @foreach($notifications as $notification)
-                <div class="card mb-3 card-hover" onclick="href('/notification/{{$notification->id}}')"
-                     style="cursor: pointer">
+                <div class="card mb-3 card-hover pointer-cursor" onclick="href('/notification/{{$notification->id}}')">
                     <div class="card-body">
                         <span
-                            style="color: #{{$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
+                            style="color: {{"#".$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
                             class="text-muted"> - </span>
                         {!! $notification->data !!}
                     </div>
@@ -58,18 +30,19 @@
                 <h4 class="fw-bold">対応待ちの申請 ({{$requests->total()}}個)</h4>
             </div>
             <div class="col-md-4">
-                <a href="/admin/request" style="float: right" class="btn btn-primary">申請一覧</a>
+                <a href="/admin/request" class="btn btn-primary float-right">申請一覧</a>
             </div>
         </div>
         <hr>
         @if($requests != null && count($requests) != 0)
             @foreach($requests as $request)
-                <div class="card mb-3 card-hover" onclick="href('/admin/request/detail?id={{$request->id}}')"
-                     style="cursor: pointer">
+                <div class="card mb-3 card-hover pointer-cursor"
+                     onclick="href('/admin/request/detail?id={{$request->id}}')">
                     <div class="card-body">
                         <?php
 
                         // CHECK STATUS
+                        /* @var $request */
                         $statusText = '<span style="color: #E80">●</span> <span>申請中 / </span>';
                         switch ($request->status) {
                             case 1:
@@ -106,7 +79,7 @@
                 <h4 class="fw-bold">最新15件の勤怠ログ</h4>
             </div>
             <div class="col-md-4">
-                <a href="/admin/attend-manage" style="float: right" class="btn btn-primary">勤怠情報管理</a>
+                <a href="/admin/attend-manage" class="btn btn-primary float-right">勤怠情報管理</a>
             </div>
         </div>
         <hr>
@@ -123,6 +96,7 @@
                 <tr class="attends-row" onclick="jump('/admin/attend-manage/view/{{$dat->id}}')">
                     <td>
                         <?php
+                        /* @var $dat */
                         $date_now = new DateTime($dat->date);
                         echo $date_now->format('Y年m月d日');
                         ?>

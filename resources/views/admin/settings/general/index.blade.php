@@ -1,20 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "システム設定")
 
 @section('content')
@@ -24,9 +9,8 @@
                 <h2 class="fw-bold">各種情報確認</h2>
             </div>
             <div class="col-md-6">
-                <a href="/admin/settings/general/edit" class="btn btn-primary" style="float: right">編集</a>
-                <a href="/admin/settings" class="btn btn-secondary"
-                   style="float: right; margin-right: 10px">システム設定に戻る</a>
+                <a href="/admin/settings/general/edit" class="btn btn-primary float-right">編集</a>
+                <a href="/admin/settings" class="btn btn-secondary float-right mr-10px">システム設定に戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
@@ -70,11 +54,11 @@
             </div>
             --}}
             <div class="mb-3 col-md-12">
-                <div class="card" style="width: 100%;">
+                <div class="card width-100pct">
                     <div class="card-header">
                         有給設定
                     </div>
-                    <div class="card-body" style="height: 400px; overflow: auto">
+                    <div class="card-body overflow-auto height-400">
                         @if(count($configArray ?? []) != 0)
                             <table class="table">
                                 <tr>
@@ -89,7 +73,9 @@
                                     @if($item == "")
                                         @continue
                                     @endif
-                                    <?php $dat = preg_split("/,/", $item);?>
+                                    <?php
+                                    /* @var $item */
+                                    $dat = preg_split("/,/", $item);?>
                                     @if($index != 0)
                                         <tr>
                                             <td>

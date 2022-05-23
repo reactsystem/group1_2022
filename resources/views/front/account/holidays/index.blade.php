@@ -1,12 +1,5 @@
 @extends('layouts.main')
 
-@section('styles')
-    <style>
-        .attends-row {
-            cursor: default;
-        }
-    </style>
-@endsection
 @section('pageTitle', "ユーザー管理")
 
 @section('content')
@@ -16,8 +9,7 @@
                 <h2 class="fw-bold">有給一覧</h2>
             </div>
             <div class="col-md-6">
-                <a href="/account" class="btn btn-secondary"
-                   style="float: right; margin-right: 10px">ユーザー管理へ戻る</a>
+                <a href="/account" class="btn btn-secondary float-right mr-10px">ユーザー管理へ戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
@@ -48,6 +40,7 @@
                 $twoYearAgo = date("Y-m-d H:i:s", strtotime("-2 year"));
                 $status = "有効";
                 $className = "";
+                /* @var $dat */
                 if ($dat->created_at < $twoYearAgo) {
                     $className = "background-color: #999;";
                     $status = "失効 - 期限切れ";
@@ -56,7 +49,7 @@
                     $status = "無効 - 使用済み";
                 }
                 ?>
-                <tr class="attends-row" style="{{$className}}">
+                <tr class="attends-row pointer-default-i pointer-nonevent" style="{{$className}}">
                     <td>{{$dat->amount}}日</td>
                     <td>{{$dat->created_at->format('Y年 n月 j日')}}</td>
                     <td>{{$status}}</td>

@@ -1,20 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "システム設定")
 
 @section('content')
@@ -24,9 +9,8 @@
                 <h2 class="fw-bold">休日設定</h2>
             </div>
             <div class="col-md-6">
-                <a href="/admin/settings/holiday/new" class="btn btn-primary" style="float: right">休日を追加</a>
-                <a href="/admin/settings" class="btn btn-secondary"
-                   style="float: right; margin-right: 10px">システム設定に戻る</a>
+                <a href="/admin/settings/holiday/new" class="btn btn-primary float-right">休日を追加</a>
+                <a href="/admin/settings" class="btn btn-secondary float-right mr-10px">システム設定に戻る</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
