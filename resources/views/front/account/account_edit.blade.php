@@ -17,7 +17,7 @@
 
             <div class="mb-3">
                 <label for="nameInput" class="form-label">部署</label>
-                <input class="form-control text-muted" style="cursor: no-drop" value="{{$user['dname']}}" disabled>
+                <input class="form-control text-muted pointer-no-drop" value="{{$user['dname']}}" disabled>
             </div>
 
             <div class="mb-3">
@@ -28,13 +28,13 @@
 
             <div class="mb-3">
                 <label for="joinedDate" class="form-label">入社日</label>
-                <input class="form-control text-muted" id="joinedDate" style="cursor: no-drop"
+                <input class="form-control text-muted pointer-no-drop" id="joinedDate"
                        value="{{$user['joined_date']}}" disabled>
             </div>
 
             <div class="mb-3">
                 <label for="employeeId" class="form-label">社員番号</label>
-                <input class="form-control text-muted" id="employeeId" style="cursor: no-drop"
+                <input class="form-control text-muted pointer-no-drop" id="employeeId"
                        value="{{$user['employee_id']}}" disabled>
             </div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\CalenderUtil;
+use App\Http\Controllers\DownloadUtil;
 use App\Models\Attendance;
 use App\Models\Holiday;
 use App\Models\MonthlyReport;
@@ -258,8 +259,8 @@ class AdminAttendManagementController
         }
 
         $tempDate = new DateTime();
-        $year = $requestData->year ?? intval($tempDate->format('Y'));
-        $month = $requestData->month ?? intval($tempDate->format('m'));
+        $year = min(9999, max(0, $requestData->year ?? intval($tempDate->format('Y'))));
+        $month = min(12, max(1, $requestData->month ?? intval($tempDate->format('m'))));
         $cYear = intval($tempDate->format('Y'));
         $cMonth = intval($tempDate->format('m'));
         $day = intval($tempDate->format('d'));
@@ -275,7 +276,7 @@ class AdminAttendManagementController
         $dataList = Attendance::where('user_id', '=', $user->id)->where("attendances.deleted_at", "=", null)->where('date', 'LIKE', "%$likeMonth%")->get();
 
         $tempDate = new DateTime();
-        $todayData = Attendance::where("user_id", "=", $user->id)->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $todayData = Attendance::where("user_id", "=", $user->id)->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format($year . '-' . $month . '-j'))->orderByDesc("date")->first();
         $hours = 0;
         $minutes = 0;
         $hoursReq = 0;
@@ -464,6 +465,72 @@ class AdminAttendManagementController
             }
         }
         return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('error', 'まだ月報が承認されていません。');
+    }
+
+    function exportDataCsv(Request $request, int $user_id, int $year, int $month = -1)
+    {
+        $user = User::find($user_id);
+        if ($user == null) {
+            return;
+        }
+        $likeMonth = "";
+        if ($month == -1) {
+            $likeMonth = $year . "-";
+        } else {
+            $likeMonth = $year . "-" . sprintf('%02d', $month) . "-";
+        }
+        $dataList = Attendance::where('user_id', '=', $user_id)->where("attendances.deleted_at", "=", null)->where('date', 'LIKE', "%$likeMonth%")->get();
+        if ($dataList == null) {
+            return;
+        }
+        $data = "date,status,comment,workTime,restTime,joined,left";
+        foreach ($dataList as $dat) {
+            $status = $dat->mode == 1 ? "退勤" : "出勤";
+            $rest = $dat->rest ?? "00:00:00";
+            $comment = $dat->comment ?? "";
+            $data .= "\n{$dat->date},{$status},{$dat->comment},{$dat->time},{$rest},{$dat->created_at},{$dat->left_at}";
+        }
+        $data = mb_convert_encoding($data, "SJIS", "UTF-8");
+        $fileName = "";
+        if ($month == -1) {
+            $fileName = "{$user->name} 勤務データ({$year}年).csv";
+        } else {
+            $fileName = "{$user->name} 勤務データ({$year}年{$month}月).csv";
+        }
+        DownloadUtil::downloadData($data, $fileName, 'text/csv');
+    }
+
+    function exportRequestDataCsv(Request $request, int $user_id, int $year, int $month = -1)
+    {
+        $user = User::find($user_id);
+        if ($user == null) {
+            return;
+        }
+        $likeMonth = "";
+        if ($month == -1) {
+            $likeMonth = $year . "-";
+        } else {
+            $likeMonth = $year . "-" . sprintf('%02d', $month) . "-";
+        }
+        $dataList = VariousRequest::where('user_id', '=', $user_id)->where('various_requests.date', 'LIKE', "%$likeMonth%")->leftJoin('request_types', 'request_types.id', 'various_requests.type')->select('various_requests.*', 'request_types.name as rname')->get();
+        if ($dataList == null) {
+            return;
+        }
+        $data = "date,uuid,type,typeRaw,status,reason,relatedId,time,created,updated";
+        foreach ($dataList as $dat) {
+            $status = $dat->mode == 1 ? "退勤" : "出勤";
+            $rest = $dat->rest ?? "00:00:00";
+            $comment = $dat->comment ?? "";
+            $data .= "\n{$dat->date},{$dat->uuid},{$dat->rname},{$dat->type},{$dat->status},{$dat->reason},{$dat->related_id},{$dat->time},{$dat->created_at},{$dat->updated_at}";
+        }
+        $data = mb_convert_encoding($data, "SJIS", "UTF-8");
+        $fileName = "";
+        if ($month == -1) {
+            $fileName = "{$user->name} 申請データ({$year}年).csv";
+        } else {
+            $fileName = "{$user->name} 申請データ({$year}年{$month}月).csv";
+        }
+        DownloadUtil::downloadData($data, $fileName, 'text/csv');
     }
 
 }

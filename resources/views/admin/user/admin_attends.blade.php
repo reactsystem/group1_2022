@@ -2,14 +2,6 @@
 
 @section('pageTitle', "社員情報管理")
 
-@section('styles')
-    <style>
-        .pointer-cursor {
-            cursor: pointer;
-        }
-    </style>
-@endsection
-
 @section('content')
     <div class="container">
         <div class="row">
@@ -17,13 +9,12 @@
                 <h2 class="fw-bold">社員一覧</h2>
             </div>
             <div class="col-md-6">
-                <a href='/admin/attends/new' class="btn btn-primary" style="float: right ; margin-right: 10px">新規登録</a>
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#searchModal"
-                        style="float: right; margin-right: 10px">
-                検索
+                <a href='/admin/attends/new' class="btn btn-primary float-right mr-10px">新規登録</a>
+                <button type="button" class="btn btn-secondary float-right mr-10px" data-bs-toggle="modal"
+                        data-bs-target="#searchModal">
+                    検索
                 </button>
-                <a href='/admin/attends/notify' class="btn btn-success"
-                   style="float: right; margin-right: 10px">メッセージ送信</a>
+                <a href='/admin/attends/notify' class="btn btn-success float-right mr-10px">メッセージ送信</a>
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
@@ -103,7 +94,7 @@
             @foreach($users as $user)
 
                 @if($user->left_date != null)
-                    <tr style="background-color: #BBB">
+                    <tr class="bg-gray2">
                 @else
                     <tr>
                         @endif

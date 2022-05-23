@@ -7,19 +7,18 @@
                 <h2 class="fw-bold">申請一覧</h2>
             </div>
             <div class="col-md-6">
-                <a href='/admin/request/create' class="btn btn-primary" style="float: right">追加</a>
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#searchModal"
-                        style="float: right; margin-right: 10px">検索
+                <a href='/admin/request/create' class="btn btn-primary float-right">追加</a>
+                <button type="button" class="btn btn-secondary float-right mr-10px" data-bs-toggle="modal"
+                        data-bs-target="#searchModal">検索
                 </button>
                 @if(!isset($request) || $request->mode != 'all')
-                    <form action="/admin/request" method='post' style="float: right; margin-right: 10px">
+                    <form action="/admin/request" method='post' class="float-right mr-10px">
                         @csrf
                         <input type="hidden" name="mode" value="all">
                         <input type="submit" class="btn btn-success" value='全ての申請を表示'>
                     </form>
                 @else
-                    <a href="/admin/request" class="btn btn-warning"
-                       style="float: right; margin-right: 10px">申請中のみ表示</a>
+                    <a href="/admin/request" class="btn btn-warning float-right mr-10px">申請中のみ表示</a>
                 @endif
             </div>
         </div>
@@ -123,7 +122,7 @@
                 <th scope="col">申請種別</th>
                 <th scope="col">理由</th>
                 <th scope="col">状態</th>
-                <th scope="col" style="text-align: right">クイックアクション</th>
+                <th scope="col" class="text-right">クイックアクション</th>
             </tr>
             </thead>
             <tbody>
@@ -133,7 +132,8 @@
                 <tr>
                     @if($request -> related_id != NULL)
                         @php
-                            $request = $request ->pair_request();
+                            /* @var $request */
+                                        $request = $request ->pair_request();
                         @endphp
                     @endif
 
@@ -156,6 +156,7 @@
 
                             <?php
                             // CHECK STATUS
+                            /* @var $request */
                             $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
                             switch ($request->status) {
                                 case 1:
@@ -171,9 +172,9 @@
                             ?>
                             {!! $statusText !!}
                         </td>
-                        <td>
-                            <div style="float: right">
-                                <a href="/admin/request/detail?id={{$request ->id}}" class="btn btn-secondary">詳細</a>
+                            <td>
+                                <div class="float-right">
+                                    <a href="/admin/request/detail?id={{$request ->id}}" class="btn btn-secondary">詳細</a>
 
                                 @if($request->status == 0) {{-- 設定待ち--}}
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"

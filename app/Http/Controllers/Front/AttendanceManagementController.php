@@ -28,8 +28,8 @@ class AttendanceManagementController extends Controller
         $mode = $requestData->mode ?? 0;
 
         $tempDate = new DateTime();
-        $year = $requestData->year ?? intval($tempDate->format('Y'));
-        $month = $requestData->month ?? intval($tempDate->format('m'));
+        $year = min(9999, max(0, $requestData->year ?? intval($tempDate->format('Y'))));
+        $month = min(12, max(1, $requestData->month ?? intval($tempDate->format('m'))));
         $cYear = intval($tempDate->format('Y'));
         $cMonth = intval($tempDate->format('m'));
         $day = intval($tempDate->format('d'));
@@ -45,7 +45,7 @@ class AttendanceManagementController extends Controller
         $dataList = Attendance::where('user_id', '=', Auth::id())->where("attendances.deleted_at", "=", null)->where('date', 'LIKE', "%$likeMonth%")->get();
 
         $tempDate = new DateTime();
-        $todayData = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $todayData = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format($year . '-' . $month . '-j'))->orderByDesc("date")->first();
         $hours = 0;
         $minutes = 0;
         $hoursReq = 0;

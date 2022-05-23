@@ -106,6 +106,8 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/attend-manage/calender/{id}', [AdminAttendManagementController::class, 'showUserCalender']);
     Route::get('/admin/attend-manage/confirm', [AdminAttendManagementController::class, 'approveReport']);
     Route::get('/admin/attend-manage/cancel', [AdminAttendManagementController::class, 'unapproveReport']);
+    Route::get('/admin/attend-manage/download/{user_id}/{year}/{month}', [AdminAttendManagementController::class, 'exportDataCsv']);
+    Route::get('/admin/attend-manage/download-requests/{user_id}/{year}/{month}', [AdminAttendManagementController::class, 'exportRequestDataCsv']);
     Route::get('/admin/attend-manage', [AdminAttendManagementController::class, 'index']);
 
     /* システム設定 */

@@ -1,20 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "社員情報管理")
 
 @section('content')
@@ -25,13 +10,12 @@
                     <h2 class="fw-bold">有給追加</h2>
                 </div>
                 <div class="col-md-8">
-                    <button type="button" onclick="createHolidayData()" class="btn btn-primary"
-                            style="float: right; width: 150px;"
+                    <button type="button" onclick="createHolidayData()" class="btn btn-primary float-right width-150"
                             id="saveBtn">
                         追加
                     </button>
-                    <a href="/admin/attends/holidays/{{$user_id}}" class="btn btn-secondary"
-                       style="float: right; margin-right: 10px;">有給一覧に戻る</a>
+                    <a href="/admin/attends/holidays/{{$user_id}}"
+                       class="btn btn-secondary float-right mr-10px">有給一覧に戻る</a>
                 </div>
                 <div class="col-md-12 mt-3" id="alert">
                 </div>
@@ -90,7 +74,7 @@
                     const resultCode = res.data.code
                     console.log("Result: " + resultCode + " / " + res.data.message)
                     if (resultCode == 0) {
-                        saveBtn.className = "btn btn-success"
+                        saveBtn.className = "btn btn-success float-right width-150"
                         saveBtn.innerText = "保存しました"
                         alert.innerHTML = '<div class="alert alert-success" role="alert">' +
                             '<strong>成功</strong> - 有給を追加しました。編集ページに移動しています...' +
@@ -109,12 +93,12 @@
                         }
                         alertStr += '</div>';
                         alert.innerHTML = alertStr
-                        saveBtn.className = "btn btn-danger"
+                        saveBtn.className = "btn btn-danger float-right width-150"
                         saveBtn.innerText = "追加失敗"
                         await _sleep(2000)
                     }
                     saveBtn.removeAttribute("disabled")
-                    saveBtn.className = "btn btn-primary"
+                    saveBtn.className = "btn btn-primary float-right width-150"
                     saveBtn.innerText = "追加"
                 })
         }

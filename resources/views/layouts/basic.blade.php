@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('basement')
-    <div style="padding-top: 5rem;">
+    <div class="basement-padding">
         @yield('content')
     </div>
 @endsection

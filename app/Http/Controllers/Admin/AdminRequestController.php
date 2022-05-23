@@ -20,7 +20,7 @@ class AdminRequestController extends Controller
         if ($request->mode == 'all') {
             $all_requests = VariousRequest::whereNull('related_id')->orderByDesc('id')->paginate(15);
         } else {
-            $all_requests = VariousRequest::whereNull('related_id')->where('status', '=', 0)->orderByDesc('id')->paginate(10);
+            $all_requests = VariousRequest::whereNull('related_id')->where('status', '=', 0)->orderByDesc('id')->paginate(15);
         }
         $all_user = User::all();
         $parameters = [];

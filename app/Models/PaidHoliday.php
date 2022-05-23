@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,21 +32,21 @@ class PaidHoliday extends Model
     public static function useHolidays(int $userId, int $amount): array
     {
         $twoYearAgo = date("Y-m-d H:i:s", strtotime("-2 year"));
-        $data = PaidHoliday::where('user_id', $userId)->where('deleted_at', null)->where('created_at', '>=', $twoYearAgo)->get();
+        $data = PaidHoliday::where('user_id', $userId)->where('deleted_at', null)->where('created_at', '>=', $twoYearAgo)->orderBy('created_at')->get();
         $usedHolidays = [];
         foreach ($data as $dat) {
             if ($dat->amount < $amount) {
                 $usedHolidays[] = $dat->id . ":" . $dat->amount;
                 $amount -= $dat->amount;
                 $dat->amount = 0;
-                $dat->deleted_at = new \DateTime();
+                $dat->deleted_at = new DateTime();
                 $dat->save();
                 continue;
             }
             $usedHolidays[] = $dat->id . ":" . $amount;
             $dat->amount -= $amount;
             if ($dat->amount == 0) {
-                $dat->deleted_at = new \DateTime();
+                $dat->deleted_at = new DateTime();
             }
             $amount = 0;
             $dat->save();

@@ -1,20 +1,5 @@
 @extends('layouts.main')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "ユーザー管理")
 
 @section('content')
@@ -24,12 +9,10 @@
                 <h2 class="fw-bold">通知確認</h2>
             </div>
             <div class="col-md-6">
-                <button class="btn btn-danger"
-                        style="float: right;" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <button class="btn btn-danger float-right" data-bs-toggle="modal" data-bs-target="#deleteModal">
                     削除
                 </button>
-                <a href="/account/notifications" class="btn btn-secondary"
-                   style="float: right; margin-right: 10px;">通知一覧に戻る</a>
+                <a href="/account/notifications" class="btn btn-secondary float-right mr-10px">通知一覧に戻る</a>
             </div>
             <div class="col-md-12 mt-3" id="alert">
             </div>
@@ -49,18 +32,18 @@
             @endif
         </div>
         <hr>
-        <div style="display: flex">
-            <h5 class="fw-bold" style="flex: 2;">
+        <div class="display-flex">
+            <h5 class="fw-bold flex-2">
                 {{$data->title}}
             </h5>
-            <div class="text-muted" style="flex: 1;">
-                <span style="float: right;">
+            <div class="text-muted flex-1">
+                <span class="float-right">
                 作成日時: {{$data->created_at}}
                 </span>
             </div>
         </div>
         <hr>
-        <div style="cursor: pointer;" onclick="href('/notification/{{$data->id}}')">
+        <div class="pointer-cursor" onclick="href('/notification/{{$data->id}}')">
             {!! $data->data !!}
         </div>
     </div>

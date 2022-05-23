@@ -1,20 +1,5 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .attends-row {
-            transition-duration: 0.2s;
-            cursor: pointer;
-        }
-
-        .attends-row:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px #999;
-            background-color: #0b5ed7;
-            color: #fff;
-        }
-    </style>
-@endsection
 @section('pageTitle', "勤怠情報管理")
 
 @section('content')
@@ -25,12 +10,11 @@
                     <h2 class="fw-bold">勤怠情報編集</h2>
                 </div>
                 <div class="col-md-6">
-                    <button type="button" onclick="saveAttendData()" class="btn btn-primary" style="float: right"
+                    <button type="button" onclick="saveAttendData()" class="btn btn-primary float-right"
                             id="saveBtn">
                         保存
                     </button>
-                    <a href="/admin/attend-manage/view/{{$id}}" class="btn btn-secondary"
-                       style="float: right; margin-right: 10px;">キャンセル</a>
+                    <a href="/admin/attend-manage/view/{{$id}}" class="btn btn-secondary float-right mr-10px">キャンセル</a>
                 </div>
                 <div class="col-md-12 mt-3" id="alert">
                 </div>
@@ -65,7 +49,10 @@
                 <div class="mb-3 col-md-12 col-lg-6">
                     <label for="status" class="form-label">状態</label>
                     <select class="form-select" aria-label="" id="status">
-                        <option value="0" <?php if($data->mode == 0){?>selected<?php }?>>出勤中</option>
+                        <option value="0" <?php
+                        /* @var $data */
+                        if($data->mode == 0){?>selected<?php }?>>出勤中
+                        </option>
                         <option value="1" <?php if($data->mode == 1){?>selected<?php }?>>退勤済み</option>
                     </select>
                 </div>
@@ -174,7 +161,7 @@
                     const resultCode = res.data.code
                     console.log("Result: " + resultCode + " / " + res.data.message)
                     if (resultCode == 0) {
-                        saveBtn.className = "btn btn-success"
+                        saveBtn.className = "btn btn-success float-right"
                         saveBtn.innerText = "保存しました"
                         alert.innerHTML = '<div class="alert alert-success" role="alert">' +
                             '<strong>成功</strong> - 保存が完了しました。' +
@@ -191,12 +178,12 @@
                         }
                         alertStr += '</div>';
                         alert.innerHTML = alertStr
-                        saveBtn.className = "btn btn-danger"
+                        saveBtn.className = "btn btn-danger float-right"
                         saveBtn.innerText = "保存失敗"
                         await _sleep(2000)
                     }
                     saveBtn.removeAttribute("disabled")
-                    saveBtn.className = "btn btn-primary"
+                    saveBtn.className = "btn btn-primary float-right"
                     saveBtn.innerText = "保存"
                 })
         }

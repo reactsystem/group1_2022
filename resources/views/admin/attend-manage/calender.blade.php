@@ -1,239 +1,62 @@
 @extends('layouts.admin')
 
-@section('styles')
-    <style>
-        .card-hover {
-            box-shadow: 0 0 0;
-            transition-duration: 0.1s;
-        }
-
-        .card-hover:hover {
-            box-shadow: 0 0 10px #CCC;
-            transition-duration: 0.2s;
-        }
-
-        .calender-doy {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-        }
-
-        .calender-body {
-            transition-duration: 0.2s;
-            min-height: 130px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-            cursor: pointer;
-            z-index: 1;
-        }
-
-        .calender-body2 {
-            transition-duration: 0.2s;
-            min-height: 130px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-            cursor: pointer;
-        }
-
-        .calender-disabled {
-            transition-duration: 0.2s;
-            min-height: 120px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-        }
-
-        .calender-body:hover {
-            transition-duration: 0.05s;
-            box-shadow: 0 0 10px;
-            min-height: 120px;
-            padding: 10px;
-            flex: 1;
-            color: #222;
-            border-width: 1px;
-            border-style: solid;
-            border-color: #666;
-            z-index: 10;
-        }
-
-        .bg-gray {
-            background-color: #888;
-        }
-
-        .bg-gray2 {
-            background-color: #BBB;
-        }
-
-        .bg-green {
-            background-color: #BFB;
-        }
-
-        .bg-red {
-            background-color: #FBB;
-        }
-
-        .bg-blue {
-            background-color: #BBF;
-        }
-
-        .sunday {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            background-color: #F33;
-            color: #fff;
-        }
-
-        .saturday {
-            height: 30px;
-            line-height: 30px;
-            font-weight: bold;
-            text-align: center;
-            flex: 1;
-            background-color: #37F;
-            color: #fff
-        }
-
-        .type-scroll::-webkit-scrollbar {
-            display: block;
-            height: 6px;
-        }
-
-        .type-scroll::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .type-scroll::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.4);
-            border-right: none;
-            border-left: none;
-        }
-
-        .type-scroll::-webkit-scrollbar-track-piece:end {
-            margin-bottom: 10px;
-        }
-
-        .type-scroll::-webkit-scrollbar-track-piece:start {
-            margin-top: 10px;
-        }
-
-        .type-scroll {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            overflow-x: scroll;
-            overflow: overlay;
-            height: 50px;
-        }
-
-        .type-scroll {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            overflow: hidden;
-            height: 50px;
-            transition-duration: 0.3s;
-        }
-
-        .type-scroll:hover {
-            overflow-x: scroll;
-            overflow: overlay;
-            transition-duration: 0.05s;
-        }
-
-        @media only screen and (max-width: 561.99px) {
-            .calender-main {
-                transform: scale(0.5);
-                width: 200%;
-                margin-left: -50%;
-                margin-top: -150px;
-            }
-        }
-
-        @media only screen and (min-width: 562px) {
-            .calender-main {
-                transform: scale(0.6);
-                width: 170%;
-                margin-left: -35%;
-                margin-top: -120px;
-            }
-        }
-
-        @media only screen and (min-width: 768px) {
-            .calender-main {
-                transform: scale(0.8);
-                width: 125%;
-                margin-left: -13%;
-                margin-top: -70px;
-            }
-        }
-
-        @media only screen and (min-width: 992px) {
-            .calender-main {
-                transform: scale(0.7);
-                width: 145%;
-                margin-left: -23%;
-                margin-top: -85px;
-            }
-        }
-
-        @media only screen and (min-width: 1220px) {
-            .calender-main {
-                transform: scale(1.0);
-                width: 100%;
-                margin-left: 0;
-                margin-top: 0;
-            }
-        }
-    </style>
-@endsection
 @section('pageTitle', "勤怠情報管理")
 
 @section('content')
     <div class="container mb-5">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <h2 class="fw-bold">{{$user->name}}の勤怠情報</h2>
             </div>
+            <div class="col-md-6 mb-3">
+                <div class="btn-group float-right" role="group">
+                    <button id="btnGroupDrop1" type="button"
+                            class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <span class="sr-only">CSVデータ出力</span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        @if($attendData != null && count($attendData) != 0)
+                            <li><a class="dropdown-item"
+                                   href="/admin/attend-manage/download/{{$user->id}}/{{$year}}/{{$month}}">当月勤務データ出力</a>
+                            </li>
+                        @else
+                            <li><a class="dropdown-item disabled">当月勤務データ出力</a>
+                            </li>
+                        @endif
+                        <li><a class="dropdown-item"
+                               href="/admin/attend-manage/download/{{$user->id}}/{{$year}}/-1">当年勤務データ出力</a>
+                        </li>
+                        @if($reqData != null && count($reqData) != 0)
+                            <li><a class="dropdown-item"
+                                   href="/admin/attend-manage/download-requests/{{$user->id}}/{{$year}}/{{$month}}">当月申請データ出力</a>
+                            </li>
+                        @else
+                            <li><a class="dropdown-item disabled">当月申請データ出力</a>
+                            </li>
+                        @endif
+                        <li><a class="dropdown-item"
+                               href="/admin/attend-manage/download-requests/{{$user->id}}/{{$year}}/-1">当年申請データ出力</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <hr>
-            <div class="col-md-4" style="display: flex">
+            <div class="col-md-4 flex-view">
                 @if($month == 1)
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year - 1}}&month=12&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">◀</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
                 @else
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year}}&month={{$month - 1}}&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">◀</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
                 @endif
-                <h2 class="fw-bold mt-1" style="flex: 9; text-align: center">{{$year}}年 {{$month}}月</h2>
+                <h2 class="fw-bold mt-1 calender-year-month">{{$year}}年 {{$month}}月</h2>
                 @if($month == 12)
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year + 1}}&month=1&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @else
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year}}&month={{$month + 1}}&mode={{$mode}}"
-                       class="btn btn-outline-secondary btn-sm"
-                       style="height: 45px; flex: 1; margin-top: 0; font-size: 18pt">▶</a>
+                       class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @endif
             </div>
             <div class="col-md-4 type-scroll">
@@ -255,29 +78,27 @@
                         </span>欠勤&nbsp;
                 </div>
             </div>
-            <div class="col-md-4" style="display: flex; flex-direction: row-reverse; gap: 3px;">
+            <div class="col-md-4 header-flex-area">
                 @if($confirmStatus == -1)
-                    <button class="btn btn-secondary" style="height: 40px" disabled>
+                    <button class="btn btn-secondary height-40" disabled>
                         月報確定
                     </button>
                 @elseif($confirmStatus == 2)
                     <a href="/admin/attend-manage/cancel?id={{$user->id}}&year={{$year}}&month={{$month}}"
-                       class="btn btn-danger" style="height: 40px">
+                       class="btn btn-danger height-40">
                         承認取消
                     </a>
                 @elseif($confirmStatus == 1)
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal"
-                            style="height: 40px">
+                    <button type="button" class="btn btn-primary height-40" data-bs-toggle="modal"
+                            data-bs-target="#confirmModal">
                         月報承認
                     </button>
                 @else
-                    <button type="button" class="btn btn-warning"
-                            style="height: 40px" disabled>
+                    <button type="button" class="btn btn-warning height-40" disabled>
                         月報未確定
                     </button>
                 @endif
-                <a href="/admin/attends/view?id={{$user->id}}" class="btn btn-secondary"
-                   style="height: 40px">
+                <a href="/admin/attends/view?id={{$user->id}}" class="btn btn-secondary height-40">
                     社員情報に戻る
                 </a>
             </div>
@@ -296,23 +117,23 @@
                 </div>
             </div>
         @endif
-        <div style="display: flex; width: 100%; gap: 10px">
-            <div style="flex: 1.5; padding: 0">
-                <span class="text-muted" style="height: 40px; line-height: 40px">今月の労働時間</span>
+        <div class="w100-gap10 flex-view">
+            <div class="flex-1-5 padding-0">
+                <span class="text-muted vert-center-40">今月の労働時間</span>
             </div>
-            <div style="flex: 1">
-                <strong style="font-size: 20pt">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
+            <div class="flex-1">
+                <strong class="font-20">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
             </div>
-            <div style="flex: 1">
+            <div class="flex-1">
 
             </div>
-            <div style="flex: 1.5; padding: 0">
-                <span class="text-muted" style="height: 40px; line-height: 40px">今月の残業時間</span>
+            <div class="flex-1-5 padding-0">
+                <span class="text-muted vert-center-40">今月の残業時間</span>
             </div>
-            <div style="flex: 1">
-                <strong style="font-size: 20pt">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
+            <div class="flex-1">
+                <strong class="font-20">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
             </div>
-            <div style="flex: 4">
+            <div class="flex-4">
 
             </div>
         </div>
@@ -339,10 +160,7 @@
                        class="btn btn-primary">
                         月報を承認
                     </a>
-
-                    <form id='logout-form' action={{ route('logout')}} method="POST" style="display: none;">
                     @csrf
-
                 </div>
             </div>
         </div>
@@ -387,20 +205,74 @@
 
             let
         works = {
-            <?php foreach ($attendData as $data) {
+            <?php
+            /* @var $attendData */
+            foreach ($attendData as $data) {
+                $leftDate = $data->left_at;
+                $hours = 0;
+                $minutes = 0;
+                if ($leftDate != null) {
+                    $datx = new DateTime($data->left_at);
+                    $dateData = new DateTime($leftDate);
+                    $dateData = $dateData->format("G:i");
+                    $noWorkFlag = false;
+                    $workData = preg_split("/:/", $data->time);
+                    $restData = preg_split("/:/", $data->rest);
+                    $wHours = intval($workData[0]);
+                    $wMinutes = intval($workData[1]);
+                    $rHours = intval($restData[0]);
+                    $rMinutes = intval($restData[1]);
+                    $hours = max(0, $wHours - $rHours);
+                    $minutes = $wMinutes - $rMinutes;
+                    if ($minutes < 0 && $hours != 0) {
+                        $minutes = 60 - abs($minutes);
+                        $hours -= 1;
+                    } else if ($minutes < 0) {
+                        $minutes = 0;
+                    }
+                    $leftDate = $datx->format('H:i');
+                } else {
+                    $dateDatax = new DateTime();
+                    $dateData = $dateDatax->format("G:i");
+                    $noWorkFlag = false;
+
+                    $current = strtotime($dateDatax->format("Y-m-d H:i:00"));
+                    $before = strtotime($data->created_at->format("Y-m-d {$data->created_at->format('H:i')}:00"));
+                    $diff = $current - $before;
+                    $hours = intval($diff / 60 / 60);
+                    $minutes = intval($diff / 60) % 60;
+                    $workTime = sprintf("%02d", $hours) . ":" . sprintf("%02d", $minutes);
+
+                    $workData = preg_split("/:/", $workTime);
+                    $restData = preg_split("/:/", $data->rest ?? "00:00");
+                    $wHours = intval($workData[0]);
+                    $wMinutes = intval($workData[1]);
+                    $rHours = intval($restData[0]);
+                    $rMinutes = intval($restData[1]);
+                    $hours = max(0, $wHours - $rHours);
+                    $minutes = $wMinutes - $rMinutes;
+                    if ($minutes < 0 && $hours != 0) {
+                        $minutes = 60 - abs($minutes);
+                        $hours -= 1;
+                    } else if ($minutes < 0) {
+                        $minutes = 0;
+                    }
+                }
                 echo "'" . $data->date . "': { date: '" . $data->date . "',";
                 echo "mode: " . $data->mode . ",";
                 echo "status: " . $data->status . ",";
                 echo "comment: '" . ($data->comment ?? "null") . "',";
                 echo "time: '" . ($data->time ?? "null") . "',";
+                echo "rtime: '" . $hours . ":" . sprintf("%02d", $minutes) . "',";
                 echo "rest: '" . ($data->rest ?? '00:00:00') . "',";
-                echo "start: '" . ($data->created_at ?? "null") . "',";
-                echo "end: '" . ($data->left_at ?? "null") . "'},";
+                echo "start: '" . ($data->created_at->format("H:i") ?? "null") . "',";
+                echo "end: '" . ($leftDate ?? "00:00") . "'},";
             }?>
         }
 
         let requests = {<?php
             $found = [];
+            /* @var $reqData */
             foreach ($reqData as $key => $data) {
                 echo "'" . $key . "': [";
                 foreach ($data[0] as $dat) {
@@ -412,6 +284,7 @@
                     echo "time: '" . ($dat->time ?? "null") . "'},";
                 }
                 $dayKey = preg_split("/-/", $key)[2];
+                /* @var $holidays */
                 if (array_key_exists($dayKey, $holidays)) {
                     $found[$dayKey] = true;
                     foreach ($holidays[$dayKey] as $holiday) {
@@ -428,6 +301,8 @@
                 echo "],";
             }
             for ($i = 1; $i <= 31; $i++) {
+                /* @var $year */
+                /* @var $month */
                 if (!array_key_exists($i, $found) && array_key_exists($i, $holidays)) {
                     $dxKey = $year . "-" . sprintf("%02d", $month) . "-" . sprintf("%02d", $i);
                     echo "'" . $dxKey . "': [";
@@ -476,10 +351,10 @@
                 } else if (minutes < 0) {
                     minutes = 0
                 }
-                if (modalData.time === 'null') {
-                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #F11;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>退勤情報未入力</span><h2 class="fw-bold">勤務中</h2></span></div></div>`
+                if (modalData.time === 'null' || modalData.end === 'null' || modalData.mode !== 1) {
+                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #F22;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間 (未退勤)</span><h2 class="fw-bold">` + modalData.rtime + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
                 } else {
-                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + hours + `:` + ('00' + minutes).slice(-2) + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
+                    modalContext.innerHTML += `<div style="display: flex"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: #18F;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>勤務時間</span><h2 class="fw-bold">` + modalData.rtime + `</h2></span><span style="flex: 1"><span>休憩時間</span><h2 class="fw-bold">` + restHours + `:` + restMinutes + `</h2></span></div></div>`
                 }
             }
             if (requestsData !== undefined) {
@@ -521,40 +396,66 @@
 
             if (modalData !== undefined) {
                 modalContext.innerHTML += `<?php
+                /* @var $confirmStatus */
                 if ($confirmStatus) {
                     echo '<div class="col-md-12 mt-3" id="alert">
-                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr><div class="row">';
+                    echo '<div class="mb-3 col-md-12 col-lg-6">
+                <label for="startInput" class="form-label">出勤時刻</label>
+                <input type="time" class="form-control" id="startInput" placeholder="未設定"
+                       value="`+modalData.start+`" disabled
+                >
+            </div>';
+                    echo '` + (modalData.mode == 1 ? `<div class="mb-3 col-md-12 col-lg-6">
+                <label for="endInput" class="form-label">退勤時刻</label>
+                <input type="time" class="form-control" id="endInput" placeholder="未設定"
+                       value="`+modalData.end+`" disabled
+                >
+            </div> ` : ``) + `';
+
+                    echo '
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="restInput" class="form-label">休憩時間</label>
                 <input type="time" class="form-control" id="restInput" placeholder="未設定"
                        value="`+modalData.rest+`" disabled
                 >
-            </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
+            </div></div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px" disabled>`+modalData.comment+`</textarea>';
                 } else {
                     echo '<div class="col-md-12 mt-3" id="alert">
-                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr>
+                </div><h6 class="mt-3 fw-bold">勤務情報</h6><hr><div class="row">';
+                    echo '<div class="mb-3 col-md-12 col-lg-6">
+                <label for="startInput" class="form-label">出勤時刻</label>
+                <input type="time" class="form-control" id="startInput" placeholder="未設定"
+                       value="`+modalData.start+`"
+                >
+            </div>';
+                    echo '` + (modalData.mode == 1 ? `<div class="mb-3 col-md-12 col-lg-6">
+                <label for="endInput" class="form-label">退勤時刻</label>
+                <input type="time" class="form-control" id="endInput" placeholder="未設定"
+                       value="`+modalData.end+`"
+                >
+            </div> ` : ``) + `';
+
+                    echo '
             <div class="mb-3 col-md-12 col-lg-6">
                 <label for="restInput" class="form-label">休憩時間</label>
                 <input type="time" class="form-control" id="restInput" placeholder="未設定"
                        value="`+modalData.rest+`"
                 >
-            </div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px">`+modalData.comment+`</textarea><button class="btn btn-primary" id="saveBtn" style="float: right; margin-top: 7px" onclick="saveComment(\'`+keys+`\')">勤務詳細を保存</button>';
+            </div></div><h6 class="mt-3 fw-bold">勤務詳細</h6><textarea id="textArea" class="form-control mt-2" style="width: 100%; min-height: 200px">`+modalData.comment+`</textarea><button class="btn btn-primary" id="saveBtn" style="float: right; margin-top: 7px" onclick="saveComment(\'`+keys+`\')">勤務詳細を保存</button>';
                 }
                 ?>`
             }
             console.log("TotalHours: " + hours + ":" + minutes)
 
             // language=HTML
-            primaryButton.innerText = "新規申請"
+            primaryButton.style.display = "none"
             secondaryButton.innerText = "閉じる"
             mode = 1
             jQuery('#basicModal').modal("show");
         }
 
         function attendManagePrimary() {
-            if (mode === 1 && currentDay != 0) {
-                location = "/request/create?date=" + year + "-" + ('00' + month).slice(-2) + "-" + ('00' + currentDay).slice(-2)
-            }
         }
 
         function attendManageSecondary() {
@@ -571,15 +472,25 @@
 
             let saveBtn = document.getElementById("saveBtn")
             let restTime = document.getElementById("restInput")
+            let endValue = null
+            try {
+                let endInput = document.getElementById("endInput")
+                endValue = endInput.value
+            } catch (error) {
+            }
+
             let textArea = document.getElementById("textArea")
             saveBtn.setAttribute("disabled", "")
             saveBtn.innerText = "保存しています"
+
             alert.innerHTML = ""
 
             axios
                 .post("/api/v1/attends/comment/set", {
                     text: textArea.value,
                     rest: restTime.value,
+                    start: startInput.value,
+                    end: endValue,
                     user: {{$user->id}},
                     date: date
                 })
