@@ -3,5 +3,19 @@
 ### 起動前の準備
 
 1. `artisan migrate:fresh --seed`
-2. `npm install`
-2. `npm run dev`
+2. `composer install`
+3. `npm install`
+4. `npm run dev`
+
+---
+
+### アカウント
+
+#### 管理者1  
+Mail: `admin@localhost.com`  
+Pass: `aaaaaaaa`  
+
+#### ユーザー  
+Mail: `tester.test.jp`  
+Pass: `aaaaaaaa`  
+  
