@@ -8,19 +8,29 @@
             <div class="col-md-10 col-12">
                 @if($data != null && $data->mode == 0)
                     <div class="row">
-                        <div class="col-auto vert-center-40 pr-0">
+                        <div class="col-6 col-md-auto vert-center-40 pr-0">
                             労働時間
                         </div>
-                        <div class="col-auto vert-center-40 fw-bold font-26">
-                            {{$interval}}
+                        <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
+                            {!! $interval !!}
                         </div>
-                        <div class="col-md-1 col-sm-3">
-                        </div>
-                        <div class="col-auto vert-center-40 pr-0">
+                        <div class="col-6 col-md-auto vert-center-40 pr-0">
                             出勤時刻
                         </div>
-                        <div class="col-auto vert-center-40 fw-bold font-26">
+                        <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
                             {{$data->created_at->format("G:i")}}
+                        </div>
+                        <div class="col-6 col-md-auto vert-center-40 pr-0">
+                            退勤時刻
+                        </div>
+                        <div class="col-6 col-md-auto vert-center-40 fw-bold font-26 text-muted">
+                            --:--
+                        </div>
+                        <div class="col-6 col-md-auto vert-center-40 pr-0">
+                            合計時間
+                        </div>
+                        <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
+                            {{$origin}}
                         </div>
                     </div>
                 @elseif($data != null && $data->mode == 1)
@@ -29,7 +39,7 @@
                             労働時間
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
-                            {{$interval}}
+                            {!! $interval !!}
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 pr-0">
                             出勤時刻
@@ -105,7 +115,7 @@
                     <div class="mb-3 col-sm-12 col-md-6 col-lg-4">
                         <label for="startInput" class="form-label">出勤時刻</label>
                         <input type="time" class="form-control" id="startInput" placeholder="未設定"
-                               value="{{substr(($data->created_at->format("h:i") ?? "00:00:00"), 0, 5)}}"
+                               value="{{substr(($data->created_at->format("H:i") ?? "00:00:00"), 0, 5)}}"
                         >
                     </div>
                     @if($data->mode == 1)

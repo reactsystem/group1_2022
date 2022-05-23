@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('pageTitle', "管理者コントロールパネル")
+@section('pageTitle', "管理者CP")
 
 @section('content')
     <div class="container">

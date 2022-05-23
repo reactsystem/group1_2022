@@ -3,7 +3,7 @@
 @section('pageTitle', "各種申請")
 
 @section('content')
-    <div class="container">
+    <div class="container mb-5">
         <div class="row">
             <div class="col-md-6">
                 <h2 class="fw-bold">各種申請</h2>

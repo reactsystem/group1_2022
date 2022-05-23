@@ -26,57 +26,60 @@ class UserEditController extends Controller
     }
 
     // ユーザー情報編集へ
-    function account_edit(Request $request){
-        if(!Auth::check()){
+    function account_edit(Request $request)
+    {
+        if (!Auth::check()) {
             return redirect('/login');
         }
         $user = User::where('users.id', Auth::id())->leftJoin("departments", "users.department", "departments.id")->select("users.*", "departments.name as dname")->first();
-        return view('front/account/account_edit',['user' => $user,]);
+        return view('front/account/account_edit', ['user' => $user,]);
     }
 
     // ユーザー情報変更
-    function account_edit_done(Request $request){
-        if(!Auth::check()){
+    function account_edit_done(Request $request)
+    {
+        if (!Auth::check()) {
             return redirect('/login');
         }
         $auth_user = Auth::user();
-        $user = User::find ($auth_user['id']);
-        $user -> name = $request ->InputName;
+        $user = User::find($auth_user['id']);
+        $user->name = $request->InputName;
         $user->email = $request->InputEmail;
         Notification::create(['user_id' => 0, 'title' => 'ユーザー情報が更新されました', 'data' => $user->name . 'がユーザー情報を更新しました。', 'url' => '/admin/attends/view?id=' . $user->id, 'status' => 0]);
 
-        $user -> save();
-        return view('front/account/account',['user' => $user,]);
+        $user->save();
+        return view('front/account/account', ['user' => $user,]);
     }
 
     // ユーザーパスワード変更へ
-    function password_update(Request $request){
-        if(!Auth::check()){
+    function password_update(Request $request)
+    {
+        if (!Auth::check()) {
             return redirect('/login');
         }
         $user = Auth::user();
-        return view('front/account/password_update',['user' => $user,]);
+        return view('front/account/password_update', ['user' => $user,]);
     }
 
     protected function validator(array $data)
     {
-        return Validator::make($data,[
+        return Validator::make($data, [
             'new_password' => 'required|string|min:8|confirmed',
         ]);
     }
 
     //
-    function password_update_done(Request $request){
-        if(!Auth::check()){
+    function password_update_done(Request $request)
+    {
+        if (!Auth::check()) {
             return redirect('/login');
         }
         $auth_user = Auth::user();
-        $user = User::find ($auth_user['id']);
+        $user = User::find($auth_user['id']);
 
-        if(!password_verify($request->current_password,$user->password))
-        {
+        if (!password_verify($request->current_password, $user->password)) {
             return redirect('/account/password_update')
-                ->with('warning','パスワードが違います');
+                ->with('warning', 'パスワードが違います');
         }
 
         //新規パスワードの確認

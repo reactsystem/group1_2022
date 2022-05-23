@@ -100,7 +100,15 @@ class RequestController extends Controller
     {
         $types = RequestType::where('deleted_at', null)->get();
         $reqDate = $request->date;
-        return view('front.request.create', compact('types', 'reqDate'));
+        $interval = 0;
+        try {
+            $dateNow = new DateTime();
+            $dateTime = new DateTime($reqDate);
+            $interval = $dateTime->diff($dateNow);
+        } catch (\Exception $e) {
+            $reqDate = "";
+        }
+        return view('front.request.create', compact('types', 'reqDate', 'interval'));
     }
 
     function checkRequestBack(Request $request)
