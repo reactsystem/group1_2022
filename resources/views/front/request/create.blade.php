@@ -26,7 +26,7 @@
                            data-language='en'
                            data-multiple-dates-separator=", "
                            placeholder="クリックして日付を選択"
-                           value="{{old('dates')}}{{$reqDate}}"
+                           value="{{old('dates')}}"
                            data-position='top left' readonly/>
                     <div class="form-text">最大10日までまとめて選択できます</div>
                 </div>
@@ -233,11 +233,48 @@
             timeFormat: 'HH:mm',
             firstDay: 0
         };
+        const maxDateValue = new Date()
+        maxDateValue.setDate(maxDateValue.getDate() + 365)
+        const minDateValue = new Date()
+        minDateValue.setDate(minDateValue.getDate() - 90)
+        const dateStr = "{{$reqDate ?? ""}}";
+        let year = 2022
+        let month = 1
+        let day = 1
+        if (dateStr !== "") {
+            console.log("DATE STR: " + dateStr)
+            const dateData = dateStr.split("-")
+            year = parseInt(dateData[0])
+            month = parseInt(dateData[1])
+            day = parseInt(dateData[2])
+            console.log("YEAR: " + year + " MONTH: " + month + " DAY: " + day)
+        }
+        const date = new Date(dateStr)
+
+        console.log(date)
+        /*
+        <?php var_dump($interval);?>
+        */
+        console.log("INTERVAL: ")
+
         new AirDatepicker('#requestDate', {
             locale: localeEs,
             multipleDates: 10,
+            selectedDates: [date],
+            todayButton: new Date({{$reqDate ?? ""}}),
+            minDate: minDateValue,
+            maxDate: maxDateValue,
+            onRenderCell: function (date, cellType) {
+                if (cellType === 'day') {
+                    const day = date.getDay(),
+                        isDisabled = disabledDays.indexOf(day) !== -1
+                    return {
+                        disabled: isDisabled
+                    }
+                }
+            },
             onSelect({date}) {
-                timeAvailable = (date + '') !== '';
+                timeAvailable = (date + '') !== ''
                 console.log('TIME: ' + date)
                 checkData()
             }

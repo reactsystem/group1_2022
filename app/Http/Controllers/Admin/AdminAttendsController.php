@@ -21,61 +21,66 @@ use Illuminate\Support\Facades\Validator;
 class AdminAttendsController extends Controller
 {
     // メイン画面
-    function admin_attends(){
+    function admin_attends()
+    {
         $users = User::orderBy('id', 'asc')->paginate(10);
         $departments = Department::where('deleted_at', null)->get();
         $parameters = '';
 
-        return view('admin/user/admin_attends',['users' => $users,'parameters' =>$parameters,'departments' => $departments]);
+        return view('admin/user/admin_attends', ['users' => $users, 'parameters' => $parameters, 'departments' => $departments]);
     }
 
-    function admin_search(Request $request){
-        $users = User::orderBy('id' , 'asc');
+    function admin_search(Request $request)
+    {
+        $users = User::orderBy('id', 'asc');
 
-        if(isset($request ->id)){
-            $users ->where('employee_id','LIKE','%'.$request->id.'%');
+        if (isset($request->id)) {
+            $users->where('employee_id', 'LIKE', '%' . $request->id . '%');
         }
-        if(isset($request ->name)){
-            $users ->where('name','LIKE','%'.$request->name.'%');
+        if (isset($request->name)) {
+            $users->where('name', 'LIKE', '%' . $request->name . '%');
         }
-        if(isset($request ->department)){
-            $users ->where('department','=',$request->department);
+        if (isset($request->department)) {
+            $users->where('department', '=', $request->department);
         }
 
         $users = $users->paginate(10);
         $parameters = '';
         $departments = Department::where('deleted_at', null)->get();
-        return view('admin/user/admin_attends',['users' => $users,'parameters' =>$parameters ,'departments' => $departments]);
+        return view('admin/user/admin_attends', ['users' => $users, 'parameters' => $parameters, 'departments' => $departments]);
     }
 
     // ユーザー新規登録
-    function admin_new(){
+    function admin_new()
+    {
         $departments = Department::where('deleted_at', null)->get();
-        return view('admin/user/admin_new',['departments' => $departments]);
+        return view('admin/user/admin_new', ['departments' => $departments]);
     }
 
     // ユーザー情報個別確認
-    function admin_view(Request $request){
-        if(empty($request -> id)){
+    function admin_view(Request $request)
+    {
+        if (empty($request->id)) {
             return redirect('/admin/attends');
         }
 
-        $user = User::find($request -> id);
+        $user = User::find($request->id);
         $departments = Department::all();
-        if(empty($user_memo))$user_memo = '';
-        return view('admin/user/admin_view',['user' => $user,'departments' => $departments,'user_memo' =>$user_memo]);
+        if (empty($user_memo)) $user_memo = '';
+        return view('admin/user/admin_view', ['user' => $user, 'departments' => $departments, 'user_memo' => $user_memo]);
     }
 
     // ユーザー情報個別編集
-    function admin_edit(Request $request){
-        if(empty($request -> id)){
+    function admin_edit(Request $request)
+    {
+        if (empty($request->id)) {
             return redirect('/admin/attends');
         }
 
         $user = User::find($request->id);
         $departments = Department::where('deleted_at', null)->get();
-        if(empty($user_memo))$user_memo = '';
-        return view('admin/user/admin_edit',['user' => $user,'departments' => $departments,'user_memo' =>$user_memo]);
+        if (empty($user_memo)) $user_memo = '';
+        return view('admin/user/admin_edit', ['user' => $user, 'departments' => $departments, 'user_memo' => $user_memo]);
     }
 
     // ユーザー追加
@@ -100,12 +105,12 @@ class AdminAttendsController extends Controller
 
         $user_memo = new UserMemo();
         $user_memo->user_id = $last_insert_id;
-        if(isset($request -> memo)){
-        $user_memo -> memo = $request -> memo;
-        }else{
-            $user -> memo = '記入なし';
+        if (isset($request->memo)) {
+            $user_memo->memo = $request->memo;
+        } else {
+            $user->memo = '記入なし';
         }
-        $user_memo -> save();
+        $user_memo->save();
         return redirect('/admin/attends');
     }
 
@@ -163,12 +168,12 @@ class AdminAttendsController extends Controller
         $user->save();
 
         $user_memo = UserMemo::where('user_id', '=', $request->id)->first();
-        if(isset($request->memo)){
+        if (isset($request->memo)) {
             $user_memo->memo = $request->memo;
-        }else{
-            $user_memo->memo ='記入なし';
+        } else {
+            $user_memo->memo = '記入なし';
         }
-        $user_memo -> save();
+        $user_memo->save();
         return redirect('/admin/attends');
     }
 

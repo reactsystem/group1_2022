@@ -111,7 +111,7 @@
     </style>
     <div class="container">
         <div class="row" style="width: 100%; margin-left: 0">
-            <div id="sidebarBase" class="col-lg-4 col-xl-3 col-md-12 text-dark sidebar-base">
+            <div id="sidebarBase" class="col-lg-4 col-xl-3 col-md-12 mb-3 text-dark sidebar-base">
                 <ul class="sidebar-data">
                     <li class="sidebar-list<?php if (Request::is('home')) {
                         echo ' active';
@@ -134,6 +134,7 @@
                     }?>" onclick="href('/account')"><span style="color: #888;">●</span> ユーザー管理
                     </li>
                     @if(Auth::user()->group_id == 1)
+                        <hr>
                         <li class="sidebar-list<?php if (Request::is('admin')) {
                             echo ' active';
                         }?>" onclick="href('/admin')"><span style="color: #888;">●</span> 管理者CP

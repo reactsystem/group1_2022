@@ -106,7 +106,7 @@
     </style>
     <div class="container">
         <div class="row" style="width: 100%; margin-left: 0">
-            <div id="sidebarBase" class="col-lg-4 col-xl-3 col-md-12 text-dark sidebar-base">
+            <div id="sidebarBase" class="col-lg-4 col-xl-3 col-md-12 mb-3 text-dark sidebar-base">
                 <ul class="sidebar-data">
                     <li class="sidebar-list<?php if (Request::is('admin')) {
                         echo ' active';
@@ -127,6 +127,9 @@
                     <li class="sidebar-list<?php if (Request::is('admin/settings*')) {
                         echo ' active';
                     }?>" onclick="href('/admin/settings')"><span style="color: #888;">●</span> システム設定
+                    </li>
+                    <li class="pointer-nonevent">
+                        <hr class="bg-gray2">
                     </li>
                     <li class="sidebar-list<?php if (Request::is('home')) {
                         echo ' active';

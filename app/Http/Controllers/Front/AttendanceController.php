@@ -68,6 +68,9 @@ class AttendanceController extends Controller
             }
             $restTime = ($rHours * 60 + $rMinutes) * 60;
             $interval = $xhours . ":" . sprintf("%02d", $xminutes);
+            if ($xhours == 0 && $xminutes == 0) {
+                $interval = "<span class='text-danger'>" . ($xhours . ":" . sprintf("%02d", $xminutes)) . "</span>";
+            }
             $origin = $wHours . ":" . sprintf("%02d", $wMinutes);
         }
         if ($data->mode == 1) {
@@ -79,6 +82,7 @@ class AttendanceController extends Controller
 
     public function attend(Request $request): Redirector|Application|RedirectResponse
     {
+        $config = Configuration::find(1);
         $tempDate = new DateTime();
         $data = MonthlyReport::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-m'))->first();
         if ($data != null) {
@@ -99,6 +103,7 @@ class AttendanceController extends Controller
             'user_id' => Auth::id(),
             'mode' => 0,
             'time' => "00:00",
+            'rest' => ($config->rest ?? "00:45:00"),
             'comment' => '',
         ]);
         return redirect("/attends")->with('result', '出勤しました。');
