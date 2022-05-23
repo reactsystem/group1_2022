@@ -276,7 +276,7 @@ class AdminAttendManagementController
         $dataList = Attendance::where('user_id', '=', $user->id)->where("attendances.deleted_at", "=", null)->where('date', 'LIKE', "%$likeMonth%")->get();
 
         $tempDate = new DateTime();
-        $todayData = Attendance::where("user_id", "=", $user->id)->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
+        $todayData = Attendance::where("user_id", "=", $user->id)->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format($year . '-' . $month . '-j'))->orderByDesc("date")->first();
         $hours = 0;
         $minutes = 0;
         $hoursReq = 0;
@@ -493,7 +493,7 @@ class AdminAttendManagementController
         $data = mb_convert_encoding($data, "SJIS", "UTF-8");
         $fileName = "";
         if ($month == -1) {
-            $fileName = "{$user->name} 勤務データ({$year}年度).csv";
+            $fileName = "{$user->name} 勤務データ({$year}年).csv";
         } else {
             $fileName = "{$user->name} 勤務データ({$year}年{$month}月).csv";
         }
@@ -526,7 +526,7 @@ class AdminAttendManagementController
         $data = mb_convert_encoding($data, "SJIS", "UTF-8");
         $fileName = "";
         if ($month == -1) {
-            $fileName = "{$user->name} 申請データ({$year}年度).csv";
+            $fileName = "{$user->name} 申請データ({$year}年).csv";
         } else {
             $fileName = "{$user->name} 申請データ({$year}年{$month}月).csv";
         }
