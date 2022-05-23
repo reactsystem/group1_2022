@@ -299,7 +299,7 @@
                 .post("/api/v1/attends/comment/set", {
                     @if(env("ENABLE_EDIT_ATTENDANCE", false))
                     start: startInput.value,
-                    @if($data->mode == 1)
+                    @if(($data->mode ?? 0) == 1)
                     end: endInput.value,
                     @endif
                         @endif
@@ -310,7 +310,7 @@
                     const resultCode = res.data.code
                     console.log("Result: " + resultCode)
                     if (resultCode == 0) {
-                        saveBtn.className = "btn btn-success"
+                        saveBtn.className = "btn btn-success float-right"
                         saveBtn.innerText = "保存しました"
                         alert.innerHTML = '<div class="alert alert-success" role="alert">' +
                             '<strong>成功</strong> - 保存が完了しました。' +
@@ -328,12 +328,12 @@
                         }
                         alertStr += '</div>';
                         alert.innerHTML = alertStr
-                        saveBtn.className = "btn btn-danger"
+                        saveBtn.className = "btn btn-danger float-right"
                         saveBtn.innerText = "保存失敗"
                         await _sleep(2000)
                     }
                     saveBtn.removeAttribute("disabled")
-                    saveBtn.className = "btn btn-primary"
+                    saveBtn.className = "btn btn-primary float-right"
                     saveBtn.innerText = "勤務詳細を保存"
                 })
         }
