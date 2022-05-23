@@ -9,16 +9,6 @@
 
 // BASIC STYLES
 
-.card-hover {
-    box-shadow: 0 0 0;
-    transition-duration: 0.1s;
-}
-
-.card-hover:hover {
-    box-shadow: 0 0 10px #CCC;
-    transition-duration: 0.2s;
-}
-
 .bg-darken {
     background-color: #222;
 }
@@ -41,6 +31,18 @@
 
 .bg-blue {
     background-color: #BBF;
+}
+
+// COMPONENT STYLES
+
+.card-hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+    transition-duration: 0.4s;
+
+    &:hover {
+        box-shadow: 0 0 10px #CCC;
+        transition-duration: 0.2s;
+    }
 }
 
 // CALENDER STYLES
@@ -234,6 +236,8 @@
     text-align: center;
 }
 
+// LAYOUT STYLES
+
 .header-flex-area {
     display: flex;
     flex-direction: row-reverse;
@@ -349,13 +353,13 @@
 .attends-row {
     transition-duration: 0.2s;
     cursor: pointer;
-}
 
-.attends-row:hover {
-    transition-duration: 0.05s;
-    box-shadow: 0 0 10px #999;
-    background-color: #0b5ed7;
-    color: #fff;
+    &:hover {
+        transition-duration: 0.05s;
+        box-shadow: 0 0 10px #999;
+        background-color: #0b5ed7;
+        color: #fff;
+    }
 }
 
 .width-100 {
@@ -403,11 +407,11 @@
     margin-right: 12px;
     color: #888;
     transition-duration: 0.4s;
-}
 
-.sidebarBtn:hover {
-    color: #fff;
-    transition-duration: 0.4s;
+    &:hover {
+        color: #fff;
+        transition-duration: 0.4s;
+    }
 }
 
 #sectionTitle2 {

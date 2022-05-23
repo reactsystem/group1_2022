@@ -129,7 +129,7 @@
                     const resultCode = res.data.code
                     console.log("Result: " + resultCode + " / " + res.data.message)
                     if (resultCode === 0) {
-                        saveBtn.className = "btn btn-success"
+                        saveBtn.className = "btn btn-success float-right"
                         saveBtn.innerText = "保存しました"
                         await _sleep(1000)
                         location = "/admin/attend-manage/view/" + res.data.id
@@ -145,12 +145,12 @@
                         }
                         alertStr += '</div>';
                         alert.innerHTML = alertStr
-                        saveBtn.className = "btn btn-danger"
+                        saveBtn.className = "btn btn-danger float-right"
                         saveBtn.innerText = "保存失敗"
                         await _sleep(2000)
                     }
                     saveBtn.removeAttribute("disabled")
-                    saveBtn.className = "btn btn-primary"
+                    saveBtn.className = "btn btn-primary float-right"
                     saveBtn.innerText = "保存"
                 })
         }

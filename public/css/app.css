@@ -11254,21 +11254,21 @@ textarea.form-control-lg {
     display: inline-block !important;
   }
 
-  .d-print-block {
-    display: block !important;
-  }
+    .d-print-block {
+        display: block !important;
+    }
 
-  .d-print-grid {
-    display: grid !important;
-  }
+    .d-print-grid {
+        display: grid !important;
+    }
 
-  .d-print-table {
-    display: table !important;
-  }
+    .d-print-table {
+        display: table !important;
+    }
 
-  .d-print-table-row {
-    display: table-row !important;
-  }
+    .d-print-table-row {
+        display: table-row !important;
+    }
 
     .d-print-table-cell {
         display: table-cell !important;
@@ -11286,16 +11286,6 @@ textarea.form-control-lg {
         display: none !important;
     }
 }
-.card-hover {
-    box-shadow: 0 0 0;
-    transition-duration: 0.1s;
-}
-
-.card-hover:hover {
-    box-shadow: 0 0 10px #CCC;
-    transition-duration: 0.2s;
-}
-
 .bg-darken {
     background-color: #222;
 }
@@ -11318,6 +11308,16 @@ textarea.form-control-lg {
 
 .bg-blue {
     background-color: #BBF;
+}
+
+.card-hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+    transition-duration: 0.4s;
+}
+
+.card-hover:hover {
+    box-shadow: 0 0 10px #CCC;
+    transition-duration: 0.2s;
 }
 
 .calender-doy {
@@ -11624,7 +11624,6 @@ textarea.form-control-lg {
     transition-duration: 0.2s;
     cursor: pointer;
 }
-
 .attends-row:hover {
     transition-duration: 0.05s;
     box-shadow: 0 0 10px #999;
@@ -11676,7 +11675,6 @@ textarea.form-control-lg {
     color: #888;
     transition-duration: 0.4s;
 }
-
 .sidebarBtn:hover {
     color: #fff;
     transition-duration: 0.4s;
