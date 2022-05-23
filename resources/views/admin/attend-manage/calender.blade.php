@@ -25,7 +25,7 @@
                             </li>
                         @endif
                         <li><a class="dropdown-item"
-                               href="/admin/attend-manage/download/{{$user->id}}/{{$year}}/-1">年度勤務データ出力</a>
+                               href="/admin/attend-manage/download/{{$user->id}}/{{$year}}/-1">当年勤務データ出力</a>
                         </li>
                         @if($reqData != null && count($reqData) != 0)
                             <li><a class="dropdown-item"
@@ -36,7 +36,7 @@
                             </li>
                         @endif
                         <li><a class="dropdown-item"
-                               href="/admin/attend-manage/download-requests/{{$user->id}}/{{$year}}/-1">年度申請データ出力</a>
+                               href="/admin/attend-manage/download-requests/{{$user->id}}/{{$year}}/-1">当年申請データ出力</a>
                         </li>
                     </ul>
                 </div>
