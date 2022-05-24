@@ -32,7 +32,7 @@
             @endif
         </div>
         <hr>
-        <div class="display-flex">
+        <div class="flex-view">
             <h5 class="fw-bold flex-2">
                 {{$data->title}}
             </h5>
