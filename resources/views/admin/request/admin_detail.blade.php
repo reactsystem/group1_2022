@@ -128,27 +128,40 @@
                 break;
         }
         ?>
-        <div><strong>社員名: </strong>{{$this_request->user->employee_id}} / {{$this_request->user->name}}</div>
-        @if($this_request -> type == 1)
-            <div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}
-                日({{$this_request -> time ?? "記入なし"}})
-            </div>
-        @else
-            <div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}日</div>
-        @endif
-        <div><strong>日付：</strong>{{$this_request['date']}}
-            @foreach($related_request as $request)
+        <ul class="list-group">
+            <li class="list-group-item"><div><strong>社員ID: </strong>{{$this_request->user->employee_id}}</div></li>
 
-                {{' , '.$request['date']}}
-            @endforeach
-        </div>
-        <div><strong>ステータス: </strong>{!! $statusText !!}</div>
-        <div><strong>申請種別: </strong>{{$this_request->request_types->name}}</div>
-        @if($this_request->time != NULL)
-            <div><strong>労働時間: </strong>{{$this_request->time}}</div>
-        @endif
-        @if($this_request->reason != "")
-            <div><strong>理由: </strong>{{$this_request->reason ?? "記入なし"}}</div>
-        @endif
+            <li class="list-group-item"><div><strong>社員名: </strong>{{$this_request->user->name}}</div></li>
+
+            @if($this_request -> type == 1)
+            <li class="list-group-item"><div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}
+                    日({{$this_request -> time ?? "記入なし"}})
+                </div></li>
+            @else
+            <li class="list-group-item"><div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}日</div></li>
+            @endif
+
+            <li class="list-group-item"><div><strong>日付：</strong>{{$this_request['date']}}
+                @foreach($related_request as $request)
+
+                    {{' , '.$request['date']}}
+                @endforeach
+            </div></li>
+
+            <li class="list-group-item"><div><strong>ステータス: </strong>{!! $statusText !!}</div></li>
+
+            <li class="list-group-item"><div><strong>申請種別: </strong>{{$this_request->request_types->name}}</div></li>
+            @if($this_request->time != NULL)
+            <li class="list-group-item"><div><strong>労働時間: </strong>{{$this_request->time}}</div></li>
+            @endif
+
+            @if($this_request->reason != "")
+                <li class="list-group-item"><strong>理由: </strong>
+                    <div class="overflow-auto">
+                        {{$this_request->reason ?? "記入なし"}}
+                    </div>
+                </li>
+            @endif
+        </ul>
     </div>
 @endsection
