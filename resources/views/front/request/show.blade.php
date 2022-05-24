@@ -19,7 +19,7 @@
             </div>
         </div>
         <hr>
-        <div class="font-14">
+        <div>
             <?php
             // CHECK STATUS
             $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
@@ -36,19 +36,22 @@
                     break;
             }
             ?>
-            <div><strong>日時: </strong>{{implode(", ", $related['date'])}}</div>
-            <div><strong>ステータス: </strong>{!! $statusText !!}</div>
-            <div><strong>申請種別: </strong>{{$result->name}}</div>
-            @if($result->time != NULL)
-                <div><strong>労働時間: </strong>{{$result->time}}</div>
-            @endif
-            @if($holidays != 0)
-                <div><strong>有給消費: </strong>{{$holidays}}日(残り{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日)
-                </div>
-            @endif
-            @if($result->reason != "")
-                <div><strong>理由: </strong>{{$result->reason}}</div>
-            @endif
+            <ul class="list-group">
+                <li class="list-group-item"><strong>日時: </strong>{{implode(", ", $related['date'])}}</li>
+                <li class="list-group-item"><strong>ステータス: </strong>{!! $statusText !!}</li>
+                <li class="list-group-item"><strong>申請種別: </strong>{{$result->name}}</li>
+                @if($result->time != NULL)
+                    <li class="list-group-item"><strong>労働時間: </strong>{{$result->time}}</li>
+                @endif
+                @if($holidays != 0)
+                    <li class="list-group-item"><strong>有給消費: </strong>{{$holidays}}
+                        日(残り{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日)
+                    </li>
+                @endif
+                @if($result->reason != "")
+                    <li class="list-group-item"><strong>理由: </strong>{{$result->reason}}</li>
+                @endif
+            </ul>
         </div>
     </div>
     @if($result->status == 0)
