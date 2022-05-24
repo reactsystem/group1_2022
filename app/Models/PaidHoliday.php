@@ -72,7 +72,13 @@ class PaidHoliday extends Model
 
     public static function createHoliday(int $userId, int $amount, $addedDate)
     {
-        PaidHoliday::create(['user_id' => $userId, 'amount' => $amount, 'updated_at' => $addedDate, 'created_at' => $addedDate]);
+        $maxDays = env('MAX_PAID_HOLIDAYS', 35);
+        $holidays = self::getHolidays($userId);
+        if (($holidays + $amount) > $maxDays) {
+            $diff = $holidays + $amount - $maxDays;
+            $keys = self::useHolidays($userId, $diff);
+        }
+        return PaidHoliday::create(['user_id' => $userId, 'amount' => $amount, 'updated_at' => $addedDate, 'created_at' => $addedDate]);
     }
 
 }
