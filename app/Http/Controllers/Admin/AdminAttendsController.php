@@ -303,12 +303,7 @@ class AdminAttendsController extends Controller
         try {
             $amount = $request->amount;
             $created = $request->created;
-            $param = [
-                'user_id' => $user_id,
-                'amount' => $amount,
-                'created_at' => $created,
-            ];
-            $id = PaidHoliday::create($param)->id;
+            $id = PaidHoliday::createHoliday($user_id, $amount, $created)->id;
             return response()->json(["error" => false, "code" => 0, "message" => "有給を追加しました。", "id" => $id]);
         } catch (\Exception $e) {
             return response()->json(["error" => true, "code" => 21, "message" => "データの処理中に問題が発生しました。\n" . $e->getMessage() . "\n" . $e->getTraceAsString() . ""]);
