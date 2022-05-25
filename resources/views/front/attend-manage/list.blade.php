@@ -24,6 +24,7 @@
         @media only screen and (min-width: 768px) {
             .calender-main {
                 border-radius: 16px;
+                margin-top: -30px;
             }
 
             .card-header {
@@ -144,8 +145,8 @@
                 </div>
             @endif
             @foreach($attendData as $data)
-                <div class="card work-card calender-main"
-                     onclick="openDescModal({{$data->created_at->format('d')}})">
+                    <div class="card work-card calender-main card-hover pointer-cursor mb-3"
+                         onclick="openDescModal({{$data->created_at->format('d')}})">
                     <div class="card-header calender-card-header">
                         {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span><?php
                             try {
