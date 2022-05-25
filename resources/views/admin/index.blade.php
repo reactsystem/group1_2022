@@ -6,11 +6,19 @@
     <div class="container">
         <h2 class="fw-bold">ダッシュボード</h2>
         <hr>
-        <h4 class="fw-bold mt-4">新着通知</h4>
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <h3 class="fw-bold">新着通知</h3>
+            </div>
+            <div class="col-md-4">
+                <a href="/admin/settings/notifications" class="btn btn-primary float-right">通知一覧</a>
+            </div>
+        </div>
         <hr>
         @if($notifications != null && count($notifications) != 0)
             @foreach($notifications as $notification)
-                <div class="card mb-3 card-hover pointer-cursor" onclick="href('/notification/{{$notification->id}}')">
+                <div class="card mb-3 card-hover pointer-cursor"
+                     onclick="href<?php echo(preg_match("/http[ |s]:\/\//", $notification->url) ? "Blank" : "");?>('/notification/{{$notification->id}}')">
                     <div class="card-body">
                         <span
                             style="color: {{"#".$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span
