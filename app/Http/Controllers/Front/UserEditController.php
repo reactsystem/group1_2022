@@ -43,8 +43,15 @@ class UserEditController extends Controller
         }
         $auth_user = Auth::user();
         $user = User::find($auth_user['id']);
-        $user->name = $request->InputName;
-        $user->email = $request->InputEmail;
+        if (env('ENABLE_NAME_EDIT', true)) {
+            $user->name = $request->InputName;
+        }
+        if (env('ENABLE_EMAIL_EDIT', true)) {
+            $user->email = $request->InputEmail;
+        }
+        if (!env('ENABLE_NAME_EDIT', true) && !env('ENABLE_EMAIL_EDIT', true)) {
+            return view('front/account/account', ['user' => $user,]);
+        }
         Notification::create(['user_id' => 0, 'title' => 'ユーザー情報が更新されました', 'data' => $user->name . 'がユーザー情報を更新しました。', 'url' => '/admin/attends/view?id=' . $user->id, 'status' => 0]);
 
         $user->save();

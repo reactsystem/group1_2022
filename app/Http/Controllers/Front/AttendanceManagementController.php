@@ -196,7 +196,7 @@ class AttendanceManagementController extends Controller
             $confirmStatus = -1;
         }
         $user = Auth::user();
-        if ($mode == 1) {
+        if ($mode == 1 && env('ENABLE_LIST_VIEW', true)) {
             return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
         } else {
             return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
