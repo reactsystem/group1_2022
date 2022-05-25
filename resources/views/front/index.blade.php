@@ -5,10 +5,10 @@
 @section('content')
     <div class="container">
         <div class="row mt-5">
-            <div class="col-md-8">
+            <div class="col-md-8 col-sm-6 col-6">
                 <h3 class="fw-bold">新着通知</h3>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6 col-6">
                 <a href="/account/notifications" class="btn btn-primary float-right">通知一覧</a>
             </div>
         </div>

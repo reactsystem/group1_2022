@@ -101,11 +101,11 @@
         </div>
         <hr>
         @if($data != null)
-            <div class="row">
-                <div class="col-md-8">
+            <div class="row mb-2">
+                <div class="col-md-8 col-sm-5 col-5">
                     <h5 class="vert-center-40">勤務情報</h5>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-7 col-7">
                     <button class="btn btn-primary float-right ml-5px" id="saveBtn" onclick="saveComment()">勤務情報を保存
                     </button>
                 </div>

@@ -7,10 +7,10 @@
         <h2 class="fw-bold">ダッシュボード</h2>
         <hr>
         <div class="row mt-4">
-            <div class="col-md-8">
+            <div class="col-md-8 col-sm-6 col-6">
                 <h3 class="fw-bold">新着通知</h3>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6 col-6">
                 <a href="/admin/settings/notifications" class="btn btn-primary float-right">通知一覧</a>
             </div>
         </div>
@@ -34,10 +34,10 @@
             </span>
         @endif
         <div class="row mt-5">
-            <div class="col-md-8">
+            <div class="col-md-8 col-sm-6 col-6">
                 <h4 class="fw-bold">対応待ちの申請 ({{$requests->total()}}個)</h4>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6 col-6">
                 <a href="/admin/request" class="btn btn-primary float-right">申請一覧</a>
             </div>
         </div>
@@ -83,78 +83,80 @@
             </span>
         @endif
         <div class="row mt-5">
-            <div class="col-md-8">
-                <h4 class="fw-bold">最新15件の勤怠ログ</h4>
+            <div class="col-md-8 col-sm-7 col-7">
+                <h4 class="fw-bold">最新15件の勤怠</h4>
             </div>
-            <div class="col-md-4">
-                <a href="/admin/attend-manage" class="btn btn-primary float-right">勤怠情報管理</a>
+            <div class="col-md-4 col-sm-5 col-5">
+                <a href="/admin/attend-manage" class="btn btn-primary float-right">勤怠管理</a>
             </div>
         </div>
         <hr>
-        <table class="table mb-5">
-            <tr>
-                <th>日付</th>
-                <th>社員名</th>
-                <th>状態</th>
-                <th>出勤</th>
-                <th>退勤</th>
-                <th>勤務時間</th>
-            </tr>
-            @foreach($data as $dat)
-                <tr class="attends-row" onclick="jump('/admin/attend-manage/view/{{$dat->id}}')">
-                    <td>
-                        <?php
-                        /* @var $dat */
-                        $date_now = new DateTime($dat->date);
-                        echo $date_now->format('Y年m月d日');
-                        ?>
-                    </td>
-                    <td>
-                        {{$dat->name}}
-                    </td>
-                    <td>
-                        {{$dat->mode == 1 ? "退勤済" : "出勤中"}}
-                    </td>
-                    <td>
-                        {{$dat->created_at}}
-                    </td>
-                    <td>
-                        {{$dat->left_at ?? "--:--"}}
-                    </td>
-                    <td>
-                        <?php
-                        $date_now = new DateTime();
-                        $interval = $dat->created_at->diff($date_now);
-                        $created = new DateTime($dat->created_at->format("H:i:50"));
-                        $intervalTime = $created->diff($date_now);
-                        if ($dat->mode == 1 && $dat->left_at != null) {
-                            $tempLeftDat1 = preg_split("/ /", $dat->left_at);
-                            $tempLeftDat2 = preg_split("/:/", $tempLeftDat1[1]);
-                            $datx = $tempLeftDat2[0] . ":" . $tempLeftDat2[1] . ":50";
-                            $left = new DateTime($tempLeftDat2[0] . ":" . $tempLeftDat2[1] . ":50");
-                            $intervalTime = $created->diff($left);
-                            //$intervalTime->set
-                        }
-
-                        $datArray = preg_split("/:/", $intervalTime->format('%h:%I'));
-                        $restData = preg_split("/:/", $dat->rest ?? "00:00");
-                        $wHours = intval($datArray[0]);
-                        $wMinutes = intval($datArray[1]);
-                        $rHours = intval($restData[0]);
-                        $rMinutes = intval($restData[1]);
-                        $xHours = max(0, $wHours - $rHours);
-                        $xMinutes = $wMinutes - $rMinutes;
-                        if ($xMinutes < 0 && $xHours != 0) {
-                            $xMinutes = 60 - abs($xMinutes);
-                            $xHours -= 1;
-                        } else if ($xMinutes < 0) {
-                            $xMinutes = 0;
-                        }
-                        echo $xHours . ":" . sprintf("%02d", $xMinutes);
-                        ?>
-                    </td>
+        <div class="table-responsive">
+            <table class="table mb-5">
+                <tr>
+                    <th>日付</th>
+                    <th>社員名</th>
+                    <th>状態</th>
+                    <th>出勤</th>
+                    <th>退勤</th>
+                    <th>勤務時間</th>
                 </tr>
-            @endforeach
-        </table>
+                @foreach($data as $dat)
+                    <tr class="attends-row" onclick="jump('/admin/attend-manage/view/{{$dat->id}}')">
+                        <td>
+                            <?php
+                            /* @var $dat */
+                            $date_now = new DateTime($dat->date);
+                            echo $date_now->format('Y年m月d日');
+                            ?>
+                        </td>
+                        <td>
+                            {{$dat->name}}
+                        </td>
+                        <td>
+                            {{$dat->mode == 1 ? "退勤済" : "出勤中"}}
+                        </td>
+                        <td>
+                            {{$dat->created_at}}
+                        </td>
+                        <td>
+                            {{$dat->left_at ?? "--:--"}}
+                        </td>
+                        <td>
+                            <?php
+                            $date_now = new DateTime();
+                            $interval = $dat->created_at->diff($date_now);
+                            $created = new DateTime($dat->created_at->format("H:i:50"));
+                            $intervalTime = $created->diff($date_now);
+                            if ($dat->mode == 1 && $dat->left_at != null) {
+                                $tempLeftDat1 = preg_split("/ /", $dat->left_at);
+                                $tempLeftDat2 = preg_split("/:/", $tempLeftDat1[1]);
+                                $datx = $tempLeftDat2[0] . ":" . $tempLeftDat2[1] . ":50";
+                                $left = new DateTime($tempLeftDat2[0] . ":" . $tempLeftDat2[1] . ":50");
+                                $intervalTime = $created->diff($left);
+                                //$intervalTime->set
+                            }
+
+                            $datArray = preg_split("/:/", $intervalTime->format('%h:%I'));
+                            $restData = preg_split("/:/", $dat->rest ?? "00:00");
+                            $wHours = intval($datArray[0]);
+                            $wMinutes = intval($datArray[1]);
+                            $rHours = intval($restData[0]);
+                            $rMinutes = intval($restData[1]);
+                            $xHours = max(0, $wHours - $rHours);
+                            $xMinutes = $wMinutes - $rMinutes;
+                            if ($xMinutes < 0 && $xHours != 0) {
+                                $xMinutes = 60 - abs($xMinutes);
+                                $xHours -= 1;
+                            } else if ($xMinutes < 0) {
+                                $xMinutes = 0;
+                            }
+                            echo $xHours . ":" . sprintf("%02d", $xMinutes);
+                            ?>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
     </div>
 @endsection
