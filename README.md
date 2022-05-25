@@ -26,3 +26,6 @@ Pass: `aaaaaaaa`
 ### マニュアル
 
 [ユーザーマニュアル (Google ドキュメント)](https://docs.google.com/document/d/1Nq9XZj8DyVy_iF-AnEuR676xrMcydwp_HxSSdBQNBi8/edit?usp=sharing)
+[ユーザーマニュアル (PDF形式)](https://drive.google.com/file/d/1YB4c6BgMmYE5JnS-3yQa3DsMU3c22yvQ/view?usp=sharing)
+
+[管理者マニュアル (Google ドキュメント)](https://docs.google.com/document/d/1dVCJ83R_aHiNoRDpcCdavFXmtRa_6USWVpbInMNQ6hM/edit?usp=sharing)
