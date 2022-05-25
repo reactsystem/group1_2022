@@ -60,9 +60,11 @@
                         月報確定
                     </button>
                 @endif
-                <a href="/attend-manage?year={{$year}}&month={{$month}}&mode=1" class="btn btn-secondary height-40">
-                    リスト表示
-                </a>
+                @if(env('ENABLE_LIST_VIEW', true))
+                    <a href="/attend-manage?year={{$year}}&month={{$month}}&mode=1" class="btn btn-secondary height-40">
+                        リスト表示
+                    </a>
+                @endif
             </div>
         </div>
         @if (session('error'))
