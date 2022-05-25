@@ -43,7 +43,8 @@
             </div>
         </div>
         <hr>
-        <div class="pointer-cursor" onclick="href('/notification/{{$data->id}}')">
+        <div class="pointer-cursor"
+             onclick="href<?php echo(preg_match("/http[ |s]:\/\//", $data->url) ? "Blank" : "");?>('/notification/{{$data->id}}')">
             {!! $data->data !!}
         </div>
     </div>

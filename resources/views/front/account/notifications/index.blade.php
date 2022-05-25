@@ -33,7 +33,8 @@
                 <th>日付</th>
             </tr>
             @foreach($data as $dat)
-                <tr class="attends-row" onclick="jump('/account/notifications/{{$dat->id}}')">
+                <tr class="attends-row<?php if ($dat->status != 0) echo ' bg-gray2';?>"
+                    onclick="jump('/account/notifications/{{$dat->id}}')">
                     <td>{{$dat->title}}</td>
                     <td>{{$dat->created_at ?? "---"}}</td>
                 </tr>

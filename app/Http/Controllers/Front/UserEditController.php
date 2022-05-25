@@ -115,6 +115,7 @@ class UserEditController extends Controller
         if ($data->user_id != Auth::id()) {
             return redirect("/account/notifications")->with('error', '指定された通知が見つかりません。(E21)');
         }
+        $data->update(['status' => 1]);
         return view('front.account.notifications.edit', compact('data', 'id'));
     }
 
