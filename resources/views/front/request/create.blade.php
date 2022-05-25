@@ -82,7 +82,7 @@
     </script>
     <script defer>
         let typeSelected = false
-        let timeAvailable = false
+        let timeAvailable = <?php echo(isset($reqDate) ? "true" : "false");?>;
         let workTimeAvailable = false
         let reasonAvailable = false
         let sendData = false
@@ -215,7 +215,7 @@
             }
         }
 
-        if ('{{$reqDate}}' !== '') {
+        if ('{{$reqDate}}' === '') {
             timeAvailable = (requestDate.value + '') !== '';
             console.log('TIME: ' + requestDate.value)
             checkData()
@@ -250,12 +250,6 @@
             console.log("YEAR: " + year + " MONTH: " + month + " DAY: " + day)
         }
         const date = new Date(dateStr)
-
-        console.log(date)
-        /*
-        <?php var_dump($interval);?>
-        */
-        console.log("INTERVAL: ")
 
         new AirDatepicker('#requestDate', {
             locale: localeEs,
