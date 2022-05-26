@@ -28,7 +28,7 @@
         <div class="container noselect">
             <span class="d-inline d-lg-none sidebarBtn" id="sectionTitle">MENU <span id="sectionTitle2">▶</span></span>
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                {{ config('app.name', '勤怠管理システム') }}
             </a>
             @if (env('ENABLE_NAV_TITLE', true) && View::hasSection('pageTitle'))
                 <span class="d-none d-sm-inline title-section-splitter">|</span>
