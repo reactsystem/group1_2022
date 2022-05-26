@@ -189,7 +189,7 @@ class RequestController extends Controller
                 ]);
             }
         }
-        Notification::create(['user_id' => 0, 'title' => '申請が行われました', 'data' => $user->name . 'が申請(' . $type->name . ')を行いました。', 'url' => '/admin/request/detail?id=' . $id, 'status' => 0]);
+        Notification::publish(['user_id' => 0, 'title' => '申請が行われました', 'data' => $user->name . 'が申請(' . $type->name . ')を行いました。', 'url' => '/admin/request/detail?id=' . $id, 'status' => 0]);
 
         return redirect("/request")->with('result', '申請を行いました');
         //return view('front.request.check', compact('dates', 'type', 'holidays', 'reason', 'time'));

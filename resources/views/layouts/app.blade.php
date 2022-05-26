@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', '勤怠管理システム') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -128,6 +128,14 @@
     @endif
     function jump(link) {
         location = link
+    }
+
+    function href(url) {
+        location = url
+    }
+
+    function hrefBlank(url) {
+        window.open(url, '_blank')
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

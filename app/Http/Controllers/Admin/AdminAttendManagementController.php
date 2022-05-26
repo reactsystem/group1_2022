@@ -450,7 +450,7 @@ class AdminAttendManagementController
                 return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('error', 'この月の月報は確定されていないため承認出来ません。');
             } else {
                 MonthlyReport::find($data->id)->update(['status' => 2]);
-                Notification::create(['user_id' => $data->user_id, 'title' => '月報が承認されました', 'data' => '月報(' . $year . '年' . $month . '月度)が承認されました。承認の解除については管理部までご連絡ください。', 'url' => 'attend-manage?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
+                Notification::publish(['user_id' => $data->user_id, 'title' => '月報が承認されました', 'data' => '月報(' . $year . '年' . $month . '月度)が承認されました。承認の解除については管理部までご連絡ください。', 'url' => 'attend-manage?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
                 return redirect("/admin/attend-manage/calender/" . $user_id . "?year=$year&month=$month")->with('result', '月報を承認しました。');
             }
         }
@@ -499,12 +499,43 @@ class AdminAttendManagementController
         if ($dataList == null) {
             return;
         }
-        $data = "date,status,comment,workTime,restTime,joined,left";
+        $data = "date,status,comment,attendTime,workTime,restTime,joined,left";
         foreach ($dataList as $dat) {
+            $hours = 0;
+            $minutes = 0;
+
             $status = $dat->mode == 1 ? "退勤" : "出勤";
             $rest = $dat->rest ?? "00:00:00";
             $comment = $dat->comment ?? "";
-            $data .= "\n{$dat->date},{$status},{$dat->comment},{$dat->time},{$rest},{$dat->created_at},{$dat->left_at}";
+            if ($dat->mode == 1) {
+                $dateDatax = new DateTime();
+                $leftTime = new DateTime($dat->left_at);
+                $dateData = $dateDatax->format("G:i");
+                $noWorkFlag = false;
+
+                $current = strtotime($leftTime->format("Y-m-d H:i:00"));
+                $before = strtotime($dat->created_at->format("Y-m-d {$dat->created_at->format('H:i')}:00"));
+                $diff = $current - $before;
+                $hours = intval($diff / 60 / 60);
+                $minutes = intval($diff / 60) % 60;
+                $workTime = sprintf("%02d", $hours) . ":" . sprintf("%02d", $minutes);
+
+                $workData = preg_split("/:/", $workTime);
+                $restData = preg_split("/:/", $dat->rest ?? "00:00");
+                $wHours = intval($workData[0]);
+                $wMinutes = intval($workData[1]);
+                $rHours = intval($restData[0]);
+                $rMinutes = intval($restData[1]);
+                $hours = max(0, $wHours - $rHours);
+                $minutes = $wMinutes - $rMinutes;
+                if ($minutes < 0 && $hours != 0) {
+                    $minutes = 60 - abs($minutes);
+                    $hours -= 1;
+                } else if ($minutes < 0) {
+                    $minutes = 0;
+                }
+            }
+            $data .= "\n{$dat->date},{$status},{$dat->comment},{$dat->time}," . sprintf("%02d", $hours) . ":" . sprintf("%02d", $minutes) . ",{$rest},{$dat->created_at},{$dat->left_at}";
         }
         $data = mb_convert_encoding($data, "SJIS", "UTF-8");
         $fileName = "";

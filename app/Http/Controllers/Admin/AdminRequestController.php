@@ -111,7 +111,7 @@ class AdminRequestController extends Controller
         }
         VariousRequest::where('related_id', '=', $request->uuid)->update(['status' => 1]);
         $message = '申請を承認しました。';
-        Notification::create(['user_id' => $user->id, 'badge_color' => '00DD00', 'title' => '申請が承認されました', 'data' => '申請が承認されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
+        Notification::publish(['user_id' => $user->id, 'badge_color' => '00DD00', 'title' => '申請が承認されました', 'data' => '申請が承認されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
 
         return redirect('/admin/request')->with('flash_message', $message);
     }
@@ -137,7 +137,7 @@ class AdminRequestController extends Controller
         $user->save();
         $requestData->update(['status' => 2]);
 
-        Notification::create(['user_id' => $user->id, 'badge_color' => 'DD0000', 'title' => '申請が却下されました', 'data' => '申請が却下されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
+        Notification::publish(['user_id' => $user->id, 'badge_color' => 'DD0000', 'title' => '申請が却下されました', 'data' => '申請が却下されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
 
         return redirect('/admin/request')->with('error', '申請を却下しました。');
     }

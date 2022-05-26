@@ -52,7 +52,7 @@ class UserEditController extends Controller
         if (!env('ENABLE_NAME_EDIT', true) && !env('ENABLE_EMAIL_EDIT', true)) {
             return view('front/account/account', ['user' => $user,]);
         }
-        Notification::create(['user_id' => 0, 'title' => 'ユーザー情報が更新されました', 'data' => $user->name . 'がユーザー情報を更新しました。', 'url' => '/admin/attends/view?id=' . $user->id, 'status' => 0]);
+        Notification::publish(['user_id' => 0, 'title' => 'ユーザー情報が更新されました', 'data' => $user->name . 'がユーザー情報を更新しました。', 'url' => '/admin/attends/view?id=' . $user->id, 'status' => 0]);
 
         $user->save();
         return view('front/account/account', ['user' => $user,]);
