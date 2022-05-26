@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\PaidHoliday;
@@ -40,13 +41,14 @@ class AdminRequestController extends Controller
     }
 
     // 検索
-    function search(Request $request){
+    function search(Request $request)
+    {
         $all_requests = new VariousRequest;
-        $all_user= User::all();
+        $all_user = User::all();
 
         // 条件：状態
-        if(isset($request->status)){
-            $all_requests = $all_requests -> where('status','=',$request->status);
+        if (isset($request->status)) {
+            $all_requests = $all_requests->where('status', '=', $request->status);
         }
 
         // 条件：名前
@@ -78,20 +80,22 @@ class AdminRequestController extends Controller
     }
 
     // 詳細画面
-    function detail(Request $request){
-        $this_request = VariousRequest::find($request ->id);
+    function detail(Request $request)
+    {
+        $this_request = VariousRequest::find($request->id);
         $uuid = $this_request['uuid'];
-        $related_request = VariousRequest::where('related_id','=',$uuid)->get();
+        $related_request = VariousRequest::where('related_id', '=', $uuid)->get();
 
         return view('admin/request/admin_detail', ['this_request' => $this_request, 'related_request' => $related_request]);
     }
 
     // 申請承認
-    function approve(Request $request){
+    function approve(Request $request)
+    {
         // 有給休暇を戻すかどうか
-        $this_request = VariousRequest::find($request ->id);
-        $user = User::find($this_request ->user_id);
-        $request_days = $this_request -> related_request() -> count() +1;
+        $this_request = VariousRequest::find($request->id);
+        $user = User::find($this_request->user_id);
+        $request_days = $this_request->related_request()->count() + 1;
 
         // 前の状態が承認済みだった場合
         if ($this_request->status == 2) {
@@ -105,9 +109,9 @@ class AdminRequestController extends Controller
         } else {
             VariousRequest::find($request->id)->update(['status' => 1]);
         }
-        VariousRequest::where('related_id','=',$request ->uuid)->update(['status' => 1]);
+        VariousRequest::where('related_id', '=', $request->uuid)->update(['status' => 1]);
         $message = '申請を承認しました。';
-        Notification::create(['user_id' => $user->id, 'badge_color' => '00DD00', 'title' => '申請が承認されました', 'data' => '申請が承認されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
+        Notification::publish(['user_id' => $user->id, 'badge_color' => '00DD00', 'title' => '申請が承認されました', 'data' => '申請が承認されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
 
         return redirect('/admin/request')->with('flash_message', $message);
     }
@@ -133,20 +137,22 @@ class AdminRequestController extends Controller
         $user->save();
         $requestData->update(['status' => 2]);
 
-        Notification::create(['user_id' => $user->id, 'badge_color' => 'DD0000', 'title' => '申請が却下されました', 'data' => '申請が却下されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
+        Notification::publish(['user_id' => $user->id, 'badge_color' => 'DD0000', 'title' => '申請が却下されました', 'data' => '申請が却下されました。ここをクリックして詳細を確認できます。', 'url' => '/request/' . $request->id, 'status' => 0]);
 
         return redirect('/admin/request')->with('error', '申請を却下しました。');
     }
 
     // 申請新規追加
-    function create(Request $request){
+    function create(Request $request)
+    {
         $all_user = User::all();
         $types = RequestType::where('deleted_at', null)->get();
         return view('admin/request/admin_create', ['types' => $types, 'users' => $all_user]);
     }
 
     // 申請新規追加
-    function check(Request $request){
+    function check(Request $request)
+    {
         {
             $user = user::find($request->user_id);
             if ($user == null) {

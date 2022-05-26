@@ -31,7 +31,7 @@
             padding-bottom: 2px;
             border-radius: 4px;
             padding-left: 10px;
-            padding-right: 20px;
+            padding-right: 52px;
         }
 
         .sidebar-list:hover {
@@ -134,6 +134,7 @@
                     }?>" onclick="href('/account')"><span style="color: #888;">●</span> ユーザー管理
                     </li>
                     @if(Auth::user()->group_id == 1)
+                        <hr>
                         <li class="sidebar-list<?php if (Request::is('admin')) {
                             echo ' active';
                         }?>" onclick="href('/admin')"><span style="color: #888;">●</span> 管理者CP
@@ -201,11 +202,6 @@
                 sectionTitle2.style.transform = "rotate(90deg)"
                 classList.replace("sidebar-base", "sidebar-base2")
             }
-        }
-
-
-        function href(url) {
-            location = url
         }
     </script>
 @endsection

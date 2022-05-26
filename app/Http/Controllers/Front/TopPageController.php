@@ -40,13 +40,19 @@ class TopPageController extends Controller
             $xHours = max(0, $wHours - $rHours);
             $xMinutes = $wMinutes - $rMinutes;
             if ($xMinutes < 0 && $xHours != 0) {
-                $xMinutes = 60 - abs($xMinutes);
-                $xHours -= 1;
+                while ($xMinutes < 0 && $xHours != 0) {
+                    $xMinutes = 60 - abs($xMinutes);
+                    $xHours -= 1;
+                }
             } else if ($xMinutes < 0) {
                 $xMinutes = 0;
             }
             $hours += $xHours;
             $minutes += $xMinutes;
+            while ($minutes >= 60) {
+                $minutes -= 60;
+                $hours++;
+            }
         }
         $date_now = new DateTime($tempDate->format("H:i:50"));
         if ($data == null) {
@@ -109,8 +115,6 @@ class TopPageController extends Controller
 
         return view('front.index', compact('notifications', 'interval', 'data', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'xHours', 'xMinutes'));
     }
-
-
 
 
 }

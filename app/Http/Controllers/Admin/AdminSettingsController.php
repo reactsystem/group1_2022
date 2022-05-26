@@ -501,6 +501,7 @@ class AdminSettingsController extends Controller
         if ($data->user_id != 0) {
             return redirect("/admin/settings/notifications")->with('error', '指定された通知が見つかりません。(E21)');
         }
+        $data->update(['status' => 1]);
         return view('admin.settings.notifications.edit', compact('data', 'id'));
     }
 

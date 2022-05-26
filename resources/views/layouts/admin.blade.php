@@ -128,6 +128,9 @@
                         echo ' active';
                     }?>" onclick="href('/admin/settings')"><span style="color: #888;">●</span> システム設定
                     </li>
+                    <li class="pointer-nonevent">
+                        <hr class="bg-gray2">
+                    </li>
                     <li class="sidebar-list<?php if (Request::is('home')) {
                         echo ' active';
                     }?>" onclick="href('/home')"><span style="color: #888;">●</span> 勤怠システムトップ
@@ -193,10 +196,6 @@
                 sectionTitle2.style.transform = "rotate(90deg)"
                 classList.replace("sidebar-base", "sidebar-base2")
             }
-        }
-
-        function href(url) {
-            location = url
         }
     </script>
 @endsection

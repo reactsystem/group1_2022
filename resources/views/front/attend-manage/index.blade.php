@@ -60,9 +60,11 @@
                         月報確定
                     </button>
                 @endif
-                <a href="/attend-manage?year={{$year}}&month={{$month}}&mode=1" class="btn btn-secondary height-40">
-                    リスト表示
-                </a>
+                @if(env('ENABLE_LIST_VIEW', true))
+                    <a href="/attend-manage?year={{$year}}&month={{$month}}&mode=1" class="btn btn-secondary height-40">
+                        リスト表示
+                    </a>
+                @endif
             </div>
         </div>
         @if (session('error'))
@@ -79,23 +81,24 @@
                 </div>
             </div>
         @endif
-        <div class="w100-gap10 flex-view">
-            <div class="flex-1-5 padding-0">
+        <div class="row w-100">
+            <div class="col-md-2 col-sm-6 padding-0">
                 <span class="text-muted vert-center-40">今月の労働時間</span>
             </div>
-            <div class="flex-1">
+            <div class="col-md-3 col-sm-6">
                 <strong class="font-20">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
             </div>
-            <div class="flex-1">
+            <div class="col-md-1 d-md-inline-flex d-sm-none">
 
             </div>
-            <div class="flex-1-5 padding-0">
+            <div class="col-md-2 col-sm-6 padding-0">
                 <span class="text-muted vert-center-40">今月の残業時間</span>
             </div>
-            <div class="flex-1">
+            <div class="col-md-3 col-sm-6">
                 <strong class="font-20">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
             </div>
-            <div class="flex-4">
+            <div class="col-md-1 d-md-inline-flex d-sm-none">
+
             </div>
         </div>
         <hr>

@@ -4,11 +4,19 @@
 
 @section('content')
     <div class="container">
-        <h3 class="fw-bold">新着通知</h3>
+        <div class="row mt-5">
+            <div class="col-md-8 col-sm-6 col-6">
+                <h3 class="fw-bold">新着通知</h3>
+            </div>
+            <div class="col-md-4 col-sm-6 col-6">
+                <a href="/account/notifications" class="btn btn-primary float-right">通知一覧</a>
+            </div>
+        </div>
         <hr>
         @if($notifications != null && count($notifications) != 0)
             @foreach($notifications as $notification)
-                <div class="card card-hover mb-3 pointer-cursor" onclick="href('/notification/{{$notification->id}}')">
+                <div class="card card-hover mb-3 pointer-cursor"
+                     onclick="href<?php echo(preg_match("/http[ |s]:\/\//", $notification->url) ? "Blank" : "");?>('/notification/{{$notification->id}}')">
                     <div class="card-body">
                         <span
                             style="color: {{"#".$notification->badge_color}}; text-shadow: #{{$notification->badge_color}} 0 0 10px">●</span><strong> {{$notification->title}}</strong><span

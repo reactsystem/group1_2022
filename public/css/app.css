@@ -11245,14 +11245,15 @@ textarea.form-control-lg {
     font-size: 1.35rem !important;
   }
 }
-@media print {
-  .d-print-inline {
-    display: inline !important;
-  }
 
-  .d-print-inline-block {
-    display: inline-block !important;
-  }
+@media print {
+    .d-print-inline {
+        display: inline !important;
+    }
+
+    .d-print-inline-block {
+        display: inline-block !important;
+    }
 
     .d-print-block {
         display: block !important;
@@ -11314,10 +11315,9 @@ textarea.form-control-lg {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0);
     transition-duration: 0.4s;
 }
-
 .card-hover:hover {
-    box-shadow: 0 0 10px #CCC;
-    transition-duration: 0.2s;
+    box-shadow: 0 0 15px #888;
+    transition-duration: 0.05s;
 }
 
 .calender-doy {

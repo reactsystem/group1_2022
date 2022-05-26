@@ -100,7 +100,15 @@ class RequestController extends Controller
     {
         $types = RequestType::where('deleted_at', null)->get();
         $reqDate = $request->date;
-        return view('front.request.create', compact('types', 'reqDate'));
+        $interval = 0;
+        try {
+            $dateNow = new DateTime();
+            $dateTime = new DateTime($reqDate);
+            $interval = $dateTime->diff($dateNow);
+        } catch (\Exception $e) {
+            $reqDate = "";
+        }
+        return view('front.request.create', compact('types', 'reqDate', 'interval'));
     }
 
     function checkRequestBack(Request $request)
@@ -181,7 +189,7 @@ class RequestController extends Controller
                 ]);
             }
         }
-        Notification::create(['user_id' => 0, 'title' => '申請が行われました', 'data' => $user->name . 'が申請(' . $type->name . ')を行いました。', 'url' => '/admin/request/detail?id=' . $id, 'status' => 0]);
+        Notification::publish(['user_id' => 0, 'title' => '申請が行われました', 'data' => $user->name . 'が申請(' . $type->name . ')を行いました。', 'url' => '/admin/request/detail?id=' . $id, 'status' => 0]);
 
         return redirect("/request")->with('result', '申請を行いました');
         //return view('front.request.check', compact('dates', 'type', 'holidays', 'reason', 'time'));

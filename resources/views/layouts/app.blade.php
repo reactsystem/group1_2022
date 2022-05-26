@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', '勤怠管理システム') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -28,9 +28,9 @@
         <div class="container noselect">
             <span class="d-inline d-lg-none sidebarBtn" id="sectionTitle">MENU <span id="sectionTitle2">▶</span></span>
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                {{ config('app.name', '勤怠管理システム') }}
             </a>
-            @if (View::hasSection('pageTitle'))
+            @if (env('ENABLE_NAV_TITLE', true) && View::hasSection('pageTitle'))
                 <span class="d-none d-sm-inline title-section-splitter">|</span>
                 <span class="d-none d-sm-inline text-white title-fs">@yield('pageTitle')</span>
             @endif
@@ -48,28 +48,35 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item d-lg-inline d-md-none d-none">
-                        <span id="navCurrentTime" class="nav-link text-white fw-bold clock">時刻取得中</span>
-                    </li>
-                    <!-- Authentication Links -->
+                    @if(env('ENABLE_NAV_CLOCK', true))
+                        <li class="nav-item d-lg-inline d-md-none d-none">
+                            <span id="navCurrentTime" class="nav-link text-white fw-bold clock">時刻取得中</span>
+                        </li>
+                    @endif
+                <!-- Authentication Links -->
                     @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                        @endif
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </li>
+                        @endif
+                    @else
+                        @if(env('ENABLE_NAV_LOGOUT', true))
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    @if(env('ENABLE_NAV_NAME', true))
+                                        {{ Auth::user()->name }}
+                                    @else
+                                        オプション
+                                    @endif
                                 </a>
-
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -82,17 +89,27 @@
                                     </form>
                                 </div>
                             </li>
-                        @endguest
-                    </ul>
-                </div>
+                        @else
+                            @if(env('ENABLE_NAV_NAME', true))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        {{ Auth::user()->name }}
+                                    </a>
+                                </li>
+                            @endif
+                        @endif
+                    @endguest
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <main>
-            @yield('basement')
-        </main>
+    <main>
+        @yield('basement')
+    </main>
 </div>
 <script defer>
+    @if(env('ENABLE_NAV_CLOCK', true))
     function updateDisplayTime() {
         let date = new Date()
         let years = date.getFullYear()
@@ -108,8 +125,17 @@
 
     setInterval('updateDisplayTime()', 1000)
 
+    @endif
     function jump(link) {
         location = link
+    }
+
+    function href(url) {
+        location = url
+    }
+
+    function hrefBlank(url) {
+        window.open(url, '_blank')
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

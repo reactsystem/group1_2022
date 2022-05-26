@@ -79,8 +79,24 @@ class AttendanceManagementController extends Controller
             $interval = $todayData->created_at->diff($date_now);
             $createDate = new DateTime($todayData->created_at);
             if ($todayData->mode == 0) {
-                $hours += intval($interval->format('%h'));
-                $minutes += intval($interval->format('%i'));
+                $datArray = preg_split("/:/", $interval->format('%h:%i:%s'));
+                $restData = preg_split("/:/", $todayData->rest);
+                $wHours = intval($datArray[0]);
+                $wMinutes = intval($datArray[1]);
+                $rHours = intval($restData[0]);
+                $rMinutes = intval($restData[1]);
+                $xhours = max(0, $wHours - $rHours);
+                $xminutes = $wMinutes - $rMinutes;
+                if ($xminutes < 0 && $xhours != 0) {
+                    $xminutes = 60 - abs($xminutes);
+                    $xhours -= 1;
+                } else if ($xminutes < 0) {
+                    $xminutes = 0;
+                }
+                $hours += $xhours;
+                $minutes += $xminutes;
+                //$hours += intval($interval->format('%h'));
+                //$minutes += intval($interval->format('%i'));
             }
         }
 
@@ -180,7 +196,7 @@ class AttendanceManagementController extends Controller
             $confirmStatus = -1;
         }
         $user = Auth::user();
-        if ($mode == 1) {
+        if ($mode == 1 && env('ENABLE_LIST_VIEW', true)) {
             return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
         } else {
             return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
@@ -206,7 +222,7 @@ class AttendanceManagementController extends Controller
                 return redirect("/attend-manage?year={$year}&month={$month}")->with('error', '既に確定しています。');
             } else {
                 MonthlyReport::find($data->id)->update(['status' => 1]);
-                Notification::create(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
+                Notification::publish(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
                 return redirect("/attend-manage?year={$year}&month={$month}")->with('result', '月報を確定しました。');
             }
         }
@@ -215,7 +231,7 @@ class AttendanceManagementController extends Controller
             'date' => $tempDate->format('Y-m'),
             'status' => 1,
         ]);
-        Notification::create(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
+        Notification::publish(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
         return redirect("/attend-manage?year={$year}&month={$month}")->with('result', '月報を確定しました。');
     }
 

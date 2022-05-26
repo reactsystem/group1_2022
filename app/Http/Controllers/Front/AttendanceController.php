@@ -68,6 +68,9 @@ class AttendanceController extends Controller
             }
             $restTime = ($rHours * 60 + $rMinutes) * 60;
             $interval = $xhours . ":" . sprintf("%02d", $xminutes);
+            if ($xhours == 0 && $xminutes == 0) {
+                $interval = "<span class='text-danger'>" . ($xhours . ":" . sprintf("%02d", $xminutes)) . "</span>";
+            }
             $origin = $wHours . ":" . sprintf("%02d", $wMinutes);
         }
         if ($data->mode == 1) {
@@ -79,6 +82,7 @@ class AttendanceController extends Controller
 
     public function attend(Request $request): Redirector|Application|RedirectResponse
     {
+        $config = Configuration::find(1);
         $tempDate = new DateTime();
         $data = MonthlyReport::where("user_id", "=", Auth::id())->where("date", "=", $tempDate->format('Y-m'))->first();
         if ($data != null) {
@@ -99,6 +103,7 @@ class AttendanceController extends Controller
             'user_id' => Auth::id(),
             'mode' => 0,
             'time' => "00:00",
+            'rest' => ($config->rest ?? "00:45:00"),
             'comment' => '',
         ]);
         return redirect("/attends")->with('result', '出勤しました。');
@@ -180,9 +185,6 @@ class AttendanceController extends Controller
         if (!Auth::check()) {
             return response()->json(["error" => true, "code" => 10, "message" => "ログインしてください。"]);
         }
-        if (!isset($request->text)) {
-            return response()->json(["error" => true, "code" => 20, "message" => "業務メモがありません。"]);
-        }
         if (!isset($request->rest)) {
             return response()->json(["error" => true, "code" => 24, "message" => "休憩時間が設定されていません。"]);
         }
@@ -191,26 +193,22 @@ class AttendanceController extends Controller
             $userId = $request->user;
         }
         $rules = [
-            'text' => 'required|max:2000|min:1',
+            'text' => 'max:2000',
             'rest' => 'required',
         ];
         $messages = [
             'rest.required' => '休憩時間を入力してください',
-            'text.required' => '業務詳細を記入してください',
-            'text.min' => '業務詳細は1文字以上で入力してください',
             'text.max' => '業務詳細は2,000文字以下で入力してください',
         ];
         if (env("ENABLE_EDIT_ATTENDANCE", false)) {
             $rules = [
-                'text' => 'required|max:2000|min:1',
+                'text' => 'max:2000',
                 'start' => 'required',
                 'rest' => 'required',
             ];
             $messages = [
                 'start.required' => '出勤時間を入力してください',
                 'rest.required' => '休憩時間を入力してください',
-                'text.required' => '業務詳細を記入してください',
-                'text.min' => '業務詳細は1文字以上で入力してください',
                 'text.max' => '業務詳細は2,000文字以下で入力してください',
             ];
         }
@@ -270,14 +268,14 @@ class AttendanceController extends Controller
                         'left_at' => $endDate,
                         'time' => $workTime,
                         'rest' => $restTime,
-                        'text' => $request->text,
+                        'text' => $request->text ?? "",
                     ];
 
                     Attendance::find($data->id)->update($param);
                 } else {
-                    Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
+                    Attendance::find($data->id)->update(['comment' => ($request->text ?? ""), 'rest' => $request->rest]);
                 }
-                return response()->json(["code" => 0, "message" => "${year}年${month}月${day}日の業務メモを更新しました。"]);
+                return response()->json(["code" => 0, "message" => "${year}年${month}月${day}日の勤務情報を更新しました。"]);
             } catch (\Exception $e) {
                 return response()->json(["error" => true, "code" => 22, "message" => "日付の形式が不正です。(${date}) <br>" . $e->getTraceAsString()]);
             }
@@ -327,9 +325,9 @@ class AttendanceController extends Controller
 
             Attendance::find($data->id)->update($param);
         } else {
-            Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
+            Attendance::find($data->id)->update(['comment' => $request->text ?? "", 'rest' => $request->rest]);
         }
-        Attendance::find($data->id)->update(['comment' => $request->text, 'rest' => $request->rest]);
+        Attendance::find($data->id)->update(['comment' => $request->text ?? "", 'rest' => $request->rest]);
         return response()->json(["code" => 0, "message" => "勤務詳細を更新しました。しばらくお待ちください..."]);
     }
 

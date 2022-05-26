@@ -32,7 +32,7 @@
             @endif
         </div>
         <hr>
-        <div class="display-flex">
+        <div class="flex-view">
             <h5 class="fw-bold flex-2">
                 {{$data->title}}
             </h5>
@@ -43,7 +43,8 @@
             </div>
         </div>
         <hr>
-        <div class="pointer-cursor" onclick="href('/notification/{{$data->id}}')">
+        <div class="pointer-cursor"
+             onclick="href<?php echo(preg_match("/http[ |s]:\/\//", $data->url) ? "Blank" : "");?>('/notification/{{$data->id}}')">
             {!! $data->data !!}
         </div>
     </div>
