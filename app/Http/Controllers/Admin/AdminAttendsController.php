@@ -205,7 +205,7 @@ class AdminAttendsController extends Controller
             return redirect('/admin/attends/notify')->with('error', '必須項目が記入されていません。');
             //return response()->json(["error" => true, "code" => 1, "message" => "必須項目が記入されていません", "errors" => $validator->errors()]);
         }
-        Notification::create(['user_id' => $user->id, 'title' => $request->title, 'data' => $request->data, 'url' => $request->url ?? '/account/notifications/%%THIS%%', 'status' => 0]);
+        Notification::publish(['user_id' => $user->id, 'title' => $request->title, 'data' => $request->data, 'url' => $request->url ?? '/account/notifications/%%THIS%%', 'status' => 0]);
 
         return redirect('/admin/attends')->with('result', 'メッセージを送信しました。');
     }

@@ -80,7 +80,7 @@ class AdminMiddleware extends Middleware
                 }
 
                 if ($holidays != 0) {
-                    Notification::create(['user_id' => Auth::id(), 'title' => '有休が付与されました', 'data' => '有給休暇が' . $holidays . '日付与されました。', 'url' => '/account', 'status' => 0]);
+                    Notification::publish(['user_id' => Auth::id(), 'title' => '有休が付与されました', 'data' => '有給休暇が' . $holidays . '日付与されました。', 'url' => '/account', 'status' => 0]);
                 }
 
                 $user->last_login = new \DateTime();

@@ -197,9 +197,5 @@
                 classList.replace("sidebar-base", "sidebar-base2")
             }
         }
-
-        function href(url) {
-            location = url
-        }
     </script>
 @endsection

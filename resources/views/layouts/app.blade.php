@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', '勤怠管理システム') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -28,7 +28,7 @@
         <div class="container noselect">
             <span class="d-inline d-lg-none sidebarBtn" id="sectionTitle">MENU <span id="sectionTitle2">▶</span></span>
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                {{ config('app.name', '勤怠管理システム') }}
             </a>
             @if (env('ENABLE_NAV_TITLE', true) && View::hasSection('pageTitle'))
                 <span class="d-none d-sm-inline title-section-splitter">|</span>
@@ -128,6 +128,14 @@
     @endif
     function jump(link) {
         location = link
+    }
+
+    function href(url) {
+        location = url
+    }
+
+    function hrefBlank(url) {
+        window.open(url, '_blank')
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

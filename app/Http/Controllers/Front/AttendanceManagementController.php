@@ -222,7 +222,7 @@ class AttendanceManagementController extends Controller
                 return redirect("/attend-manage?year={$year}&month={$month}")->with('error', '既に確定しています。');
             } else {
                 MonthlyReport::find($data->id)->update(['status' => 1]);
-                Notification::create(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
+                Notification::publish(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
                 return redirect("/attend-manage?year={$year}&month={$month}")->with('result', '月報を確定しました。');
             }
         }
@@ -231,7 +231,7 @@ class AttendanceManagementController extends Controller
             'date' => $tempDate->format('Y-m'),
             'status' => 1,
         ]);
-        Notification::create(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
+        Notification::publish(['user_id' => 0, 'title' => '月報が確定されました', 'data' => Auth::user()->name . 'が' . $month . '月の月報を確定しました。', 'url' => '/admin/attend-manage/calender/' . Auth::id() . '?year=' . $year . '&month=' . $month . '&mode=0', 'status' => 0]);
         return redirect("/attend-manage?year={$year}&month={$month}")->with('result', '月報を確定しました。');
     }
 

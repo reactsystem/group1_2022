@@ -137,6 +137,25 @@
                 </a>
             </div>
         </div>
+        <div class="w100-gap10 flex-view">
+            <div class="flex-1-5 padding-0">
+                <span class="text-muted vert-center-40">今月の労働時間</span>
+            </div>
+            <div class="flex-1">
+                <strong class="font-20">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
+            </div>
+            <div class="flex-1">
+
+            </div>
+            <div class="flex-1-5 padding-0">
+                <span class="text-muted vert-center-40">今月の残業時間</span>
+            </div>
+            <div class="flex-1">
+                <strong class="font-20">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
+            </div>
+            <div class="flex-4">
+            </div>
+        </div>
         <hr>
         <div class="cards">
             @if(count($attendData) == 0)
@@ -145,8 +164,8 @@
                 </div>
             @endif
             @foreach($attendData as $data)
-                    <div class="card work-card calender-main card-hover pointer-cursor mb-3"
-                         onclick="openDescModal({{$data->created_at->format('d')}})">
+                <div class="card work-card calender-main card-hover pointer-cursor mb-3"
+                     onclick="openDescModal({{$data->created_at->format('d')}})">
                     <div class="card-header calender-card-header">
                         {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span><?php
                             try {
