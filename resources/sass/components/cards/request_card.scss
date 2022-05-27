@@ -1,0 +1,54 @@
+.request-card-header {
+    position: absolute;
+    width: 10%;
+    min-width: 100px;
+    height: 40px;
+    border-top-left-radius: calc(0.25rem - 1px);
+    padding-top: 4px;
+    font-size: 16pt;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+    left: 0;
+    top: 0;
+}
+
+.card-header.in-progress, .card-header.approved, .card-header.declined, .card-header.cancelled {
+    margin-left: 100px;
+    font-weight: bold;
+}
+
+.card-header.in-progress::after {
+    @extend .request-card-header;
+    content: "申請中";
+    background-color: #e17f00;
+}
+
+.card-header.approved::after {
+    @extend .request-card-header;
+    content: "承認";
+    background-color: #0A0;
+}
+
+.card-header.declined::after {
+    @extend .request-card-header;
+    content: "却下";
+    background-color: #A00;
+}
+
+.card-header.cancelled::after {
+    @extend .request-card-header;
+    content: "取消";
+    background-color: #777;
+}
+
+.request-badge {
+    -webkit-text-stroke: 1px black;
+    text-stroke: 1px black;
+    font-weight: bold;
+    font-size: 16pt;
+    line-height: 10px;
+    margin-top: 6px;
+    position: absolute;
+}

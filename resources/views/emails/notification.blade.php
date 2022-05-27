@@ -4,5 +4,7 @@
 {{ $mail_param['data'] }}<br>
 <hr>
 <a href="{{url('/')}}/account/notifications/{{$push_data['id']}}">通知を詳しく見るにはここをクリック</a><br>
+または以下のURLをコピー<br>
+<span>{{url('/')}}/account/notifications/{{$push_data['id']}}</span><br>
 <br>
 {{config('app.name', '勤怠管理システム')}}

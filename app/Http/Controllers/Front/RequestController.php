@@ -48,11 +48,18 @@ class RequestController extends Controller
 
     function show(Request $request)
     {
-        $result = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name")->where('user_id', Auth::id())->where('related_id', '=', NULL)->find($request->id);
+        $result = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.type as type_int", "request_types.color as color")->where('user_id', Auth::id())->find($request->id);
         if ($result == null || $result->uuid == null) {
             return redirect("/request");
         }
-        $relatedData = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name")->where('user_id', Auth::id())->where('related_id', '=', $result->uuid)->get();
+        if ($result->related_id != null) {
+            $related_data = VariousRequest::where('uuid', $result->related_id)->first();
+            if ($related_data != null) {
+                return redirect('/request/' . $related_data->id);
+            }
+            return redirect("/request");
+        }
+        $relatedData = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.type as type_int")->where('user_id', Auth::id())->where('related_id', '=', $result->uuid)->get();
         $dates = [];
         $tempDate = new DateTime($result->date);
         $dates[] = $tempDate->format('Y年n月j日');
@@ -133,10 +140,16 @@ class RequestController extends Controller
         }
         $holidays = 0;
         $time = NULL;
-        if (isset($request->time) && $type->type == 1) {
-            $time = $request->time;
+        if (isset($request->time1) && $type->type == 1) {
+            $time = $request->time1;
             if ($time == null || $time == "00:00") {
                 return redirect("/request")->with('error', '労働時間が指定されていません');
+            }
+        }
+        if (isset($request->time2) && $type->type == -1) {
+            $time = $request->time2;
+            if ($time == null || $time == "00:00") {
+                return redirect("/request")->with('error', '退勤時刻が指定されていません');
             }
         }
         if ($request->type == 2) {
@@ -151,8 +164,12 @@ class RequestController extends Controller
         foreach ($tempDate as $index => $item) {
             //echo $request->time;
             $timeStr = "";
-            if ($request->time != null || $request->time != "") {
-                $time = preg_split("/:/", $request->time);
+            if ($request->time1 != null || $request->time1 != "") {
+                $time = preg_split("/:/", $request->time1);
+                $timeStr = intval($time[0]) . ":" . sprintf("%02d", intval($time[1]));
+            }
+            if ($request->time2 != null || $request->time2 != "") {
+                $time = preg_split("/:/", $request->time2);
                 $timeStr = intval($time[0]) . ":" . sprintf("%02d", intval($time[1]));
             }
             if ($index == 0) {

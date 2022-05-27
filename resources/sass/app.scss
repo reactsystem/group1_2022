@@ -7,6 +7,8 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+@import 'components/cards/request_card';
+
 // BASIC STYLES
 
 .bg-darken {
@@ -39,8 +41,11 @@
     //box-shadow: 0 0 10px #CCC;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0);
     transition-duration: 0.4s;
+    z-index: 1;
 
     &:hover {
+        z-index: 10;
+        transform: scale(1.03);
         box-shadow: 0 0 15px #888;
         transition-duration: 0.05s;
     }
@@ -107,6 +112,7 @@
     border-style: solid;
     border-color: #666;
     z-index: 10;
+    transform: scale(1.1);
 }
 
 .sunday {
@@ -545,4 +551,8 @@
 
 .font-40 {
     font-size: 40pt;
+}
+
+.ml-20px {
+    margin-left: 20px;
 }

@@ -385,7 +385,7 @@ class AdminSettingsController extends Controller
         $rules = [
             'name' => 'required',
             'color' => 'required',
-            'type' => 'required|numeric|min:0|max:3',
+            'type' => 'required|numeric|min:-1|max:3',
         ];
         $messages = [
             'name.required' => '名称を記入してください',
