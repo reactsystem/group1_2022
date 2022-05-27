@@ -215,6 +215,10 @@
                             if (array_key_exists($data->date, $reqData)) {
                                 foreach ($reqData[$data->date][0] as $rDat) {
                                     if ($rDat->time == null) continue;
+                                    $datType = App\Models\RequestType::find($rDat->type);
+                                    if ($datType != null && $datType->type == -1) {
+                                        continue;
+                                    }
                                     $tempDiffDat = preg_split("/:/", $rDat->time);
                                     $tempHours = intval($tempDiffDat[0]);
                                     $tempMinutes = intval($tempDiffDat[1]);

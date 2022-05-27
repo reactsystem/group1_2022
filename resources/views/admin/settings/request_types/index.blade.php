@@ -46,6 +46,8 @@
                             理由必要
                         @elseif($dat->type == 3)
                             理由不要
+                        @elseif($dat->type == -1)
+                            退勤処理申請
                         @else
                             ---
                         @endif

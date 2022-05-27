@@ -45,6 +45,11 @@
                            value="{{old('time')}}"/>
                     <div class="form-text">分単位で入力できます</div>
                 </div>
+                <div class="mb-3 col-lg-4 col-md-6 col-sm-12" style="display: none" id="workTime2">
+                    <label class="form-label">退勤時刻</label>
+                    <input name="time" id="requestTime2" type="time" class="form-control" placeholder="0:00"
+                           value="{{old('time')}}"/>
+                </div>
                 <div class="mb-3 col-sm-12">
                     <label class="form-label">申請理由</label>
                     <textarea name="reason" id="requestReason"
@@ -99,6 +104,7 @@
         let proceedButton = document.getElementById('proceedButton');
         let requestDate = document.getElementById('requestDate');
         let requestTime = document.getElementById('requestTime');
+        let requestTime2 = document.getElementById('requestTime2');
         let requestReason = document.getElementById('requestReason');
         let requestForm = document.getElementById('requestForm');
         let checkPassed = false
@@ -143,11 +149,21 @@
             if (types[requestType.value - 1][1] === 1) {
                 if (requestTime.value !== "") {
                     message += '<b>時間:</b> ' + requestTime.value + '<br>'
-                } else if (types[requestType.value - 1][1] === 1) {
+                } else {
                     submitButton.className = "btn btn-danger disabled"
                     submitButton.innerText = "申請できません"
                     v1++
                     message += '<b>時間:</b> <span style="color: #FFF; background-color: #900">時間が指定されていません</span><br>'
+                }
+            }
+            if (types[requestType.value - 1][1] === -1) {
+                if (requestTime2.value !== "") {
+                    message += '<b>退勤時刻:</b> ' + requestTime2.value + '<br>'
+                } else {
+                    submitButton.className = "btn btn-danger disabled"
+                    submitButton.innerText = "申請できません"
+                    v1++
+                    message += '<b>退勤時刻:</b> <span style="color: #FFF; background-color: #900">退勤時刻が指定されていません</span><br>'
                 }
             }
             if (types[requestType.value - 1][1] === 2) {
@@ -160,7 +176,7 @@
                     message += '<b>有給消費:</b> ' + reqDates.length + '日(残り{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日)<br>'
                 }
             }
-            if (types[requestType.value - 1][1] !== 2 && types[requestType.value - 1][1] !== 3 && requestReason.value === "") {
+            if (types[requestType.value - 1][1] !== 2 && types[requestType.value - 1][1] !== 3 && types[requestType.value - 1][1] !== -1 && requestReason.value === "") {
                 submitButton.className = "btn btn-danger disabled"
                 submitButton.innerText = "申請できません"
                 v1++
@@ -179,6 +195,12 @@
             console.log('WORKTIME: ' + requestTime.value + ' / ' + workTimeAvailable)
             checkData()
         }
+
+        requestTime2.onchange = function () {
+            workTimeAvailable = (requestTime2.value !== "");
+            console.log('WORKTIME: ' + requestTime2.value + ' / ' + workTimeAvailable)
+            checkData()
+        }
         requestReason.onchange = function () {
             reasonAvailable = requestReason.value !== "";
             console.log('REASON: ' + requestReason.value)
@@ -187,6 +209,7 @@
 
         let requestType = document.getElementById('requestType');
         let workTime = document.getElementById('workTime');
+        let workTime2 = document.getElementById('workTime2');
         requestType.onchange = function () {
             console.log('DATA: ' + requestType.value + ' / ' + isFinite(requestType.value))
             if (requestType.value !== 0 && isFinite(requestType.value)) {
@@ -200,15 +223,22 @@
             }
             if (types[requestType.value - 1][1] === 1) {
                 workTime.style.display = "inline"
+                requestTime2.value = ""
+                workTime2.style.display = "none"
+            } else if (types[requestType.value - 1][1] === -1) {
+                workTime.style.display = "none"
+                requestTime.value = ""
+                workTime2.style.display = "inline"
             } else {
                 workTime.style.display = "none"
+                workTime2.style.display = "none"
                 requestTime.value = ""
             }
         };
 
         function checkData() {
             console.log('Type: ' + typeSelected + ' / Time: ' + timeAvailable + ' / Work: ' + workTimeAvailable + ' / Reason: ' + reasonAvailable)
-            if (typeSelected && timeAvailable && (types[requestType.value - 1][1] !== 1 || workTimeAvailable) && (types[requestType.value - 1][1] === 2 || types[requestType.value - 1][1] === 3 || reasonAvailable)) {
+            if (typeSelected && timeAvailable && ((types[requestType.value - 1][1] !== 1 && types[requestType.value - 1][1] !== -1) || workTimeAvailable) && (types[requestType.value - 1][1] === 2 || types[requestType.value - 1][1] === 3 || types[requestType.value - 1][1] === -1 || reasonAvailable)) {
                 proceedButton.removeAttribute("disabled")
             } else {
                 proceedButton.setAttribute("disabled", "")

@@ -11,7 +11,11 @@
         <div>日時: <strong>{{implode(", ", $dates)}}</strong></div>
         <div>申請種別: <strong>{{$type->name}}</strong></div>
         @if($time != "")
-            <div>労働時間: <strong>{{$time}}</strong></div>
+            @if($type->type == -1)
+                <div>退勤時刻: <strong>{{$time}}</strong></div>
+            @else
+                <div>労働時間: <strong>{{$time}}</strong></div>
+            @endif
         @endif
         @if($holidays != 0)
             <div>有給消費: <strong>{{$holidays}}日 (申請前の残有給日数: 8日)</strong></div>
