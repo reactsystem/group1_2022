@@ -65,7 +65,7 @@
         } else if ($daysCount % 7 == 0) {
             $style = "calender-body bg-blue";
         } else {
-            $style = "calender-body";
+            $style = "calender-body bg-white";
         }
         echo '<div class="' . $style . '" onclick="attendManageOpenDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . $joinStr . '</div>';
     } else {

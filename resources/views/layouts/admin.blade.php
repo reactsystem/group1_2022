@@ -35,6 +35,7 @@
             background-color: #ddd;
             color: #222;
             transition-duration: 0.05s;
+            transform: scale(1.1);
         }
 
         @media screen and (max-width: 991.9999px) {

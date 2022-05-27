@@ -38,6 +38,7 @@
             background-color: #444;
             color: #fff;
             transition-duration: 0.05s;
+            transform: scale(1.1);
         }
 
         @media screen and (max-width: 991.999px) {

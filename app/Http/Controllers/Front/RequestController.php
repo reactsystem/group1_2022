@@ -140,10 +140,16 @@ class RequestController extends Controller
         }
         $holidays = 0;
         $time = NULL;
-        if (isset($request->time) && $type->type == 1) {
-            $time = $request->time;
+        if (isset($request->time1) && $type->type == 1) {
+            $time = $request->time1;
             if ($time == null || $time == "00:00") {
                 return redirect("/request")->with('error', '労働時間が指定されていません');
+            }
+        }
+        if (isset($request->time2) && $type->type == -1) {
+            $time = $request->time2;
+            if ($time == null || $time == "00:00") {
+                return redirect("/request")->with('error', '退勤時刻が指定されていません');
             }
         }
         if ($request->type == 2) {
@@ -158,8 +164,12 @@ class RequestController extends Controller
         foreach ($tempDate as $index => $item) {
             //echo $request->time;
             $timeStr = "";
-            if ($request->time != null || $request->time != "") {
-                $time = preg_split("/:/", $request->time);
+            if ($request->time1 != null || $request->time1 != "") {
+                $time = preg_split("/:/", $request->time1);
+                $timeStr = intval($time[0]) . ":" . sprintf("%02d", intval($time[1]));
+            }
+            if ($request->time2 != null || $request->time2 != "") {
+                $time = preg_split("/:/", $request->time2);
                 $timeStr = intval($time[0]) . ":" . sprintf("%02d", intval($time[1]));
             }
             if ($index == 0) {
