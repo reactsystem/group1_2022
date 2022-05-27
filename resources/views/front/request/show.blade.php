@@ -1,14 +1,5 @@
 @extends('layouts.main')
 
-@section('styles')
-    <style>
-        .card-header {
-            margin-left: 100px;
-            font-weight: bold;
-        }
-    </style>
-@endsection
-
 @section('pageTitle', "各種申請")
 @section('content')
     <div class="container">

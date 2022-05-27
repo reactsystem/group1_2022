@@ -11220,13 +11220,13 @@ textarea.form-control-lg {
     text-align: left !important;
   }
 
-  .text-xxl-end {
-    text-align: right !important;
-  }
+    .text-xxl-end {
+        text-align: right !important;
+    }
 
-  .text-xxl-center {
-    text-align: center !important;
-  }
+    .text-xxl-center {
+        text-align: center !important;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -11288,7 +11288,6 @@ textarea.form-control-lg {
         display: none !important;
     }
 }
-
 .request-card-header, .card-header.cancelled::after, .card-header.declined::after, .card-header.approved::after, .card-header.in-progress::after {
     position: absolute;
     width: 10%;
@@ -11303,6 +11302,11 @@ textarea.form-control-lg {
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
     left: 0;
     top: 0;
+}
+
+.card-header.in-progress, .card-header.approved, .card-header.declined, .card-header.cancelled {
+    margin-left: 100px;
+    font-weight: bold;
 }
 
 .card-header.in-progress::after {
