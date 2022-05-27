@@ -48,8 +48,15 @@ class RequestController extends Controller
 
     function show(Request $request)
     {
-        $result = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.type as type_int")->where('user_id', Auth::id())->where('related_id', '=', NULL)->find($request->id);
+        $result = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.type as type_int")->where('user_id', Auth::id())->find($request->id);
         if ($result == null || $result->uuid == null) {
+            return redirect("/request");
+        }
+        if ($result->related_id != null) {
+            $related_data = VariousRequest::where('uuid', $result->related_id)->first();
+            if ($related_data != null) {
+                return redirect('/request/' . $related_data->id);
+            }
             return redirect("/request");
         }
         $relatedData = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name", "request_types.type as type_int")->where('user_id', Auth::id())->where('related_id', '=', $result->uuid)->get();

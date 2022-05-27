@@ -277,10 +277,10 @@
                 echo "'" . $key . "': [";
                 foreach ($data[0] as $dat) {
                     echo "{date: '" . $dat->date . "',";
+                    echo "id: '" . $dat->id . "',";
                     echo "typeName: '" . $dat->name . "',";
                     echo "typeColor: '" . $dat->color . "',";
                     echo "status: " . $dat->status . ",";
-                    echo "reason: '" . ($dat->reason ?? "null") . "',";
                     echo "time: '" . ($dat->time ?? "null") . "'},";
                 }
                 $dayKey = preg_split("/-/", $key)[2];
@@ -292,7 +292,6 @@
                         echo "typeName: '" . $holiday->name . " (会社設定休日)',";
                         echo "typeColor: '#ee5822',";
                         echo "status: 0,";
-                        echo "reason: '',";
                         echo "time: ''},";
                     }
                 }
@@ -312,7 +311,6 @@
                         echo "typeName: '" . $holiday->name . " (会社設定休日)',";
                         echo "typeColor: '#ee5822',";
                         echo "status: 0,";
-                        echo "reason: '',";
                         echo "time: ''},";
                     }
                     echo "],";
@@ -365,31 +363,13 @@
                     const tempMinutes = parseInt(timeData[1])
                     hours += tempHours
                     minutes += tempMinutes
-                    /*
-
-                    let restHours = '0'
-                    let restMinutes = '00'
-                    console.log("CurrentHours: " + hours + ":" + minutes)
-                    if (restTimeMode === 0) {
-                        if (hours >= 8) {
-                            restTimeMode = 2
-                            restHours = '1'
-                            restMinutes = '00'
-                        } else if (hours >= 6) {
-                            restTimeMode = 1
-                            restHours = '0'
-                            restMinutes = '45'
-                        }
-                    } else if (restTimeMode === 1) {
-                        restHours = '0'
-                        restMinutes = '15'
-                        restTimeMode = 2
+                    let links = ''
+                    let linksClass = ''
+                    if (data.id != null) {
+                        links = ' onclick="href(\'/admin/request/detail?id=' + (data.id) + '\')"'
+                        linksClass = ' card-hover pointer-cursor'
                     }
-                    let restTimeStr = restHours + `:` + restMinutes
-                    if (isNaN(tempHours) || isNaN(tempMinutes)) {
-                        restTimeStr = "--:--"
-                    }*/
-                    modalContext.innerHTML += `<div style="display: flex" class="mt-1"> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + ((data.time === 'null' ? '--:--' : data.time) ?? '--:--') + `</h2></span></div></div>`
+                    modalContext.innerHTML += `<div style="display: flex" class="mt-1` + linksClass + `"` + links + `> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + ((data.time === 'null' ? '--:--' : data.time) ?? '--:--') + `</h2></span></div></div>`
                     console.log(data.typeName)
                 })
             }
