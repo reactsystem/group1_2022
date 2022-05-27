@@ -229,7 +229,7 @@
                 sectionTitle2.style.transform = "translateX(0px)"
                 sectionTitle.style.transform = "translateX(0px)"
                 sidebarData.style.transform = "scale(0.985)"
-                sidebarData.style.opacity = 0.0
+                sidebarData.style.opacity = null
                 sectionTitle3.style.opacity = 0.0
                 sectionTitle3.style.transform = null
                 classList.replace("sidebar-base2", "sidebar-base")
