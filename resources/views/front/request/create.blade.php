@@ -41,13 +41,13 @@
                 </div>
                 <div class="mb-3 col-lg-4 col-md-6 col-sm-12" style="display: none" id="workTime">
                     <label class="form-label">労働時間</label>
-                    <input name="time" id="requestTime" type="time" class="form-control" placeholder="0:00"
+                    <input name="time1" id="requestTime" type="time" class="form-control" placeholder="0:00"
                            value="{{old('time')}}"/>
                     <div class="form-text">分単位で入力できます</div>
                 </div>
                 <div class="mb-3 col-lg-4 col-md-6 col-sm-12" style="display: none" id="workTime2">
                     <label class="form-label">退勤時刻</label>
-                    <input name="time" id="requestTime2" type="time" class="form-control" placeholder="0:00"
+                    <input name="time2" id="requestTime2" type="time" class="form-control" placeholder="0:00"
                            value="{{old('time')}}"/>
                 </div>
                 <div class="mb-3 col-sm-12">
@@ -233,6 +233,7 @@
                 workTime.style.display = "none"
                 workTime2.style.display = "none"
                 requestTime.value = ""
+                requestTime2.value = ""
             }
         };
 

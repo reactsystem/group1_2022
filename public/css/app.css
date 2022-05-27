@@ -11204,13 +11204,13 @@ textarea.form-control-lg {
     padding-left: 0.5rem !important;
   }
 
-  .ps-xxl-3 {
-    padding-left: 1rem !important;
-  }
+    .ps-xxl-3 {
+        padding-left: 1rem !important;
+    }
 
-  .ps-xxl-4 {
-    padding-left: 1.5rem !important;
-  }
+    .ps-xxl-4 {
+        padding-left: 1.5rem !important;
+    }
 
     .ps-xxl-5 {
         padding-left: 3rem !important;
@@ -11366,8 +11366,11 @@ textarea.form-control-lg {
 .card-hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0);
     transition-duration: 0.4s;
+    z-index: 1;
 }
 .card-hover:hover {
+    z-index: 10;
+    transform: scale(1.03);
     box-shadow: 0 0 15px #888;
     transition-duration: 0.05s;
 }
@@ -11431,6 +11434,7 @@ textarea.form-control-lg {
     border-style: solid;
     border-color: #666;
     z-index: 10;
+    transform: scale(1.1);
 }
 
 .sunday {
