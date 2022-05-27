@@ -171,7 +171,7 @@
         const currentDate = new Date()
         let diff = new Date(currentDate.getTime() - startDate.getTime() + 54000000)
 
-        console.log(diff.toString())
+        // DISABLED - console.log(diff.toString())
 
         let modalHeader = document.getElementById("modalHeader")
         let modalContext = document.getElementById("modalContext")
@@ -268,10 +268,10 @@
         }
 
         function leaveModal() {
-            console.log("CURRENT: " + (diff.getTime() / 1000) + " (" + restTime + ") / " + diff.getHours() + ':' + diff.getMinutes())
+            // DISABLED - console.log("CURRENT: " + (diff.getTime() / 1000) + " (" + restTime + ") / " + diff.getHours() + ':' + diff.getMinutes())
             if ((diff.getTime() / 1000) > baseTime + restTime + 54000 + 60) {
                 let diff2 = new Date(diff.getTime() - (baseTime * 1000) - (restTime * 1000))
-                console.log('残業あり')
+                // DISABLED - console.log('残業あり')
                 modalHeader.innerText = "退勤確認"
                 modalContext.innerHTML = '<div class="text-center mb-3">' +
                     '時間外労働(' + diff2.getHours() + ':' + ('00' + diff2.getMinutes()).slice(-2) + ')が発生しています。<br>残業申請を行いますか?' +
@@ -281,7 +281,7 @@
                 mode = 1
                 return true
             } else {
-                console.log('残業無し')
+                // DISABLED - console.log('残業無し')
                 location = "/attends/end"
             }
             return false
@@ -318,7 +318,7 @@
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
-                    console.log("Result: " + resultCode)
+                    // DISABLED - console.log("Result: " + resultCode)
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success float-right"
                         saveBtn.innerText = "保存しました"

@@ -285,10 +285,10 @@
             let alert = document.getElementById("alert")
             currentDay = day
             modalContext.innerHTML = ""
-            console.log("選択: " + day)
+            // DISABLED - // DISABLED - console.log("選択: " + day)
             modalHeader.innerText = "{{$month}}月" + day + "日の勤務情報"
             const keys = '{{$year}}-' + ('00' + {{$month}}).slice(-2) + '-' + ('00' + day).slice(-2)
-            console.log("KEYS: " + keys)
+            // DISABLED - // DISABLED - console.log("KEYS: " + keys)
             const modalData = works[keys]
             const requestsData = requests[keys]
             let hours = 0
@@ -319,7 +319,7 @@
                 }
             }
             if (requestsData !== undefined) {
-                console.log(requestsData)
+                // DISABLED - // DISABLED - console.log(requestsData)
                 requestsData.forEach(data => {
                     const timeData = data.time.split(":")
                     const tempHours = parseInt(timeData[0])
@@ -333,7 +333,7 @@
                         linksClass = ' card-hover pointer-cursor'
                     }
                     modalContext.innerHTML += `<div style="display: flex" class="mt-1` + linksClass + `"` + links + `> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + ((data.time === 'null' ? '--:--' : data.time) ?? '--:--') + `</h2></span></div></div>`
-                    console.log(data.typeName)
+                    // DISABLED - // DISABLED - console.log(data.typeName)
                 })
             }
 
@@ -391,7 +391,7 @@
                 }
                 ?>`
             }
-            console.log("TotalHours: " + hours + ":" + minutes)
+            // DISABLED - // DISABLED - console.log("TotalHours: " + hours + ":" + minutes)
 
             // language=HTML
             primaryButton.innerText = "新規申請"
@@ -452,7 +452,7 @@
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
-                    console.log("Result: " + resultCode + " (" + res.data.message + ")")
+                    // DISABLED - // DISABLED - console.log("Result: " + resultCode + " (" + res.data.message + ")")
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success"
                         saveBtn.innerText = "保存しました"

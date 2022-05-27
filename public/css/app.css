@@ -11196,13 +11196,13 @@ textarea.form-control-lg {
     padding-left: 0 !important;
   }
 
-  .ps-xxl-1 {
-    padding-left: 0.25rem !important;
-  }
+    .ps-xxl-1 {
+        padding-left: 0.25rem !important;
+    }
 
-  .ps-xxl-2 {
-    padding-left: 0.5rem !important;
-  }
+    .ps-xxl-2 {
+        padding-left: 0.5rem !important;
+    }
 
     .ps-xxl-3 {
         padding-left: 1rem !important;
@@ -11302,11 +11302,17 @@ textarea.form-control-lg {
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
     left: 0;
     top: 0;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.3);
+    margin-top: -0.5px;
 }
 
 .card-header.in-progress, .card-header.approved, .card-header.declined, .card-header.cancelled {
     margin-left: 100px;
     font-weight: bold;
+    border-top-left-radius: 0;
+    margin-top: -0.5px;
 }
 
 .card-header.in-progress::after {
@@ -11434,7 +11440,7 @@ textarea.form-control-lg {
     border-style: solid;
     border-color: #666;
     z-index: 10;
-    transform: scale(1.1);
+    transform: scale(1.15);
 }
 
 .sunday {
@@ -11726,10 +11732,10 @@ textarea.form-control-lg {
 .sidebarBtn {
     cursor: pointer;
     font-size: 1.25rem;
-    margin-top: -6px;
+    margin-top: -1px;
     margin-right: 12px;
     color: #888;
-    transition-duration: 0.4s;
+    transition-duration: 0s;
 }
 .sidebarBtn:hover {
     color: #fff;
@@ -11874,4 +11880,13 @@ textarea.form-control-lg {
 
 .ml-20px {
     margin-left: 20px;
+}
+
+#sectionTitle3 {
+    opacity: 0;
+    position: absolute;
+    transform: translateX(-20px);
+    transition-duration: 0.15s;
+    font-size: 22pt;
+    top: -9px;
 }

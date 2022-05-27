@@ -341,7 +341,7 @@
         function searchAttendData() {
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
             if (!checkData()) {
-                console.log("Failed")
+                // DISABLED - console.log("Failed")
                 return
             }
             let keywords = []
@@ -354,7 +354,7 @@
             if (status.value >= 0) {
                 keywords.push('status=' + status.value)
             }
-            console.log("URL: " + "/admin/request/search?" + keywords.join("&"))
+            // DISABLED - console.log("URL: " + "/admin/request/search?" + keywords.join("&"))
             jump("/admin/request/search?" + keywords.join("&"))
         }
 

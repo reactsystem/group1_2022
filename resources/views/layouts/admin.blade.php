@@ -38,6 +38,10 @@
             transform: scale(1.1);
         }
 
+        body {
+            overflow-x: hidden;
+        }
+
         @media screen and (max-width: 991.9999px) {
             .sidebar-data {
                 list-style: none;
@@ -47,6 +51,9 @@
                 margin-top: 80px;
                 padding-left: 0;
                 transition-duration: 0.3s;
+                position: fixed;
+                transform: scale(0.985);
+                opacity: 0.0;
             }
 
             .sidebar-base {
@@ -59,7 +66,6 @@
 
             .sidebar-base2 {
                 background-color: #222;
-                height: 370px;
                 z-index: 1;
                 opacity: 1.0;
                 transition-duration: 0.3s;
@@ -67,7 +73,17 @@
 
             .main-card {
                 border-top-left-radius: 20px;
-                border-top-right-radius: 20px;
+                /*border-top-right-radius: 20px;*/
+                transform: translateX(0);
+                z-index: 2;
+                transition-duration: 0.2s;
+            }
+
+            .main-card2 {
+                filter: brightness(0.5);
+                border-top-left-radius: 20px;
+                /*border-top-right-radius: 20px;*/
+                transform: translateX(max(40vw, 300px));
                 transition-duration: 0.2s;
             }
         }
@@ -98,6 +114,15 @@
 
             .main-card {
                 border-radius: 0;
+                transform: translateX(0);
+                transition-duration: 0.2s;
+            }
+
+            .main-card2 {
+                border-top-left-radius: 20px;
+                /*border-top-right-radius: 20px;*/
+                transform: translateX(0);
+                transition-duration: 0.2s;
             }
         }
 
@@ -106,9 +131,9 @@
         }
     </style>
     <div class="container">
-        <div class="row" style="width: 100%; margin-left: 0">
+        <div class="row layout-base" style="width: 100%; margin-left: 0">
             <div id="sidebarBase" class="col-lg-4 col-xl-3 col-md-12 text-dark sidebar-base">
-                <ul class="sidebar-data">
+                <ul class="sidebar-data" id="sidebarData">
                     <li class="sidebar-list<?php if (Request::is('admin')) {
                         echo ' active';
                     }?>" onclick="href('/admin')"><span style="color: #888;">●</span> 管理者CPトップ
@@ -161,7 +186,9 @@
         const _sleepX = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
         window.onload = async () => {
+            await _sleepX(100)
             loading.style.pointerEvents = "none"
+            sectionTitle.style.transitionDuration = 0.4
             await _sleepX(200)
             loading.style.opacity = 0.0
             await _sleepX(500)
@@ -184,18 +211,31 @@
 
         sectionTitle.onclick = function () {
             let classList = sidebarBase.classList
-            mainCard.style.zIndex = 2
+            let mainCardClassList = mainCard.classList
             mainCard.style.userSelect = "none"
             mainCard.style.pointerEvents = "none"
             const data = classList.item(classList.length - 1)
             if (data === 'sidebar-base2') {
                 mainCard.style.filter = null
-                sectionTitle2.style.transform = "rotate(0deg)"
+                sectionTitle2.style.opacity = 1.0
+                sectionTitle2.style.transform = "translateX(0px)"
+                sectionTitle.style.transform = "translateX(0px)"
+                sidebarData.style.transform = "scale(0.985)"
+                sidebarData.style.opacity = 0.0
+                sectionTitle3.style.opacity = 0.0
+                sectionTitle3.style.transform = null
                 classList.replace("sidebar-base2", "sidebar-base")
+                mainCardClassList.replace("main-card2", "main-card")
             } else {
-                mainCard.style.filter = "brightness(0.5)"
-                sectionTitle2.style.transform = "rotate(90deg)"
+                sectionTitle2.style.opacity = 0.0
+                sectionTitle2.style.transform = "translateX(20px)"
+                sidebarData.style.opacity = 1.0
+                sectionTitle3.style.opacity = 1.0
+                sectionTitle3.style.transform = "translateX(-25px)"
+                sidebarData.style.transform = "scale(1.0)"
+                sectionTitle.style.transform = "translateX(30px)"
                 classList.replace("sidebar-base", "sidebar-base2")
+                mainCardClassList.replace("main-card", "main-card2")
             }
         }
     </script>
