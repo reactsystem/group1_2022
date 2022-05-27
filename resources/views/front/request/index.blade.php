@@ -50,17 +50,17 @@
                     break;
             }
             ?>
-                <div class="card card-hover width-100pct pointer-cursor mb-10px"
-                     onclick="href('/request/{{$result->id}}')">
-                    <div class="card-body">
-                        <div class="fw-bold font-13">
-                            {!! $statusText !!}<span>{{ implode(", ", $related[$result->id]['date']) }}</span>
+            <div class="card card-hover width-100pct pointer-cursor mb-10px"
+                 onclick="href('/request/{{$result->id}}')">
+                <div class="card-body">
+                    <div class="fw-bold font-13">
+                        {!! $statusText !!}<span>{{ implode(", ", $related[$result->id]['date']) }}</span>
                     </div>
                     <div>
                         申請種別: {{$result->name}}
                     </div>
                     <div>
-                        理由: {{$result->reason}}
+                        理由: <?php echo $result->reason == "" ? "<span class='text-muted'>未記入</span>" : $result->reason;?>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\RequestType;
 use App\Models\VariousRequest;
 use DateTime;
 use Illuminate\Http\Request;
@@ -103,6 +104,10 @@ class TopPageController extends Controller
 
         foreach ($allRequests as $dat) {
             if ($dat->time == null) {
+                continue;
+            }
+            $datType = RequestType::find($dat->type);
+            if ($datType != null && $datType->type == -1) {
                 continue;
             }
             $datArray = preg_split("/:/", $dat->time);

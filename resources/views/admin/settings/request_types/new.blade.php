@@ -47,6 +47,7 @@
                         <option value="2">有給消費(理由不要)</option>
                         <option value="0">理由必要</option>
                         <option value="3">理由不要</option>
+                        <option value="-1">退勤時刻申請</option>
                     </select>
                 </div>
                 <div class="mb-3 col-md-12 col-lg-6">

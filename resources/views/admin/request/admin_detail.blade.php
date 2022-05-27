@@ -134,25 +134,43 @@
             <li class="list-group-item"><div><strong>社員名: </strong>{{$this_request->user->name}}</div></li>
 
             @if($this_request -> type == 1)
-            <li class="list-group-item"><div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}
-                    日({{$this_request -> time ?? "記入なし"}})
-                </div></li>
+                <li class="list-group-item">
+                    <div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}
+                        日({{$this_request -> time ?? "記入なし"}})
+                    </div>
+                </li>
             @else
-            <li class="list-group-item"><div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}日</div></li>
+                <li class="list-group-item">
+                    <div><strong>期間：</strong>{{$this_request -> related_request() -> count() +1}}日</div>
+                </li>
             @endif
 
-            <li class="list-group-item"><div><strong>日付：</strong>{{$this_request['date']}}
-                @foreach($related_request as $request)
+            <li class="list-group-item">
+                <div><strong>日付：</strong>{{$this_request['date']}}
+                    @foreach($related_request as $request)
 
-                    {{' , '.$request['date']}}
-                @endforeach
-            </div></li>
+                        {{' , '.$request['date']}}
+                    @endforeach
+                </div>
+            </li>
 
-            <li class="list-group-item"><div><strong>ステータス: </strong>{!! $statusText !!}</div></li>
+            <li class="list-group-item">
+                <div><strong>ステータス: </strong>{!! $statusText !!}</div>
+            </li>
 
-            <li class="list-group-item"><div><strong>申請種別: </strong>{{$this_request->request_types->name}}</div></li>
+            <li class="list-group-item">
+                <div><strong>申請種別: </strong>{{$this_request->request_types->name}}</div>
+            </li>
             @if($this_request->time != NULL)
-            <li class="list-group-item"><div><strong>労働時間: </strong>{{$this_request->time}}</div></li>
+                <li class="list-group-item">
+                    <div>
+                        @if($this_request->request_types->type == -1)
+                            <strong>退勤時刻: </strong>
+                        @else
+                            <strong>労働時間: </strong>
+                        @endif
+                        {{$this_request->time}}</div>
+                </li>
             @endif
 
             @if($this_request->reason != "")

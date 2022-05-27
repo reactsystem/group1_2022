@@ -11228,22 +11228,23 @@ textarea.form-control-lg {
     text-align: center !important;
   }
 }
+
 @media (min-width: 1200px) {
-  .fs-1 {
-    font-size: 2.25rem !important;
-  }
+    .fs-1 {
+        font-size: 2.25rem !important;
+    }
 
-  .fs-2 {
-    font-size: 1.8rem !important;
-  }
+    .fs-2 {
+        font-size: 1.8rem !important;
+    }
 
-  .fs-3 {
-    font-size: 1.575rem !important;
-  }
+    .fs-3 {
+        font-size: 1.575rem !important;
+    }
 
-  .fs-4 {
-    font-size: 1.35rem !important;
-  }
+    .fs-4 {
+        font-size: 1.35rem !important;
+    }
 }
 
 @media print {
@@ -11287,6 +11288,43 @@ textarea.form-control-lg {
         display: none !important;
     }
 }
+
+.request-card-header, .card-header.cancelled::after, .card-header.declined::after, .card-header.approved::after, .card-header.in-progress::after {
+    position: absolute;
+    width: 10%;
+    min-width: 100px;
+    height: 40px;
+    border-top-left-radius: calc(0.25rem - 1px);
+    padding-top: 4px;
+    font-size: 16pt;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+    left: 0;
+    top: 0;
+}
+
+.card-header.in-progress::after {
+    content: "申請中";
+    background-color: #e17f00;
+}
+
+.card-header.approved::after {
+    content: "承認";
+    background-color: #0A0;
+}
+
+.card-header.declined::after {
+    content: "却下";
+    background-color: #A00;
+}
+
+.card-header.cancelled::after {
+    content: "取消";
+    background-color: #777;
+}
+
 .bg-darken {
     background-color: #222;
 }

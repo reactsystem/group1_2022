@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
 use App\Models\Notification;
 use App\Models\PaidHoliday;
 use App\Models\RequestType;
@@ -108,6 +109,28 @@ class AdminRequestController extends Controller
             VariousRequest::find($request->id)->update(['holidays_key' => $holidayData[1], 'status' => 1]);
         } else {
             VariousRequest::find($request->id)->update(['status' => 1]);
+        }
+        $requestType = RequestType::find($this_request->type);
+        if ($requestType != null && $requestType->type == -1) {
+            $attend = Attendance::where('date', $this_request->date)->where('user_id', $this_request->user_id)->first();
+            $attend->mode = 1;
+            $left_at = new DateTime($this_request->date . " " . $this_request->time . ":00");
+
+            $current = $left_at->getTimestamp();
+            $before = strtotime($attend->created_at);
+            $diff = $current - $before;
+            $hours = intval($diff / 60 / 60);
+            $minutes = sprintf('%02d', intval($diff / 60) % 60);
+
+            $created = new DateTime($attend->created_at->format("H:i:50"));
+            $created->s = 0;
+            $tempLeftDat = preg_split("/:/", $left_at->format('H:i:50'));
+            $left = new DateTime($tempLeftDat[0] . ":" . $tempLeftDat[1] . ":50");
+            $left->s = 0;
+            $intervalTime = $created->diff($left);
+            $attend->time = $intervalTime->format('%h:%I');
+            $attend->left_at = $left_at;
+            $attend->save();
         }
         VariousRequest::where('related_id', '=', $request->uuid)->update(['status' => 1]);
         $message = '申請を承認しました。';

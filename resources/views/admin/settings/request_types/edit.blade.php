@@ -53,6 +53,7 @@
                     <option value="2" <?php if($data->type == 2){?>selected<?php }?>>有給消費(理由不要)</option>
                     <option value="0" <?php if($data->type == 0){?>selected<?php }?>>理由必要</option>
                     <option value="3" <?php if($data->type == 3){?>selected<?php }?>>理由不要</option>
+                    <option value="-1" <?php if($data->type == -1){?>selected<?php }?>>退勤時刻申請</option>
                 </select>
             </div>
             <div class="mb-3 col-md-12 col-lg-6">

@@ -110,6 +110,10 @@ class AttendanceManagementController extends Controller
             if ($dat->time == null) {
                 continue;
             }
+            $datType = RequestType::find($dat->type);
+            if ($datType != null && $datType->type == -1) {
+                continue;
+            }
             $datArray = preg_split("/:/", $dat->time);
             $hoursReq += intval($datArray[0]);
             $minutesReq += intval($datArray[1]);

@@ -1,5 +1,14 @@
 @extends('layouts.main')
 
+@section('styles')
+    <style>
+        .card-header {
+            margin-left: 100px;
+            font-weight: bold;
+        }
+    </style>
+@endsection
+
 @section('pageTitle', "各種申請")
 @section('content')
     <div class="container">
@@ -19,39 +28,89 @@
             </div>
         </div>
         <hr>
-        <div>
-            <?php
-            // CHECK STATUS
-            $statusText = '<span style="color: #E80">●</span> <strong>申請中</strong>';
-            /* @var $result */
-            switch ($result->status) {
-                case 1:
-                    $statusText = '<span style="color: #0E0">●</span> <strong>承認</strong>';
-                    break;
-                case 2:
-                    $statusText = '<span style="color: #E00">●</span> <strong>却下</strong>';
-                    break;
-                case 3:
-                    $statusText = '<span style="color: #AAA">●</span> <strong>取消</strong>';
-                    break;
-            }
-            ?>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>日時: </strong>{{implode(", ", $related['date'])}}</li>
-                <li class="list-group-item"><strong>ステータス: </strong>{!! $statusText !!}</li>
-                <li class="list-group-item"><strong>申請種別: </strong>{{$result->name}}</li>
-                @if($result->time != NULL)
-                    <li class="list-group-item"><strong>労働時間: </strong>{{$result->time}}</li>
-                @endif
-                @if($holidays != 0)
-                    <li class="list-group-item"><strong>有給消費: </strong>{{$holidays}}
-                        日(残り{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日)
-                    </li>
-                @endif
-                @if($result->reason != "")
-                    <li class="list-group-item"><strong>理由: </strong>{{$result->reason}}</li>
-                @endif
-            </ul>
+        <?php
+        // CHECK STATUS
+        $statusClass = 'in-progress';
+        /* @var $result */
+        switch ($result->status) {
+            case 1:
+                $statusClass = 'approved';
+                break;
+            case 2:
+                $statusClass = 'declined';
+                break;
+            case 3:
+                $statusClass = 'cancelled';
+                break;
+        }
+        ?>
+        <div class="mb-5 card">
+            <div class="card-header {{$statusClass}}">
+                <div class="row">
+                    <div class="col-md-5">
+                        {{$result->name}}
+                    </div>
+                    <div class="col-md-7 d-none d-sm-none d-md-inline-flex text-right">
+                        <span class="width-100pct">
+                            申請日時: {{$result->created_at}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="table-responsive col-md-4 col-lg-4 col-xl-3">
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    日時
+                                </th>
+                            </tr>
+                            @foreach($related['date'] as $date)
+                                <tr>
+                                    <td>
+                                        {{$date}}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                    <div class="col-md-8 col-lg-8 col-xl-9">
+                        <ul class="padding-0">
+                            @if($result->time != NULL)
+                                <li class="list-group-item">
+                                    @if($result->type_int == -1)
+                                        <strong>退勤時刻: </strong>
+                                    @else
+                                        <strong>労働時間: </strong>
+                                    @endif
+                                    {{$result->time}}
+                                </li>
+                            @endif
+                            @if($holidays != 0)
+                                <li class="list-group-item"><strong>有給消費: </strong>{{$holidays}}
+                                    日(残り{{\App\Models\PaidHoliday::getHolidays(Auth::id())}}日)
+                                </li>
+                            @endif
+                        </ul>
+                        @if($result->reason != "")
+                            <label for="reasonText" class="form-label">
+                                <strong>理由</strong>
+                            </label>
+                            <textarea id="reasonText" class="form-control" readonly>{{$result->reason}}</textarea>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <span class="width-100pct">
+                            最終更新: {{$result->updated_at}}
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     @if($result->status == 0)
