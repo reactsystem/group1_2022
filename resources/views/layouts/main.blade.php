@@ -86,6 +86,8 @@
                 /*border-top-right-radius: 20px;*/
                 transform: translateX(max(40vw, 300px));
                 transition-duration: 0.25s;
+                user-select: none;
+                pointer-events: none;
             }
         }
 
@@ -168,7 +170,8 @@
                     @endif
                 </ul>
             </div>
-            <div class="col-lg-8 col-xl-9 bg-light main-card" id="mainCard" style="height: 100%; min-height: 100vh">
+            <div class="col-lg-8 col-xl-9 bg-light main-card" id="mainCard"
+                 style="height: 100%; min-height: 100vh; transition-duration: 0.0s">
                 <div style="margin-top: 80px" class="basement">
                     @yield('content')
                 </div>
@@ -199,6 +202,7 @@
             sectionTitle.style.transitionDuration = 0.4
             await _sleepX(200)
             loading.style.opacity = 0.0
+            mainCard.style.transitionDuration = null
             await _sleepX(500)
             loading.style.display = "none"
         }
@@ -220,8 +224,6 @@
         sectionTitle.onclick = function () {
             let classList = sidebarBase.classList
             let mainCardClassList = mainCard.classList
-            mainCard.style.userSelect = "none"
-            mainCard.style.pointerEvents = "none"
             const data = classList.item(classList.length - 1)
             if (data === 'sidebar-base2') {
                 mainCard.style.filter = null

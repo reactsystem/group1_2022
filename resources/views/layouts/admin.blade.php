@@ -77,6 +77,7 @@
                 transform: translateX(0);
                 z-index: 2;
                 transition-duration: 0.4s;
+                transition-timing-function: cubic-bezier(0.15, 1.07, 0.76, 0.98);
             }
 
             .main-card2 {
@@ -84,7 +85,10 @@
                 border-top-left-radius: 20px;
                 /*border-top-right-radius: 20px;*/
                 transform: translateX(max(40vw, 300px));
-                transition-duration: 0.2s;
+                transition-duration: 0.4s;
+                transition-timing-function: cubic-bezier(0.15, 1.07, 0.76, 0.98);
+                user-select: none;
+                pointer-events: none;
             }
         }
 
@@ -163,7 +167,8 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-lg-8 col-xl-9 bg-light main-card" id="mainCard" style="height: 100%; min-height: 100vh;">
+            <div class="col-lg-8 col-xl-9 bg-light main-card" id="mainCard"
+                 style="height: 100%; min-height: 100vh; transition-duration: 0.0">
                 <div style="margin-top: 80px" class="basement">
                     @yield('content')
                 </div>
@@ -191,6 +196,7 @@
             sectionTitle.style.transitionDuration = 0.4
             await _sleepX(200)
             loading.style.opacity = 0.0
+            mainCard.style.transitionDuration = null
             await _sleepX(500)
             loading.style.display = "none"
         }
@@ -212,8 +218,6 @@
         sectionTitle.onclick = function () {
             let classList = sidebarBase.classList
             let mainCardClassList = mainCard.classList
-            mainCard.style.userSelect = "none"
-            mainCard.style.pointerEvents = "none"
             const data = classList.item(classList.length - 1)
             if (data === 'sidebar-base2') {
                 mainCard.style.filter = null
@@ -221,6 +225,7 @@
                 sectionTitle2.style.transform = "translateX(0px)"
                 sectionTitle.style.transform = "translateX(0px)"
                 sidebarData.style.transform = "scale(0.985)"
+                sidebarData.style.opacity = null
                 sectionTitle3.style.opacity = 0.0
                 sectionTitle3.style.transform = null
                 classList.replace("sidebar-base2", "sidebar-base")
