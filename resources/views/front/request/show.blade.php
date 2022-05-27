@@ -39,7 +39,8 @@
             <div class="card-header {{$statusClass}}">
                 <div class="row">
                     <div class="col-md-5">
-                        {{$result->name}}
+                        <span style="color: {{$result->color}};" class="request-badge">●</span><span
+                            class="ml-20px">{{$result->name}}</span>
                     </div>
                     <div class="col-md-7 d-none d-sm-none d-md-inline-flex text-right">
                         <span class="width-100pct">
