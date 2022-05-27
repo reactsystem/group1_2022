@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-md-7 d-none d-sm-none d-md-inline-flex text-right">
                         <span class="width-100pct">
-                            申請日時: {{$result->created_at}}
+                            作成日時: {{$result->created_at}}
                         </span>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         <table class="table">
                             <tr>
                                 <th>
-                                    日時
+                                    申請日時 ({{count($related['date'])}}日)
                                 </th>
                             </tr>
                             @foreach($related['date'] as $date)
