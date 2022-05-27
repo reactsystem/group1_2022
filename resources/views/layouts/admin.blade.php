@@ -76,7 +76,7 @@
                 /*border-top-right-radius: 20px;*/
                 transform: translateX(0);
                 z-index: 2;
-                transition-duration: 0.2s;
+                transition-duration: 0.4s;
             }
 
             .main-card2 {
