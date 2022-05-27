@@ -66,10 +66,25 @@ class TopPageController extends Controller
         $interval = $created->diff($date_now);
         $createDate = new DateTime($data->created_at);
 
-
         if ($data->mode == 0) {
-            $hours += intval($interval->format('%h'));
-            $minutes += intval($interval->format('%i'));
+            $datArray = preg_split("/:/", $interval->format('%h:%i:%s'));
+            $restData = preg_split("/:/", $data->rest);
+            $wHours = intval($datArray[0]);
+            $wMinutes = intval($datArray[1]);
+            $rHours = intval($restData[0]);
+            $rMinutes = intval($restData[1]);
+            $xhours = max(0, $wHours - $rHours);
+            $xminutes = $wMinutes - $rMinutes;
+            if ($xminutes < 0 && $xhours != 0) {
+                $xminutes = 60 - abs($xminutes);
+                $xhours -= 1;
+            } else if ($xminutes < 0) {
+                $xminutes = 0;
+            }
+            $hours += $xhours;
+            $minutes += $xminutes;
+            //$hours += intval($interval->format('%h'));
+            //$minutes += intval($interval->format('%i'));
         }
 
         $datTime = $data->time;
