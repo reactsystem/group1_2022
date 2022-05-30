@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('pageTitle', "新規申請")
+@section('pageTitle', "各種申請管理")
 @section('styles')
     <link href="{{ asset('css/air-datepicker.css') }}" rel="stylesheet">
 @endsection

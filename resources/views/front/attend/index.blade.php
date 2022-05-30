@@ -12,25 +12,25 @@
                             労働時間
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
-                            {!! $interval !!}
+                            <span class="float-right">{!! $interval !!}</span>
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 pr-0">
                             出勤時刻
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
-                            {{$data->created_at->format("G:i")}}
+                            <span class="float-right">{{$data->created_at->format("G:i")}}</span>
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 pr-0">
                             退勤時刻
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26 text-muted">
-                            --:--
+                            <span class="float-right">--:--</span>
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 pr-0">
                             合計時間
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
-                            {{$origin}}
+                            <span class="float-right">{{$origin}}</span>
                         </div>
                     </div>
                 @elseif($data != null && $data->mode == 1)
@@ -39,25 +39,25 @@
                             労働時間
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
-                            {!! $interval !!}
+                            <span class="float-right">{!! $interval !!}</span>
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 pr-0">
                             出勤時刻
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
-                            {{$data->created_at->format("G:i")}}
+                            <span class="float-right">{{$data->created_at->format("G:i")}}</span>
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 pr-0">
                             退勤時刻
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
-                            {{$leftTime->format("G:i")}}
+                            <span class="float-right">{{$leftTime->format("G:i")}}</span>
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 pr-0">
                             合計時間
                         </div>
                         <div class="col-6 col-md-auto vert-center-40 fw-bold font-26">
-                            {{$origin}}
+                            <span class="float-right">{{$origin}}</span>
                         </div>
                     </div>
                 @else

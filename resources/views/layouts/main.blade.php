@@ -64,6 +64,7 @@
                 height: 0;
                 z-index: 0;
                 transition-duration: 0.3s;
+                pointer-events: none;
             }
 
             .sidebar-base2 {
@@ -75,8 +76,6 @@
             .main-card {
                 border-top-left-radius: 20px;
                 /*border-top-right-radius: 20px;*/
-                transform: translateX(0);
-                z-index: 2;
                 transition-duration: 0.4s;
             }
 
@@ -87,7 +86,8 @@
                 transform: translateX(max(40vw, 300px));
                 transition-duration: 0.25s;
                 user-select: none;
-                pointer-events: none;
+                cursor: pointer;
+                /*pointer-events: none;*/
             }
         }
 
@@ -121,7 +121,6 @@
 
             .main-card {
                 border-radius: 0;
-                transform: translateX(0);
                 transition-duration: 0.2s;
             }
 
@@ -172,7 +171,7 @@
             </div>
             <div class="col-lg-8 col-xl-9 bg-light main-card" id="mainCard"
                  style="height: 100%; min-height: 100vh; transition-duration: 0.0s">
-                <div style="margin-top: 80px" class="basement">
+                <div style="margin-top: 80px" class="basement" id="basement">
                     @yield('content')
                 </div>
             </div>
@@ -192,6 +191,7 @@
         const sectionTitle2 = document.getElementById('sectionTitle2')
         const sectionTitle3 = document.getElementById('sectionTitle3')
         const sidebarData = document.getElementById('sidebarData')
+        const basement = document.getElementById('basement')
         const sidebarBase = document.getElementById('sidebarBase')
         const mainCard = document.getElementById('mainCard')
         const _sleepX = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -199,7 +199,8 @@
         window.onload = async () => {
             await _sleepX(100)
             loading.style.pointerEvents = "none"
-            sectionTitle.style.transitionDuration = 0.4
+            sectionTitle.style.transitionDuration = "0.4s"
+            sectionTitle2.style.transitionDuration = "0.2s"
             await _sleepX(200)
             loading.style.opacity = 0.0
             mainCard.style.transitionDuration = null
@@ -221,6 +222,25 @@
             }
         };
 
+        mainCard.onclick = function () {
+            let classList = sidebarBase.classList
+            let mainCardClassList = mainCard.classList
+            const data = classList.item(classList.length - 1)
+            if (data === 'sidebar-base2') {
+                mainCard.style.filter = null
+                sectionTitle2.style.opacity = 1.0
+                sectionTitle2.style.transform = null
+                sectionTitle.style.transform = null
+                sidebarData.style.transform = "scale(0.985)"
+                sidebarData.style.opacity = null
+                sectionTitle3.style.opacity = 0.0
+                sectionTitle3.style.transform = null
+                basement.style.pointerEvents = null
+                classList.replace("sidebar-base2", "sidebar-base")
+                mainCardClassList.replace("main-card2", "main-card")
+            }
+        }
+
         sectionTitle.onclick = function () {
             let classList = sidebarBase.classList
             let mainCardClassList = mainCard.classList
@@ -228,12 +248,13 @@
             if (data === 'sidebar-base2') {
                 mainCard.style.filter = null
                 sectionTitle2.style.opacity = 1.0
-                sectionTitle2.style.transform = "translateX(0px)"
-                sectionTitle.style.transform = "translateX(0px)"
+                sectionTitle2.style.transform = null
+                sectionTitle.style.transform = null
                 sidebarData.style.transform = "scale(0.985)"
                 sidebarData.style.opacity = null
                 sectionTitle3.style.opacity = 0.0
                 sectionTitle3.style.transform = null
+                basement.style.pointerEvents = null
                 classList.replace("sidebar-base2", "sidebar-base")
                 mainCardClassList.replace("main-card2", "main-card")
             } else {
@@ -244,6 +265,7 @@
                 sectionTitle3.style.transform = "translateX(-25px)"
                 sidebarData.style.transform = "scale(1.0)"
                 sectionTitle.style.transform = "translateX(30px)"
+                basement.style.pointerEvents = "none"
                 classList.replace("sidebar-base", "sidebar-base2")
                 mainCardClassList.replace("main-card", "main-card2")
             }

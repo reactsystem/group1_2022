@@ -413,16 +413,13 @@
     margin-top: -1px;
     margin-right: 12px;
     color: #888;
-    transition-duration: 0.4s;
 
     &:hover {
         color: #fff;
-        transition-duration: 0.4s;
     }
 }
 
 #sectionTitle2 {
-    transition-duration: 0.2s;
     display: inline-block;
     margin-top: -5px;
 }
@@ -562,6 +559,16 @@
     position: absolute;
     transform: translateX(-30px) rotate(-45deg);
     transition-duration: 0.35s;
-    font-size: 22pt;
+    font-size: 23pt;
     top: -10px;
+}
+
+.arrow {
+    width: 13px;
+    height: 13px;
+    border: 2px solid;
+    border-color: #aaa #aaa transparent transparent;
+    transform: rotate(45deg);
+    margin-left: -12px;
+    margin-top: -3px;
 }

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('pageTitle', "申請一覧")
+@section('pageTitle', "各種申請管理")
 @section('content')
     <div class="container">
         <div class="row">
