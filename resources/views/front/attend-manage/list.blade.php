@@ -3,11 +3,10 @@
 @section('styles')
     <style>
         @media only screen and (max-width: 767.999px) {
-            .calender-main {
-                transform: scale(0.7);
+            .calender-list-main {
                 width: 145%;
                 margin-left: -23%;
-                margin-top: -40px;
+                margin-top: -10px;
                 border-radius: 15px;
             }
 
@@ -16,15 +15,16 @@
             }
 
             .cards {
-                margin-top: 40px;
+                margin-top: -110px;
                 border-radius: 20px;
+                transform: scale(0.7);
             }
         }
 
         @media only screen and (min-width: 768px) {
-            .calender-main {
+            .calender-list-main {
                 border-radius: 16px;
-                margin-top: -30px;
+                margin-top: -10px;
             }
 
             .card-header {
@@ -37,11 +37,10 @@
         }
 
         @media only screen and (min-width: 992px) {
-            .calender-main {
-                transform: scale(0.75);
+            .calender-list-main {
                 width: 134%;
                 margin-left: -17%;
-                margin-top: -30px;
+                margin-top: -10px;
                 border-radius: 13px;
             }
 
@@ -50,13 +49,13 @@
             }
 
             .cards {
-                margin-top: 40px;
+                transform: scale(0.75);
+                margin-top: -100px;
             }
         }
 
         @media only screen and (min-width: 1220px) {
-            .calender-main {
-                transform: scale(1.0);
+            .calender-list-main {
                 width: 100%;
                 margin-left: 0;
                 margin-top: 10px;
@@ -68,6 +67,7 @@
             }
 
             .cards {
+                transform: scale(1.0);
                 margin-top: 20px;
             }
         }
@@ -164,8 +164,8 @@
                 </div>
             @endif
             @foreach($attendData as $data)
-                <div class="card work-card calender-main card-hover pointer-cursor mb-3"
-                     onclick="openDescModal({{$data->created_at->format('d')}})">
+                    <div class="card work-card calender-list-main card-hover pointer-cursor mb-3"
+                         onclick="openDescModal({{$data->created_at->format('d')}})">
                     <div class="card-header calender-card-header">
                         {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span><?php
                             try {
