@@ -41,6 +41,10 @@
             transform: scale(1.1);
         }
 
+        body {
+            overflow-x: hidden;
+        }
+
         @media screen and (max-width: 991.999px) {
             .sidebar-data {
                 list-style: none;
@@ -50,26 +54,40 @@
                 margin-top: 80px;
                 padding-left: 0;
                 transition-duration: 0.3s;
+                position: fixed;
+                transform: scale(0.985);
+                opacity: 0.0;
             }
 
             .sidebar-base {
                 background-color: #BBB;
                 height: 0;
-                z-index: -1;
+                z-index: 0;
                 transition-duration: 0.3s;
+                pointer-events: none;
             }
 
             .sidebar-base2 {
                 background-color: #BBB;
-                height: 370px;
                 z-index: 1;
                 transition-duration: 0.3s;
             }
 
             .main-card {
                 border-top-left-radius: 20px;
-                border-top-right-radius: 20px;
-                transition-duration: 0.2s;
+                /*border-top-right-radius: 20px;*/
+                transition-duration: 0.4s;
+            }
+
+            .main-card2 {
+                filter: brightness(0.5);
+                border-top-left-radius: 20px;
+                /*border-top-right-radius: 20px;*/
+                transform: translateX(max(40vw, 300px));
+                transition-duration: 0.25s;
+                user-select: none;
+                cursor: pointer;
+                /*pointer-events: none;*/
             }
         }
 
@@ -103,6 +121,14 @@
 
             .main-card {
                 border-radius: 0;
+                transition-duration: 0.2s;
+            }
+
+            .main-card2 {
+                border-top-left-radius: 20px;
+                /*border-top-right-radius: 20px;*/
+                transform: translateX(0);
+                transition-duration: 0.2s;
             }
         }
 
@@ -113,7 +139,7 @@
     <div class="container">
         <div class="row" style="width: 100%; margin-left: 0">
             <div id="sidebarBase" class="col-lg-4 col-xl-3 col-md-12 text-dark sidebar-base">
-                <ul class="sidebar-data">
+                <ul class="sidebar-data" id="sidebarData">
                     <li class="sidebar-list<?php if (Request::is('home')) {
                         echo ' active';
                     }?>" onclick="href('/home')"><span style="color: #888;">●</span> トップページ
@@ -143,8 +169,9 @@
                     @endif
                 </ul>
             </div>
-            <div class="col-lg-8 col-xl-9 bg-light main-card" id="mainCard" style="height: 100%; min-height: 100vh">
-                <div style="margin-top: 80px" class="basement">
+            <div class="col-lg-8 col-xl-9 bg-light main-card" id="mainCard"
+                 style="height: 100%; min-height: 100vh; transition-duration: 0.0s">
+                <div style="margin-top: 80px" class="basement" id="basement">
                     @yield('content')
                 </div>
             </div>
@@ -162,14 +189,21 @@
         const loading = document.getElementById('loading')
         const sectionTitle = document.getElementById('sectionTitle')
         const sectionTitle2 = document.getElementById('sectionTitle2')
+        const sectionTitle3 = document.getElementById('sectionTitle3')
+        const sidebarData = document.getElementById('sidebarData')
+        const basement = document.getElementById('basement')
         const sidebarBase = document.getElementById('sidebarBase')
         const mainCard = document.getElementById('mainCard')
         const _sleepX = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
         window.onload = async () => {
+            await _sleepX(100)
             loading.style.pointerEvents = "none"
+            sectionTitle.style.transitionDuration = "0.4s"
+            sectionTitle2.style.transitionDuration = "0.2s"
             await _sleepX(200)
             loading.style.opacity = 0.0
+            mainCard.style.transitionDuration = null
             await _sleepX(500)
             loading.style.display = "none"
         }
@@ -188,20 +222,52 @@
             }
         };
 
-        sectionTitle.onclick = function () {
+        mainCard.onclick = function () {
             let classList = sidebarBase.classList
-            mainCard.style.zIndex = 2
-            mainCard.style.userSelect = "none"
-            mainCard.style.pointerEvents = "none"
+            let mainCardClassList = mainCard.classList
             const data = classList.item(classList.length - 1)
             if (data === 'sidebar-base2') {
                 mainCard.style.filter = null
-                sectionTitle2.style.transform = "rotate(0deg)"
+                sectionTitle2.style.opacity = 1.0
+                sectionTitle2.style.transform = null
+                sectionTitle.style.transform = null
+                sidebarData.style.transform = "scale(0.985)"
+                sidebarData.style.opacity = null
+                sectionTitle3.style.opacity = 0.0
+                sectionTitle3.style.transform = null
+                basement.style.pointerEvents = null
                 classList.replace("sidebar-base2", "sidebar-base")
+                mainCardClassList.replace("main-card2", "main-card")
+            }
+        }
+
+        sectionTitle.onclick = function () {
+            let classList = sidebarBase.classList
+            let mainCardClassList = mainCard.classList
+            const data = classList.item(classList.length - 1)
+            if (data === 'sidebar-base2') {
+                mainCard.style.filter = null
+                sectionTitle2.style.opacity = 1.0
+                sectionTitle2.style.transform = null
+                sectionTitle.style.transform = null
+                sidebarData.style.transform = "scale(0.985)"
+                sidebarData.style.opacity = null
+                sectionTitle3.style.opacity = 0.0
+                sectionTitle3.style.transform = null
+                basement.style.pointerEvents = null
+                classList.replace("sidebar-base2", "sidebar-base")
+                mainCardClassList.replace("main-card2", "main-card")
             } else {
-                mainCard.style.filter = "brightness(0.5)"
-                sectionTitle2.style.transform = "rotate(90deg)"
+                sectionTitle2.style.opacity = 0.0
+                sectionTitle2.style.transform = "translateX(20px)"
+                sidebarData.style.opacity = 1.0
+                sectionTitle3.style.opacity = 1.0
+                sectionTitle3.style.transform = "translateX(-25px)"
+                sidebarData.style.transform = "scale(1.0)"
+                sectionTitle.style.transform = "translateX(30px)"
+                basement.style.pointerEvents = "none"
                 classList.replace("sidebar-base", "sidebar-base2")
+                mainCardClassList.replace("main-card", "main-card2")
             }
         }
     </script>

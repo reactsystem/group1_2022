@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('pageTitle', "新規申請")
+@section('pageTitle', "各種申請管理")
 @section('styles')
     <link href="{{ asset('css/air-datepicker.css') }}" rel="stylesheet">
 @endsection
@@ -161,10 +161,10 @@
             let req2 = []
 
             reqDates.forEach(element => {
-                    console.log("DATE: " + element)
+                    // DISABLED - console.log("DATE: " + element)
                     const dateData = new Date(element)
                     req2[req2.length] = dateData.getFullYear() + '年' + (dateData.getMonth() + 1) + '月' + (dateData.getDate()) + '日'
-                    console.log('WRITE: ' + req2[req2.length - 1])
+                    // DISABLED - console.log('WRITE: ' + req2[req2.length - 1])
                 }
             );
             let message = '<b>申請者の名前:</b> ' + userInput.options[userId].text + '<br>' + '<b>申請する日付:</b> ' + req2.join(', ') + '<br>' +
@@ -205,19 +205,19 @@
 
         requestTime.onchange = function () {
             workTimeAvailable = (requestTime.value !== "" && requestTime.value !== "00:00");
-            console.log('WORKTIME: ' + requestTime.value + ' / ' + workTimeAvailable)
+            // DISABLED - console.log('WORKTIME: ' + requestTime.value + ' / ' + workTimeAvailable)
             checkData()
         }
         requestReason.onchange = function () {
             reasonAvailable = requestReason.value !== "";
-            console.log('REASON: ' + requestReason.value)
+            // DISABLED - console.log('REASON: ' + requestReason.value)
             checkData()
         }
 
         let requestType = document.getElementById('requestType');
         let workTime = document.getElementById('workTime');
         requestType.onchange = function () {
-            console.log('DATA: ' + requestType.value + ' / ' + isFinite(requestType.value))
+            // DISABLED - console.log('DATA: ' + requestType.value + ' / ' + isFinite(requestType.value))
             if (requestType.value !== 0 && isFinite(requestType.value)) {
                 typeSelected = true
                 checkData()
@@ -237,7 +237,7 @@
 
         userInput.onchange = function () {
             userSelected = false
-            console.log('DATA: ' + userInput.value + ' / ' + isFinite(userInput.value))
+            // DISABLED - console.log('DATA: ' + userInput.value + ' / ' + isFinite(userInput.value))
             if (userInput.value != 0 && isFinite(userInput.value)) {
                 userSelected = true
                 checkData()
@@ -249,7 +249,7 @@
 
         // 下に加えてInputName がNULL以外なら通したい
         function checkData() {
-            console.log('User: ' + userSelected + ' Type: ' + typeSelected + ' / Time: ' + timeAvailable + ' / Work: ' + workTimeAvailable + ' / Reason: ' + reasonAvailable)
+            // DISABLED - console.log('User: ' + userSelected + ' Type: ' + typeSelected + ' / Time: ' + timeAvailable + ' / Work: ' + workTimeAvailable + ' / Reason: ' + reasonAvailable)
             if (userSelected && typeSelected && timeAvailable && (types[requestType.value - 1][1] !== 1 || workTimeAvailable) && (types[requestType.value - 1][1] === 2 || types[requestType.value - 1][1] === 3 || reasonAvailable)) {
                 proceedButton.removeAttribute("disabled")
             } else {
@@ -274,7 +274,7 @@
             multipleDates: 10,
             onSelect({date}) {
                 timeAvailable = (date + '') !== '';
-                console.log('TIME: ' + date)
+                // DISABLED - console.log('TIME: ' + date)
                 checkData()
             }
         });

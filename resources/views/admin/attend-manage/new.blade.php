@@ -72,10 +72,7 @@
                     <label for="endTime" class="form-label">退勤時刻</label>
                     <input type="time" class="form-control" id="endTime" placeholder="--:--" value="{{old("start")}}">
                 </div>
-                <div class="mb-3 col-md-12 col-lg-6">
-                    <label for="workTime" class="form-label">勤務時間</label>
-                    <input type="time" class="form-control" id="workTime" placeholder="--:--" value="{{old("end")}}">
-                </div>
+                <input type="hidden" id="workTime" value="">
                 <div class="mb-3 col-md-12 col-lg-6">
                     <label for="restTime" class="form-label">休憩時間</label>
                     <input type="time" class="form-control" id="restTime" placeholder="--:--" value="{{old("rest")}}">
@@ -127,7 +124,7 @@
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
-                    console.log("Result: " + resultCode + " / " + res.data.message)
+                    // DISABLED - console.log("Result: " + resultCode + " / " + res.data.message)
                     if (resultCode === 0) {
                         saveBtn.className = "btn btn-success float-right"
                         saveBtn.innerText = "保存しました"

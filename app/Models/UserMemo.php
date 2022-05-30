@@ -9,6 +9,11 @@ class UserMemo extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'memo',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'id', 'user_id');

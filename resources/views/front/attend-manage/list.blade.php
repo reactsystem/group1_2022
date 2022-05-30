@@ -3,11 +3,10 @@
 @section('styles')
     <style>
         @media only screen and (max-width: 767.999px) {
-            .calender-main {
-                transform: scale(0.7);
+            .calender-list-main {
                 width: 145%;
                 margin-left: -23%;
-                margin-top: -40px;
+                margin-top: -10px;
                 border-radius: 15px;
             }
 
@@ -16,15 +15,16 @@
             }
 
             .cards {
-                margin-top: 40px;
+                margin-top: -340px;
                 border-radius: 20px;
+                transform: scale(0.7);
             }
         }
 
         @media only screen and (min-width: 768px) {
-            .calender-main {
+            .calender-list-main {
                 border-radius: 16px;
-                margin-top: -30px;
+                margin-top: -10px;
             }
 
             .card-header {
@@ -32,16 +32,15 @@
             }
 
             .cards {
-                margin-top: 10px;
+                margin-top: 30px;
             }
         }
 
         @media only screen and (min-width: 992px) {
-            .calender-main {
-                transform: scale(0.75);
+            .calender-list-main {
                 width: 134%;
                 margin-left: -17%;
-                margin-top: -30px;
+                margin-top: -10px;
                 border-radius: 13px;
             }
 
@@ -50,13 +49,13 @@
             }
 
             .cards {
-                margin-top: 40px;
+                transform: scale(0.75);
+                margin-top: -285px;
             }
         }
 
         @media only screen and (min-width: 1220px) {
-            .calender-main {
-                transform: scale(1.0);
+            .calender-list-main {
                 width: 100%;
                 margin-left: 0;
                 margin-top: 10px;
@@ -68,6 +67,7 @@
             }
 
             .cards {
+                transform: scale(1.0);
                 margin-top: 20px;
             }
         }
@@ -78,7 +78,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-4 flex-view">
+            <div class="col-md-5 col-lg-6 col-xl-4 flex-view">
                 @if($month == 1)
                     <a href="/attend-manage?year={{$year - 1}}&month=12&mode={{$mode}}"
                        class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
@@ -95,7 +95,7 @@
                        class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @endif
             </div>
-            <div class="col-md-4 type-scroll">
+            <div class="col-md-7 col-lg-6 col-xl-4 type-scroll">
                 @foreach($cats as $cat)
                     <div>
                         <span style="color: {{$cat->color}}">
@@ -114,7 +114,7 @@
                         </span>欠勤&nbsp;
                 </div>
             </div>
-            <div class="col-md-4 header-flex-area">
+            <div class="col-md-12 col-lg-12 col-xl-4 header-flex-area">
                 @if($confirmStatus == -1)
                     <button class="btn btn-secondary height-40" disabled>
                         月報確定
@@ -137,23 +137,24 @@
                 </a>
             </div>
         </div>
-        <div class="w100-gap10 flex-view">
-            <div class="flex-1-5 padding-0">
+        <div class="row w-100 mt-3 ml-0">
+            <div class="col-md-2 col-sm-6 padding-0">
                 <span class="text-muted vert-center-40">今月の労働時間</span>
             </div>
-            <div class="flex-1">
+            <div class="col-md-3 col-sm-6">
                 <strong class="font-20">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
             </div>
-            <div class="flex-1">
+            <div class="col-md-1 d-md-inline-flex d-sm-none">
 
             </div>
-            <div class="flex-1-5 padding-0">
+            <div class="col-md-2 col-sm-6 padding-0">
                 <span class="text-muted vert-center-40">今月の残業時間</span>
             </div>
-            <div class="flex-1">
+            <div class="col-md-3 col-sm-6">
                 <strong class="font-20">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
             </div>
-            <div class="flex-4">
+            <div class="col-md-1 d-md-inline-flex d-sm-none">
+
             </div>
         </div>
         <hr>
@@ -164,8 +165,8 @@
                 </div>
             @endif
             @foreach($attendData as $data)
-                <div class="card work-card calender-main card-hover pointer-cursor mb-3"
-                     onclick="openDescModal({{$data->created_at->format('d')}})">
+                    <div class="card work-card calender-list-main card-hover pointer-cursor mb-3"
+                         onclick="openDescModal({{$data->created_at->format('d')}})">
                     <div class="card-header calender-card-header">
                         {{$data->created_at->format('Y年m月d日')}}の勤務情報&nbsp;<span><?php
                             try {
@@ -430,10 +431,10 @@
             let alert = document.getElementById("alert")
             currentDay = day
             modalContext.innerHTML = ""
-            console.log("選択: " + day)
+            // DISABLED - console.log("選択: " + day)
             modalHeader.innerText = "{{$month}}月" + day + "日の勤務情報"
             const keys = '{{$year}}-' + ('00' + {{$month}}).slice(-2) + '-' + ('00' + day).slice(-2)
-            console.log("KEYS: " + keys)
+            // DISABLED - console.log("KEYS: " + keys)
             const modalData = works[keys]
             const requestsData = requests[keys]
             let hours = 0
@@ -464,7 +465,7 @@
                 }
             }
             if (requestsData !== undefined) {
-                console.log(requestsData)
+                // DISABLED - console.log(requestsData)
                 requestsData.forEach(data => {
                     const timeData = data.time.split(":")
                     const tempHours = parseInt(timeData[0])
@@ -478,7 +479,7 @@
                         linksClass = ' card-hover pointer-cursor'
                     }
                     modalContext.innerHTML += `<div style="display: flex" class="mt-1` + linksClass + `"` + links + `> <div class="card" style="width: 20px; height: 80px;/* border: 0; */border-radius: 0;background: ` + data.typeColor + `;"></div><div class="card" style="width: 100%; height: 80px;border-radius: 0; display: flex; flex-direction: row; padding: 10px"><span style="flex: 1"><span>` + data.typeName + `</span><h2 class="fw-bold">` + ((data.time === 'null' ? '--:--' : data.time) ?? '--:--') + `</h2></span></div></div>`
-                    console.log(data.typeName)
+                    // DISABLED - console.log(data.typeName)
                 })
             }
 
@@ -536,7 +537,7 @@
                 }
                 ?>`
             }
-            console.log("TotalHours: " + hours + ":" + minutes)
+            // DISABLED - console.log("TotalHours: " + hours + ":" + minutes)
 
             // language=HTML
             primaryButton.innerText = "新規申請"
@@ -597,7 +598,7 @@
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
-                    console.log("Result: " + resultCode + " (" + res.data.message + ")")
+                    // DISABLED - console.log("Result: " + resultCode + " (" + res.data.message + ")")
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success"
                         saveBtn.innerText = "保存しました"

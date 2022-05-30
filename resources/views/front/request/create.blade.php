@@ -137,10 +137,10 @@
             let req2 = []
 
             reqDates.forEach(element => {
-                    console.log("DATE: " + element)
+                    // DISABLED - console.log("DATE: " + element)
                     const dateData = new Date(element)
                     req2[req2.length] = dateData.getFullYear() + '年' + (dateData.getMonth() + 1) + '月' + (dateData.getDate()) + '日'
-                    console.log('WRITE: ' + req2[req2.length - 1])
+                    // DISABLED - console.log('WRITE: ' + req2[req2.length - 1])
                 }
             );
 
@@ -192,18 +192,18 @@
 
         requestTime.onchange = function () {
             workTimeAvailable = (requestTime.value !== "" && requestTime.value !== "00:00");
-            console.log('WORKTIME: ' + requestTime.value + ' / ' + workTimeAvailable)
+            // DISABLED - console.log('WORKTIME: ' + requestTime.value + ' / ' + workTimeAvailable)
             checkData()
         }
 
         requestTime2.onchange = function () {
             workTimeAvailable = (requestTime2.value !== "");
-            console.log('WORKTIME: ' + requestTime2.value + ' / ' + workTimeAvailable)
+            // DISABLED - console.log('WORKTIME: ' + requestTime2.value + ' / ' + workTimeAvailable)
             checkData()
         }
         requestReason.onchange = function () {
             reasonAvailable = requestReason.value !== "";
-            console.log('REASON: ' + requestReason.value)
+            // DISABLED - console.log('REASON: ' + requestReason.value)
             checkData()
         }
 
@@ -211,7 +211,7 @@
         let workTime = document.getElementById('workTime');
         let workTime2 = document.getElementById('workTime2');
         requestType.onchange = function () {
-            console.log('DATA: ' + requestType.value + ' / ' + isFinite(requestType.value))
+            // DISABLED - console.log('DATA: ' + requestType.value + ' / ' + isFinite(requestType.value))
             if (requestType.value !== 0 && isFinite(requestType.value)) {
                 typeSelected = true
                 checkData()
@@ -238,7 +238,7 @@
         };
 
         function checkData() {
-            console.log('Type: ' + typeSelected + ' / Time: ' + timeAvailable + ' / Work: ' + workTimeAvailable + ' / Reason: ' + reasonAvailable)
+            // DISABLED - console.log('Type: ' + typeSelected + ' / Time: ' + timeAvailable + ' / Work: ' + workTimeAvailable + ' / Reason: ' + reasonAvailable)
             if (typeSelected && timeAvailable && ((types[requestType.value - 1][1] !== 1 && types[requestType.value - 1][1] !== -1) || workTimeAvailable) && (types[requestType.value - 1][1] === 2 || types[requestType.value - 1][1] === 3 || types[requestType.value - 1][1] === -1 || reasonAvailable)) {
                 proceedButton.removeAttribute("disabled")
             } else {
@@ -248,7 +248,7 @@
 
         if ('{{$reqDate}}' === '') {
             timeAvailable = (requestDate.value + '') !== '';
-            console.log('TIME: ' + requestDate.value)
+            // DISABLED - console.log('TIME: ' + requestDate.value)
             checkData()
         }
 
@@ -273,12 +273,12 @@
         let month = 1
         let day = 1
         if (dateStr !== "") {
-            console.log("DATE STR: " + dateStr)
+            // DISABLED - console.log("DATE STR: " + dateStr)
             const dateData = dateStr.split("-")
             year = parseInt(dateData[0])
             month = parseInt(dateData[1])
             day = parseInt(dateData[2])
-            console.log("YEAR: " + year + " MONTH: " + month + " DAY: " + day)
+            // DISABLED - console.log("YEAR: " + year + " MONTH: " + month + " DAY: " + day)
         }
         const date = new Date(dateStr)
 
@@ -300,7 +300,7 @@
             },
             onSelect({date}) {
                 timeAvailable = (date + '') !== ''
-                console.log('TIME: ' + date)
+                // DISABLED - console.log('TIME: ' + date)
                 checkData()
             }
         });

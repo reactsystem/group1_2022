@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <link rel="stylesheet" type="text/css" href="../../sass/app.scss"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -26,12 +27,16 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm fixed-top">
         <div class="container noselect">
-            <span class="d-inline d-lg-none sidebarBtn" id="sectionTitle">MENU <span id="sectionTitle2">▶</span></span>
+            @if(Auth::check())
+                <span class="d-inline d-lg-none sidebarBtn" id="sectionTitle"><span
+                        id="sectionTitle3">×</span> MENU <span
+                        id="sectionTitle2">▶</span></span>
+            @endif
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', '勤怠管理システム') }}
             </a>
             @if (env('ENABLE_NAV_TITLE', true) && View::hasSection('pageTitle'))
-                <span class="d-none d-sm-inline title-section-splitter">|</span>
+                <span class="d-none d-sm-inline title-section-splitter arrow"></span>
                 <span class="d-none d-sm-inline text-white title-fs">@yield('pageTitle')</span>
             @endif
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -108,6 +113,7 @@
         @yield('basement')
     </main>
 </div>
+@yield('modal')
 <script defer>
     @if(env('ENABLE_NAV_CLOCK', true))
     function updateDisplayTime() {
