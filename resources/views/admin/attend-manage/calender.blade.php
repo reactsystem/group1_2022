@@ -117,7 +117,7 @@
                 </div>
             </div>
         @endif
-        <div class="row w-100">
+        <div class="row w-100 mt-3 ml-0">
             <div class="col-md-2 col-sm-6 padding-0">
                 <span class="text-muted vert-center-40">今月の労働時間</span>
             </div>

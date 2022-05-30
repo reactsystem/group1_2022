@@ -169,6 +169,17 @@ class AttendanceController extends Controller
     public function cancelLeft(Request $request): Redirector|Application|RedirectResponse
     {
         $tempDate = new DateTime();
+        $dateSplit = preg_split("/-/", $tempDate->format('Y-m-d'));
+        $year = intval($dateSplit[0]);
+        $month = intval($dateSplit[1]);
+        $day = intval($dateSplit[2]);
+
+        $confirmData = MonthlyReport::where('user_id', '=', Auth::id())->where('date', '=', $dateSplit[0] . "-" . $dateSplit[1])->first();
+        if ($confirmData != null) {
+            if ($confirmData->status == 1) {
+                return redirect("/attends")->with('error', '月報が確定されているため退勤を取り消すことは出来ません。');
+            }
+        }
         $data = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         if ($data == null) {
             return redirect("/attends")->with('error', 'まだ出勤していません。');
@@ -223,10 +234,13 @@ class AttendanceController extends Controller
                 $year = intval($dateSplit[0]);
                 $month = intval($dateSplit[1]);
                 $day = intval($dateSplit[2]);
+
                 $confirmData = MonthlyReport::where('user_id', '=', $userId)->where('date', '=', $dateSplit[0] . "-" . $dateSplit[1])->first();
-                if ($confirmData != null) {
+                if ($confirmData != null && Auth::user()->group_id != 1) {
                     if ($confirmData->status == 1) {
                         return response()->json(["error" => true, "code" => 23, "message" => "指定された月は既に月報確定が行われています。"]);
+                    } else {
+                        return response()->json(["error" => true, "code" => 23, "message" => "指定された月({$dateSplit[0]}-{$dateSplit[1]})は既に月報確定が行われています。"]);
                     }
                 }
                 $tempDate = new DateTime();
@@ -284,6 +298,17 @@ class AttendanceController extends Controller
         $data = Attendance::where("user_id", "=", $userId)->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format('Y-n-j'))->orderByDesc("date")->first();
         if ($data == null) {
             return response()->json(["error" => true, "code" => 21, "message" => "勤務データが見つかりません。"]);
+        }
+        $dateSplit = preg_split("/-/", $tempDate->format('Y-m-d'));
+        $year = intval($dateSplit[0]);
+        $month = intval($dateSplit[1]);
+        $day = intval($dateSplit[2]);
+
+        $confirmData = MonthlyReport::where('user_id', '=', $userId)->where('date', '=', $dateSplit[0] . "-" . $dateSplit[1])->first();
+        if ($confirmData != null) {
+            if ($confirmData->status == 1) {
+                return response()->json(["error" => true, "code" => 23, "message" => "月報が確定されているため編集出来ません。"]);
+            }
         }
 
         if (env("ENABLE_EDIT_ATTENDANCE", false)) {
