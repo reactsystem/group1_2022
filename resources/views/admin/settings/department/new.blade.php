@@ -65,7 +65,7 @@
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
-                    console.log("Result: " + resultCode + " / " + res.data.message)
+                    // DISABLED - console.log("Result: " + resultCode + " / " + res.data.message)
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success float-right width-150"
                         saveBtn.innerText = "保存しました"

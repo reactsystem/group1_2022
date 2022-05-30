@@ -42,7 +42,7 @@ class AttendanceManagementController extends Controller
 
         $likeMonth = $year . "-" . sprintf('%02d', $month) . "-";
         //echo $likeMonth." / ";
-        $dataList = Attendance::where('user_id', '=', Auth::id())->where("attendances.deleted_at", "=", null)->where('date', 'LIKE', "%$likeMonth%")->get();
+        $dataList = Attendance::where('user_id', '=', Auth::id())->where("attendances.deleted_at", "=", null)->where('date', 'LIKE', "%$likeMonth%")->orderByDesc("date")->get();
 
         $tempDate = new DateTime();
         $todayData = Attendance::where("user_id", "=", Auth::id())->where("attendances.deleted_at", "=", null)->where("date", "=", $tempDate->format($year . '-' . $month . '-j'))->orderByDesc("date")->first();

@@ -207,7 +207,7 @@
             const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             if (!checkData()) {
-                console.log("Failed")
+                // DISABLED - console.log("Failed")
                 return
             }
 
@@ -221,7 +221,7 @@
             if (status.value >= 0) {
                 keywords.push('status=' + status.value)
             }
-            console.log("URL: " + "/admin/attend-manage/search?" + keywords.join("&"))
+            // DISABLED - console.log("URL: " + "/admin/attend-manage/search?" + keywords.join("&"))
 
             jump("/admin/attend-manage/search?" + keywords.join("&"))
         }

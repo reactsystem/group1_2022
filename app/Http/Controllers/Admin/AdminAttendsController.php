@@ -168,12 +168,16 @@ class AdminAttendsController extends Controller
         $user->save();
 
         $user_memo = UserMemo::where('user_id', '=', $request->id)->first();
-        if (isset($request->memo)) {
-            $user_memo->memo = $request->memo;
+        if ($user_memo != null) {
+            if (isset($request->memo) && $request->memo != null) {
+                $user_memo->memo = $request->memo;
+            } else {
+                $user_memo->memo = '記入なし';
+            }
+            $user_memo->save();
         } else {
-            $user_memo->memo = '記入なし';
+            UserMemo::create(['user_id' => $request->id, 'memo' => $request->memo]);
         }
-        $user_memo->save();
         return redirect('/admin/attends');
     }
 

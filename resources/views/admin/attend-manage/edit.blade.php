@@ -37,7 +37,7 @@
             <div class="row">
                 <div class="mb-3 col-md-12 col-lg-6">
                     <label for="dateInput" class="form-label">日付</label>
-                    <input type="text" class="form-control" id="dateInput" placeholder="XXXX-XX-XX"
+                    <input type="date" class="form-control" id="dateInput" placeholder="XXXX-XX-XX"
                            value="{{$data->date}}"
                     >
                 </div>
@@ -159,7 +159,7 @@
                 })
                 .then(async (res) => {
                     const resultCode = res.data.code
-                    console.log("Result: " + resultCode + " / " + res.data.message)
+                    // DISABLED - console.log("Result: " + resultCode + " / " + res.data.message)
                     if (resultCode == 0) {
                         saveBtn.className = "btn btn-success float-right"
                         saveBtn.innerText = "保存しました"
