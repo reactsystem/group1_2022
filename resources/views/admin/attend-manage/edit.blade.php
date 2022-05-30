@@ -37,7 +37,7 @@
             <div class="row">
                 <div class="mb-3 col-md-12 col-lg-6">
                     <label for="dateInput" class="form-label">日付</label>
-                    <input type="text" class="form-control" id="dateInput" placeholder="XXXX-XX-XX"
+                    <input type="date" class="form-control" id="dateInput" placeholder="XXXX-XX-XX"
                            value="{{$data->date}}"
                     >
                 </div>

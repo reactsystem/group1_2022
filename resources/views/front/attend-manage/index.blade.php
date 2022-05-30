@@ -5,7 +5,7 @@
 @section('content')
     <div class="container mb-5">
         <div class="row">
-            <div class="col-md-4 flex-view">
+            <div class="col-md-5 col-lg-6 col-xl-4 flex-view">
                 @if($month == 1)
                     <a href="/attend-manage?year={{$year - 1}}&month=12&mode={{$mode}}"
                        class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
@@ -22,7 +22,7 @@
                        class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @endif
             </div>
-            <div class="col-md-4 type-scroll">
+            <div class="col-md-7 col-lg-6 col-xl-4 type-scroll">
                 @foreach($cats as $cat)
                     <div>
                         <span style="color: {{$cat->color}}">
@@ -41,7 +41,7 @@
                         </span>欠勤&nbsp;
                 </div>
             </div>
-            <div class="col-md-4 header-flex-area">
+            <div class="col-md-12 col-lg-12 col-xl-4 header-flex-area">
                 @if($confirmStatus == -1)
                     <button class="btn btn-secondary height-40" disabled>
                         月報確定

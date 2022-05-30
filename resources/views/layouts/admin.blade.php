@@ -117,14 +117,14 @@
 
             .main-card {
                 border-radius: 0;
-                transform: translateX(0);
+                /*transform: translateX(0);*/
                 transition-duration: 0.2s;
             }
 
             .main-card2 {
                 border-top-left-radius: 20px;
                 /*border-top-right-radius: 20px;*/
-                transform: translateX(0);
+                /*transform: translateX(0);*/
                 transition-duration: 0.2s;
             }
         }

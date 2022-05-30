@@ -42,7 +42,7 @@
                 </div>
             </div>
             <hr>
-            <div class="col-md-4 flex-view">
+            <div class="col-md-5 col-lg-6 col-xl-4 flex-view">
                 @if($month == 1)
                     <a href="/admin/attend-manage/calender/{{$user->id}}?year={{$year - 1}}&month=12&mode={{$mode}}"
                        class="btn btn-outline-secondary btn-sm btn-calender-month">◀</a>
@@ -59,7 +59,7 @@
                        class="btn btn-outline-secondary btn-sm btn-calender-month">▶</a>
                 @endif
             </div>
-            <div class="col-md-4 type-scroll">
+            <div class="col-md-7 col-lg-6 col-xl-4 type-scroll">
                 @foreach($cats as $cat)
                     <div>
                         <span style="color: {{$cat->color}}">
@@ -78,7 +78,7 @@
                         </span>欠勤&nbsp;
                 </div>
             </div>
-            <div class="col-md-4 header-flex-area">
+            <div class="col-md-12 col-lg-12 col-xl-4 header-flex-area">
                 @if($confirmStatus == -1)
                     <button class="btn btn-secondary height-40" disabled>
                         月報確定
@@ -117,23 +117,23 @@
                 </div>
             </div>
         @endif
-        <div class="w100-gap10 flex-view">
-            <div class="flex-1-5 padding-0">
+        <div class="row w-100">
+            <div class="col-md-2 col-sm-6 padding-0">
                 <span class="text-muted vert-center-40">今月の労働時間</span>
             </div>
-            <div class="flex-1">
+            <div class="col-md-3 col-sm-6">
                 <strong class="font-20">{{$hours}}:{{sprintf("%02d", $minutes)}}</strong>
             </div>
-            <div class="flex-1">
+            <div class="col-md-1 d-md-inline-flex d-sm-none">
 
             </div>
-            <div class="flex-1-5 padding-0">
+            <div class="col-md-2 col-sm-6 padding-0">
                 <span class="text-muted vert-center-40">今月の残業時間</span>
             </div>
-            <div class="flex-1">
+            <div class="col-md-3 col-sm-6">
                 <strong class="font-20">{{$hoursReq}}:{{sprintf("%02d", $minutesReq)}}</strong>
             </div>
-            <div class="flex-4">
+            <div class="col-md-1 d-md-inline-flex d-sm-none">
 
             </div>
         </div>
