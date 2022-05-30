@@ -11228,7 +11228,6 @@ textarea.form-control-lg {
     text-align: center !important;
   }
 }
-
 @media (min-width: 1200px) {
   .fs-1 {
     font-size: 2.25rem !important;
@@ -11246,7 +11245,6 @@ textarea.form-control-lg {
     font-size: 1.35rem !important;
   }
 }
-
 @media print {
   .d-print-inline {
     display: inline !important;
@@ -11518,7 +11516,6 @@ textarea.form-control-lg {
     margin-top: -150px;
   }
 }
-
 @media only screen and (min-width: 562px) {
   .calender-main {
     transform: scale(0.6);
@@ -11527,7 +11524,6 @@ textarea.form-control-lg {
     margin-top: -120px;
   }
 }
-
 @media only screen and (min-width: 768px) {
   .calender-main {
     transform: scale(0.8);
@@ -11536,7 +11532,6 @@ textarea.form-control-lg {
     margin-top: -70px;
   }
 }
-
 @media only screen and (min-width: 992px) {
   .calender-main {
     transform: scale(0.7);
@@ -11545,7 +11540,6 @@ textarea.form-control-lg {
     margin-top: -85px;
   }
 }
-
 @media only screen and (min-width: 1220px) {
   .calender-main {
     transform: scale(1);
@@ -11885,11 +11879,15 @@ textarea.form-control-lg {
 }
 
 .arrow {
-  width: 13px;
-  height: 13px;
-  border: 2px solid;
-  border-color: #aaa #aaa transparent transparent;
-  transform: rotate(45deg);
-  margin-left: -12px;
-  margin-top: -3px;
+    width: 13px;
+    height: 13px;
+    border: 2px solid;
+    border-color: #aaa #aaa transparent transparent;
+    transform: rotate(45deg);
+    margin-left: -12px;
+    margin-top: -3px;
+}
+
+.ml-0 {
+    margin-left: 0;
 }
