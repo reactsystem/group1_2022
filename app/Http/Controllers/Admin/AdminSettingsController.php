@@ -24,9 +24,73 @@ class AdminSettingsController extends Controller
         return view('admin.settings.index');
     }
 
+    function forceUpdateHolidays()
+    {
+        return $this->updateHolidays(1);
+    }
+
+    public static function updateHolidays(int $mode = 0)
+    {
+        // https://holidays-jp.github.io/api/v1/date.csv
+        if (Storage::disk('local')->exists('config/holidays_jp.csv')) {
+            try {
+                if ($mode == 1) {
+                    $csv = fopen("https://holidays-jp.github.io/api/v1/date.csv", 'r');
+                    $config = Storage::disk('local')->delete('config/holidays_jp.csv');
+                    $data = Storage::disk('local')->put('config/holidays_jp.csv', $csv);
+                } else {
+                    $config = Storage::disk('local')->get('config/holidays_jp.csv');
+                    $lastMod = Storage::disk('local')->lastModified('config/holidays_jp.csv');
+                    $mDate = new DateTime(date("Y-m-d\TH:i:s\Z", $lastMod));
+                    $year = intval($mDate->format('Y'));
+                    $currentDate = new DateTime();
+                    $cYear = intval($currentDate->format("Y"));
+                    if ($cYear > $year) {
+                        $csv = fopen("https://holidays-jp.github.io/api/v1/date.csv", 'r');
+                        $config = Storage::disk('local')->delete('config/holidays_jp.csv');
+                        $data = Storage::disk('local')->put('config/holidays_jp.csv', $csv);
+                    }
+                }
+            } catch (\Exception $e) {
+                if ($mode == 1) {
+                    return redirect("/admin/settings/general")->with('error', '祝日データを更新出来ませんでした。(E20 / ' . ($e->getMessage()) . ')');
+                }
+            }
+        } else {
+            try {
+                $csv = fopen("https://holidays-jp.github.io/api/v1/date.csv", 'r');
+                $config = Storage::disk('local')->delete('config/holidays_jp.csv');
+                $data = Storage::disk('local')->put('config/holidays_jp.csv', $csv);
+            } catch (\Exception $e) {
+                if ($mode == 1) {
+                    return redirect("/admin/settings/general")->with('error', '祝日データを更新出来ませんでした。(E21 / ' . ($e->getMessage()) . ')');
+                }
+            }
+        }
+        if ($mode == 1) {
+            return redirect("/admin/settings/general")->with('result', '祝日データを更新しました');
+        }
+    }
+
     function general(Request $request)
     {
         $data = Configuration::find(1);
+        $holidaysUpdate = "<span class='text-danger fw-bold'>祝日データの取得中に問題が発生しました。</span>";
+        $holidaysArray = [];
+        if (Storage::disk('local')->exists('config/holidays_jp.csv')) {
+            try {
+                $config = Storage::disk('local')->get('config/holidays_jp.csv');
+                $config = str_replace(array("\r\n", "\r"), "\n", $config);
+                $holidaysArray = collect(explode("\n", $config));
+                $lastMod = Storage::disk('local')->lastModified('config/holidays_jp.csv');
+                $mDate = new DateTime(date("Y/m/d \TH:i:s\Z", $lastMod));
+                $holidaysUpdate = "<span>祝日データ: <span class='text-success fw-bold'>取得済み </span>(" . $mDate->format('Y/n/j H:i:s') . ")</span>";
+            } catch (\Exception $e) {
+                $holidaysUpdate = "<span class='text-danger fw-bold'>祝日データの取得中に例外が発生しました。 (E30 / " . $e->getMessage() . ")</span>";
+            }
+        } else {
+            $holidaysUpdate = "<span class='text-danger fw-bold'>祝日データが存在しません。祝日データ更新ボタンを押してください。</span>";
+        }
 
         $configArray = [];
 
@@ -35,7 +99,7 @@ class AdminSettingsController extends Controller
             $config = str_replace(array("\r\n", "\r"), "\n", $config);
             $configArray = collect(explode("\n", $config));
         }
-        return view('admin.settings.general.index', compact('data', 'configArray'));
+        return view('admin.settings.general.index', compact('data', 'configArray', 'holidaysArray', 'holidaysUpdate'));
     }
 
     function editGeneral(Request $request)

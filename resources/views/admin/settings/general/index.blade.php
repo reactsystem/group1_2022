@@ -10,7 +10,11 @@
             </div>
             <div class="col-md-6">
                 <a href="/admin/settings/general/edit" class="btn btn-primary float-right">編集</a>
+                <a href="/admin/settings/general/update" class="btn btn-success float-right mr-10px">祝日データ更新</a>
                 <a href="/admin/settings" class="btn btn-secondary float-right mr-10px">システム設定に戻る</a>
+            </div>
+            <div class="col-md-12">
+                {!! $holidaysUpdate !!}
             </div>
             @if (session('error'))
                 <div class="col-md-12 mt-3">
@@ -85,11 +89,52 @@
                                                 {{$dat[1]}}日
                                             </td>
                                         </tr>
-                                    @endif
+                                        @endif
                                 @endforeach
                             </table>
                         @else
                             <p>有給設定ファイルがインポートされていません。<br>編集画面でデフォルト設定ファイルを再ダウンロードできます。</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 col-md-12">
+                <div class="card width-100pct">
+                    <div class="card-header">
+                        祝日データ
+                    </div>
+                    <div class="card-body overflow-auto height-400">
+                        @if(count($configArray ?? []) != 0)
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>
+                                        日時
+                                    </th>
+                                    <th>
+                                        名称
+                                    </th>
+                                </tr>
+                                @foreach($holidaysArray as $index => $item)
+                                    @if($item == "")
+                                        @continue
+                                    @endif
+                                    <?php
+                                    /* @var $item */
+                                    $dat = preg_split("/,/", $item);?>
+                                    @if($index != 0)
+                                        <tr>
+                                            <td>
+                                                {{$dat[0]}}
+                                            </td>
+                                            <td>
+                                                {{$dat[1]}}
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </table>
+                        @else
+                            <p>祝日データがありません。<br>祝日データ更新ボタンを押してください。</p>
                         @endif
                     </div>
                 </div>

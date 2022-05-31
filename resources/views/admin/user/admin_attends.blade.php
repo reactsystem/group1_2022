@@ -115,28 +115,29 @@
                         $allowInt = intval(preg_replace("/-/", "", $tempDate->format('Y-m')));
 
                         if($dateInt > $allowInt){ ?>
-                        <td class="fw-bold text-white"
-                            style="background-color: #006bb9;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -6px; @endif">
+                        <td class="fw-bold text-white pointer-nonevent"
+                            style="background-color: #006bb9; text-align: center;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.7); outline-offset: -6px; @endif">
                             {{$monthly->date}}
                         </td>
                         <?php }else if($dateInt >= $allowInt){ ?>
-                        <td class="fw-bold text-white"
-                            style="background-color: #084;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -6px; @endif">
+                        <td class="fw-bold text-white pointer-nonevent"
+                            style="background-color: #084; text-align: center;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.7); outline-offset: -6px; @endif">
                             {{$monthly->date}}
                         </td>
                         <?php }else{ ?>
-                        <td class="fw-bold text-white"
-                            style="background-color: #c40024;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -6px; @endif">
+                        <td class="fw-bold text-white pointer-nonevent"
+                            style="background-color: #c40024; text-align: center;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.7); outline-offset: -6px; @endif">
                             {{$monthly->date}}
                         </td>
                         <?php }
 
                         } else { ?>
-                        <td class="fw-bold bg-green text-white" style="background-color: #565656">
+                        <td class="fw-bold bg-green text-white pointer-nonevent text-center"
+                            style="background-color: #565656">
                             ---
                         </td>
                         <?php } ?>
-                        <td>
+                        <td class="table-btn">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
                                         data-bs-toggle="dropdown"

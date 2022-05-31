@@ -19,12 +19,26 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AttendanceManagementController extends Controller
 {
 
     public function index(Request $requestData): Factory|View|Application
     {
+        $holidaysJp = Storage::disk('local')->get('config/holidays_jp.csv');
+        $holidaysJp = str_replace(array("\r\n", "\r"), "\n", $holidaysJp);
+        $holidaysJp = preg_split("/\n/", $holidaysJp);
+        $holidaysJpArray = [];
+        foreach ($holidaysJp as $holiday) {
+            try {
+                $data = collect(explode(",", $holiday));
+                $holidaysJpArray[$data[0]] = $data[1];
+            } catch (\Exception $e) {
+
+            }
+        }
+
         $mode = $requestData->mode ?? 0;
 
         $tempDate = new DateTime();
@@ -152,6 +166,7 @@ class AttendanceManagementController extends Controller
             }
         }
 
+
         $reqHtml = "";
         foreach ($requests as $request) {
             $type = $request->type;
@@ -201,9 +216,9 @@ class AttendanceManagementController extends Controller
         }
         $user = Auth::user();
         if ($mode == 1 && env('ENABLE_LIST_VIEW', true)) {
-            return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
+            return view('front.attend-manage.list', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'holidaysJpArray', 'user'));
         } else {
-            return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
+            return view('front.attend-manage.index', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'holidaysJpArray', 'user'));
         }
     }
 

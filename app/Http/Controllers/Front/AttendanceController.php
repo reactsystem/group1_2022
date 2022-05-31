@@ -15,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AttendanceController extends Controller
@@ -98,6 +99,27 @@ class AttendanceController extends Controller
                 return redirect("/attends")->with('error', '既に退勤しています。');
             }
         }
+
+        $holidaysJp = Storage::disk('local')->get('config/holidays_jp.csv');
+        $holidaysJp = str_replace(array("\r\n", "\r"), "\n", $holidaysJp);
+        $holidaysJp = preg_split("/\n/", $holidaysJp);
+        $holidaysJpArray = [];
+        $w = intval($tempDate->format('w'));
+        if ($w == 0 || $w == 6) {
+            return redirect("/attends")->with('error', '休日は出勤することができません。休日出勤を申請してください。');
+        }
+        foreach ($holidaysJp as $holiday) {
+            try {
+                $data = collect(explode(",", $holiday));
+                if ($data[0] == $tempDate->format('Y-m-d')) {
+                    return redirect("/attends")->with('error', '祝日は出勤することができません。休日出勤を申請してください。');
+                }
+                $holidaysJpArray[$data[0]] = $data[1];
+            } catch (\Exception $e) {
+
+            }
+        }
+
         Attendance::create([
             'date' => $tempDate,
             'user_id' => Auth::id(),

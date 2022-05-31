@@ -138,6 +138,7 @@ Route::group(['middleware' => ['auth', 'admin', 'holidays']], function () {
     Route::get('/admin/settings/general/edit', [AdminSettingsController::class, 'editGeneral']);
     Route::post('/admin/settings/general/edit', [AdminSettingsController::class, 'updateGeneral']);
     Route::get('/admin/settings/general/download', [AdminSettingsController::class, 'downloadDefaultCsv']);
+    Route::get('/admin/settings/general/update', [AdminSettingsController::class, 'forceUpdateHolidays']);
 
     Route::get('/admin/settings/notifications', [AdminSettingsController::class, 'notifications']);
     Route::get('/admin/settings/notifications/{id}', [AdminSettingsController::class, 'viewNotification']);
@@ -154,6 +155,7 @@ Route::group(['middleware' => ['auth', 'admin', 'holidays']], function () {
 
     Route::get('/admin', [AdminTopPageController::class, 'index'])->name('admin-home');
 });
+
 
 Auth::routes(['register' => false]);
 

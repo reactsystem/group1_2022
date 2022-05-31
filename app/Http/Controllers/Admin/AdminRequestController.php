@@ -59,9 +59,9 @@ class AdminRequestController extends Controller
 
         // 条件：日付
         if (isset($request->dateInput)) {
-            $requests = $all_requests->where('date', '=', $request->dateInput)->paginate(15);
+            $requests = $all_requests->where('date', '=', $request->dateInput)->orderByDesc('id')->paginate(15);
         } else {
-            $requests = $all_requests->whereNull('related_id')->paginate(15);
+            $requests = $all_requests->whereNull('related_id')->orderByDesc('id')->paginate(15);
         }
         $parameters = [];
         if (isset($request->mode)) {

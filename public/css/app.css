@@ -11681,18 +11681,15 @@ textarea.form-control-lg {
     cursor: pointer;
     color: #222 !important;
 }
-
 .attends-row:hover {
     transition-duration: 0.05s;
     box-shadow: 0 0 10px #999;
     background-color: #0b5ed7 !important;
     color: #fff !important;
 }
-
 .attends-row:hover td {
     color: #fff !important;
 }
-
 .attends-row:hover td span {
     color: #fff !important;
 }
@@ -11900,4 +11897,9 @@ textarea.form-control-lg {
 
 .ml-0 {
     margin-left: 0;
+}
+
+.table-btn {
+    padding: 4px !important;
+    margin-left: 10px;
 }

@@ -46,33 +46,61 @@
     $afterInt = intval($year . sprintf("%02d", $month) . sprintf("%02d", $i));
     $beforeInt = intval($joinYear . sprintf("%02d", $joinMonth) . sprintf("%02d", $joinDay));
     $isJoinedBeforeDay = $afterInt >= $beforeInt;
+
+    $key = $year . '-' . sprintf("%02d", $month) . '-' . str_pad($i, 2, 0, STR_PAD_LEFT);
+    $noWorkFlag = true;
+    /* @var $holidaysJpArray */
+    if(array_key_exists($key, $holidaysJpArray)){
+    $noWorkFlag = false;
+    $nameX = $holidaysJpArray[$key];
     if ($isJoinedBeforeDay) {
         $joinStr = "";
         if ($year == $joinYear && $month == $joinMonth && $i == $joinDay) {
             $joinStr = ' / 入社日';
         }
-        $style = "";
-        /* @var $confirmStatus */
-        /* @var $cYear */
-        /* @var $cMonth */
-        /* @var $cDay */
         if ($confirmStatus != 0) {
             $style = "calender-body2 bg-gray2";
-        } else if ($year == $cYear && $month == $cMonth && $i == $cDay) {
-            $style = "calender-body bg-green";
-        } else if ($daysCount % 7 == 1) {
-            $style = "calender-body bg-red";
-        } else if ($daysCount % 7 == 0) {
-            $style = "calender-body bg-blue";
         } else {
-            $style = "calender-body bg-white";
+            $style = "calender-body bg-red";
         }
         echo '<div class="' . $style . '" onclick="attendManageOpenDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . $joinStr . '</div>';
     } else {
         echo '<div class="calender-body2 bg-gray" onclick="attendManageOpenDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . '</div>';
     }
-    $key = $year . '-' . sprintf("%02d", $month) . '-' . str_pad($i, 2, 0, STR_PAD_LEFT);
-    $noWorkFlag = true;
+    ?>
+    <div>
+        <strong>{{$nameX}}</strong>
+    </div>
+    <?php
+    }else {
+
+        if ($isJoinedBeforeDay) {
+            $joinStr = "";
+            if ($year == $joinYear && $month == $joinMonth && $i == $joinDay) {
+                $joinStr = ' / 入社日';
+            }
+            $style = "";
+            /* @var $confirmStatus */
+            /* @var $cYear */
+            /* @var $cMonth */
+            /* @var $cDay */
+            if ($confirmStatus != 0) {
+                $style = "calender-body2 bg-gray2";
+            } else if ($year == $cYear && $month == $cMonth && $i == $cDay) {
+                $style = "calender-body bg-green";
+            } else if ($daysCount % 7 == 1) {
+                $style = "calender-body bg-red";
+            } else if ($daysCount % 7 == 0) {
+                $style = "calender-body bg-blue";
+            } else {
+                $style = "calender-body bg-white";
+            }
+            echo '<div class="' . $style . '" onclick="attendManageOpenDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . $joinStr . '</div>';
+        } else {
+            echo '<div class="calender-body2 bg-gray" onclick="attendManageOpenDescModal(' . $i . ')"><div style="font-weight: bolder; font-size: 12pt">' . $i . '</div>';
+        }
+    }
+
     try {
     /* @var $holidays */
     if(array_key_exists($i, $holidays)){
@@ -136,19 +164,19 @@
         echo $reqHtml;
     } catch (Exception $ex) {
     }
-        $diffDayOfWeek = $daysCount % 7 - 1;
+    $diffDayOfWeek = $daysCount % 7 - 1;
 
-        if (!$isJoinedBeforeDay) {
-            echo '<div>---</div>';
-        } else {
-            /* @var $day */
-            if ($noWorkFlag &&
-                $diffDayOfWeek > 0 && $diffDayOfWeek < 6 &&
-                ((($year <= $cYear && $month <= $cMonth) || ($year < $cYear)) && (($year != $cYear || $month != $cMonth || $i < $day)))) {
-                echo '<div><span style="color: #888;">●</span> <strong>欠勤</strong></div> ';
-            }
+    if (!$isJoinedBeforeDay) {
+        echo '<div>---</div>';
+    } else {
+        /* @var $day */
+        if ($noWorkFlag &&
+            $diffDayOfWeek > 0 && $diffDayOfWeek < 6 &&
+            ((($year <= $cYear && $month <= $cMonth) || ($year < $cYear)) && (($year != $cYear || $month != $cMonth || $i < $day)))) {
+            echo '<div><span style="color: #888;">●</span> <strong>欠勤</strong></div> ';
         }
-        ?>
+    }
+    ?>
 </div>
 <?php }
 if ($daysCount % 7 != 0) {

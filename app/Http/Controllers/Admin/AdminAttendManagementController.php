@@ -19,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AdminAttendManagementController
@@ -251,6 +252,19 @@ class AdminAttendManagementController
 
     public function showUserCalender(Request $requestData): Factory|View|Application
     {
+        $holidaysJp = Storage::disk('local')->get('config/holidays_jp.csv');
+        $holidaysJp = str_replace(array("\r\n", "\r"), "\n", $holidaysJp);
+        $holidaysJp = preg_split("/\n/", $holidaysJp);
+        $holidaysJpArray = [];
+        foreach ($holidaysJp as $holiday) {
+            try {
+                $data = collect(explode(",", $holiday));
+                $holidaysJpArray[$data[0]] = $data[1];
+            } catch (\Exception $e) {
+
+            }
+        }
+
         $mode = $requestData->mode ?? 0;
         $user_id = $requestData->id;
         $user = User::find($user_id);
@@ -430,7 +444,7 @@ class AdminAttendManagementController
         if ($year < $joinYear || $year > $cYear || ($year <= $joinYear && $month < $joinMonth) || ($year >= $cYear && $month > $cMonth)) {
             $confirmStatus = -1;
         }
-        return view('admin.attend-manage.calender', compact('monthlyReports', 'requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
+        return view('admin.attend-manage.calender', compact('monthlyReports', 'requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'holidaysJpArray', 'user'));
     }
 
     public function approveReport(Request $request): Redirector|Application|RedirectResponse

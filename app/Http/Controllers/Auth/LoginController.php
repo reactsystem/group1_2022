@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use DateTime;
@@ -60,6 +61,7 @@ class LoginController extends Controller
                 return redirect("/login")->with('error', 'このアカウントは退職済みの為ログイン出来ません。');
             }
         }
+        AdminSettingsController::updateHolidays();
         /*
 
         if (Storage::disk('local')->exists('config/paid_holidays.csv')) {
