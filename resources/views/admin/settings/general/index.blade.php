@@ -60,7 +60,7 @@
                     </div>
                     <div class="card-body overflow-auto height-400">
                         @if(count($configArray ?? []) != 0)
-                            <table class="table">
+                            <table class="table table-striped">
                                 <tr>
                                     <th>
                                         経過月数

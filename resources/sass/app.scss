@@ -358,14 +358,23 @@
 }
 
 .attends-row {
-    transition-duration: 0.2s;
+    transition-duration: 0.25s;
     cursor: pointer;
+    color: #222 !important;
 
     &:hover {
         transition-duration: 0.05s;
         box-shadow: 0 0 10px #999;
-        background-color: #0b5ed7;
-        color: #fff;
+        background-color: #0b5ed7 !important;
+        color: #fff !important;
+
+        & td {
+            color: #fff !important;
+
+            & span {
+                color: #fff !important;
+            }
+        }
     }
 }
 

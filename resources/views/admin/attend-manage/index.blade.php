@@ -36,7 +36,7 @@
             <span>{!! $searchStr !!}</span>
         @endif
         <hr>
-        <table class="table">
+        <table class="table table-striped">
             <tr>
                 <th>日付</th>
                 <th>社員名</th>
@@ -51,20 +51,26 @@
                         <?php
                         /* @var $dat */
                         $date_now = new DateTime($dat->date);
-                        echo $date_now->format('Y年m月d日');
+                        echo $date_now->format('Y年n月j日');
                         ?>
                     </td>
                     <td>
                         {{$dat->name}}
                     </td>
                     <td>
-                        {{$dat->mode == 1 ? "退勤済" : "出勤中"}}
+                        {!! $dat->mode == 1 ? "<span class='fw-bold text-success'>退勤済</span>" : "<span class='fw-bold text-danger'>出勤中</span>" !!}
                     </td>
                     <td>
-                        {{$dat->created_at}}
+                        {{$dat->created_at->format('G:i')}}
                     </td>
                     <td>
-                        {{$dat->left_at ?? "--:--"}}
+                        <?php if ($dat->left_at != null) {
+                            $tempDate = new DateTime($dat->left_at);
+                            $leftDate = $tempDate->format('G:i');
+                        } else {
+                            $leftDate = "--:--";
+                        }?>
+                        {{$leftDate}}
                     </td>
                     <td>
                         <?php
@@ -179,6 +185,7 @@
             checkData();
         }
         dateInput.onchange = function () {
+            console.log(dateInput.value)
             dateInputFilled = dateInput.value != null && dateInput.value !== "";
             checkData();
         }

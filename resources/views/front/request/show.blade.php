@@ -52,7 +52,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="table-responsive col-md-4 col-lg-4 col-xl-3">
-                        <table class="table">
+                        <table class="table table-striped">
                             <tr>
                                 <th>
                                     申請日時 ({{count($related['date'])}}日)

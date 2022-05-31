@@ -28,7 +28,7 @@
             @endif
         </div>
         <hr>
-        <table class="table">
+        <table class="table table-striped">
             <tr>
                 <th>部署名</th>
                 <th>最終更新</th>

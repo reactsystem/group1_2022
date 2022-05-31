@@ -84,7 +84,7 @@
         @endif
         <div class="row mt-5">
             <div class="col-md-8 col-sm-7 col-7">
-                <h4 class="fw-bold">最新15件の勤怠</h4>
+                <h4 class="fw-bold">最新{{env('ADMIN_DASHBOARD_ATTENDS', 15)}}件の勤怠</h4>
             </div>
             <div class="col-md-4 col-sm-5 col-5">
                 <a href="/admin/attend-manage" class="btn btn-primary float-right">勤怠管理</a>
@@ -92,7 +92,7 @@
         </div>
         <hr>
         <div class="table-responsive">
-            <table class="table mb-5">
+            <table class="table mb-5 table-striped">
                 <tr>
                     <th>日付</th>
                     <th>社員名</th>
@@ -114,13 +114,19 @@
                             {{$dat->name}}
                         </td>
                         <td>
-                            {{$dat->mode == 1 ? "退勤済" : "出勤中"}}
+                            {!! $dat->mode == 1 ? "<span class='fw-bold text-success'>退勤済</span>" : "<span class='fw-bold text-danger'>出勤中</span>" !!}
                         </td>
                         <td>
-                            {{$dat->created_at}}
+                            {{$dat->created_at->format('G:i')}}
                         </td>
                         <td>
-                            {{$dat->left_at ?? "--:--"}}
+                            <?php if ($dat->left_at != null) {
+                                $tempDate = new DateTime($dat->left_at);
+                                $leftDate = $tempDate->format('G:i');
+                            } else {
+                                $leftDate = "--:--";
+                            }?>
+                            {{$leftDate}}
                         </td>
                         <td>
                             <?php

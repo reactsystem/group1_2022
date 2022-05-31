@@ -36,8 +36,8 @@
                 {{ config('app.name', '勤怠管理システム') }}
             </a>
             @if (env('ENABLE_NAV_TITLE', true) && View::hasSection('pageTitle'))
-                <span class="d-none d-sm-inline title-section-splitter arrow"></span>
-                <span class="d-none d-sm-inline text-white title-fs">@yield('pageTitle')</span>
+                <span class="d-none d-sm-inline title-section-splitter">|</span>
+                    <span class="d-none d-sm-inline text-white title-fs">@yield('pageTitle')</span>
             @endif
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

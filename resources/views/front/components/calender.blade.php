@@ -136,19 +136,19 @@
         echo $reqHtml;
     } catch (Exception $ex) {
     }
-    $diffDayOfWeek = $daysCount % 7 - 1;
+        $diffDayOfWeek = $daysCount % 7 - 1;
 
-    if (!$isJoinedBeforeDay) {
-        echo '<div>---</div>';
-    } else {
-        /* @var $day */
-        if ($noWorkFlag &&
-            $diffDayOfWeek > 0 && $diffDayOfWeek < 6 &&
-            ($year <= $cYear && ($month <= $cMonth && ($year != $cYear || $month != $cMonth || $i < $day)))) {
-            echo '<div><span style="color: #888;">●</span> <strong>欠勤</strong></div> ';
+        if (!$isJoinedBeforeDay) {
+            echo '<div>---</div>';
+        } else {
+            /* @var $day */
+            if ($noWorkFlag &&
+                $diffDayOfWeek > 0 && $diffDayOfWeek < 6 &&
+                ((($year <= $cYear && $month <= $cMonth) || ($year < $cYear)) && (($year != $cYear || $month != $cMonth || $i < $day)))) {
+                echo '<div><span style="color: #888;">●</span> <strong>欠勤</strong></div> ';
+            }
         }
-    }
-    ?>
+        ?>
 </div>
 <?php }
 if ($daysCount % 7 != 0) {

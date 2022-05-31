@@ -415,10 +415,11 @@ class AdminAttendManagementController
             }
             $reqHtml = "";
         }
-        $dt = Carbon::createFromDate($year, $month);
+        $dt = Carbon::parse($year . '-' . $month . '-1 0:00:00');
         CalenderUtil::renderCalendar($dt);
         $cats = RequestType::all();
         $data = MonthlyReport::where("user_id", "=", $user->id)->where("date", "=", $year . "-" . sprintf("%02d", $month))->first();
+        $monthlyReports = MonthlyReport::where("user_id", "=", $user->id)->where('status', '>', 0)->get();
         $confirmStatus = 0;
         if ($data != null) {
             $confirmStatus = $data->status;
@@ -426,10 +427,10 @@ class AdminAttendManagementController
         $joinDate = new DateTime($user->joined_date);
         $joinYear = intval($joinDate->format('Y'));
         $joinMonth = intval($joinDate->format('m'));
-        if ($year > $cYear || $month > $cMonth || $year < $joinYear || $month < $joinMonth) {
+        if ($year < $joinYear || $year > $cYear || ($year <= $joinYear && $month < $joinMonth) || ($year >= $cYear && $month > $cMonth)) {
             $confirmStatus = -1;
         }
-        return view('admin.attend-manage.calender', compact('requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
+        return view('admin.attend-manage.calender', compact('monthlyReports', 'requestData', 'dt', 'attendData', 'reqData', 'year', 'month', 'mode', 'cats', 'day', 'cYear', 'cMonth', 'cDay', 'confirmStatus', 'hours', 'minutes', 'hoursReq', 'minutesReq', 'holidays', 'user'));
     }
 
     public function approveReport(Request $request): Redirector|Application|RedirectResponse

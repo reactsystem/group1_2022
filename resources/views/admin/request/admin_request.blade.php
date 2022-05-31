@@ -114,7 +114,7 @@
         </div>
 
 
-        <table class="table">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th scope="col">社員名</th>
