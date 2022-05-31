@@ -39,7 +39,7 @@ class PaidHolidayMiddleware extends Middleware
                     $lMonth = 1;
                     $lDay = 1;
                     if ($lastLoginRaw != null && $lastLoginRaw != "") {
-                        $lastLogin = new DateTime($user->last_login ?? "1990-01-01 0:00:00");
+                        $lastLogin = new DateTime($user->last_login->format('Y-m-d') ?? "1990-01-01 0:00:00");
                         $lYear = intval($lastLogin->format('Y'));
                         $lMonth = intval($lastLogin->format('m'));
                         $lDay = intval($lastLogin->format('d'));
