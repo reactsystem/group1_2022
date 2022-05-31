@@ -34,7 +34,7 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'holidays']], function () {
 
     Route::get('/home', [TopPageController::class, 'index'])->name('home');
 
@@ -74,7 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-Route::group(['middleware' => ['auth', 'admin']], function () {
+Route::group(['middleware' => ['auth', 'admin', 'holidays']], function () {
     Route::get('/admin', [AdminSettingsController::class, 'index'])->name('admin-home');
 
     /* 社員情報管理 */
