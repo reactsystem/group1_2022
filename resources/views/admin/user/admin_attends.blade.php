@@ -48,14 +48,14 @@
                                     <label for="dateInput" class="form-label">社員番号</label>
                                 </div>
                                 <div class="mb-3 col-sm-12 col-md-9">
-                                    <input type = 'number' class="form-control" value='' name='id'>
+                                    <input type='number' class="form-control" value='' name='id'>
                                 </div>
 
                                 <div class="col-sm-12">
                                     <label for="dateInput" class="form-label">社員名</label>
                                 </div>
                                 <div class="mb-3 col-sm-12 col-md-9">
-                                    <input type = 'text' class="form-control" value='' name='name'>
+                                    <input type='text' class="form-control" value='' name='name'>
                                 </div>
 
 
@@ -65,9 +65,9 @@
                                 <div class="mb-3 col-sm-12 col-md-9">
                                     <select class="form-select" aria-label="部署" name='department'>
                                         <option selected value="">ここから選択</option>
-                                      @foreach($departments as $item)
-                                        <option value="{{$item['id']}}">{{$item['name']}}</option>
-                                      @endforeach
+                                        @foreach($departments as $item)
+                                            <option value="{{$item['id']}}">{{$item['name']}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -82,14 +82,19 @@
             </div>
         </div>
 
-        <table class="table" id="sort_table">
+        <table class="table table-striped" id="sort_table">
             <tr>
                 <th class="pointer-cursor" scope="col">社員番号</th>
                 <th class="pointer-cursor" scope="col">社員名</th>
                 <th class="pointer-cursor" scope="col">部署</th>
                 <th class="pointer-cursor" scope="col">最終出勤</th>
+                <th class="pointer-cursor" scope="col">月報確定</th>
                 <th scope="col">操作</th>
             </tr>
+
+            <?php $tempDate1 = new DateTime();
+            $tempDate = new DateTime($tempDate1->format('Y-m-1 0:00:00'));
+            $tempDate = $tempDate->modify("-1 months")?>
 
             @foreach($users as $user)
 
@@ -102,6 +107,35 @@
                         <td>{{$user -> name}}</td>
                         <td>{{$user -> departments -> name}}</td>
                         <td>{{$user -> latestAttemdance->date ?? ""}}</td>
+                        <?php
+                        /* @var $user */
+                        $monthly = \App\Models\MonthlyReport::where('user_id', $user->id)->where('status', '>', 0)->orderByDesc('date')->first();
+                        if($monthly != null){
+                        $dateInt = intval(preg_replace("/-/", "", $monthly->date));
+                        $allowInt = intval(preg_replace("/-/", "", $tempDate->format('Y-m')));
+
+                        if($dateInt > $allowInt){ ?>
+                        <td class="fw-bold text-white"
+                            style="background-color: #006bb9;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -6px; @endif">
+                            {{$monthly->date}}
+                        </td>
+                        <?php }else if($dateInt >= $allowInt){ ?>
+                        <td class="fw-bold text-white"
+                            style="background-color: #084;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -6px; @endif">
+                            {{$monthly->date}}
+                        </td>
+                        <?php }else{ ?>
+                        <td class="fw-bold text-white"
+                            style="background-color: #c40024;@if($monthly->status == 2) outline: 3px solid rgba(255, 255, 255, 0.4); outline-offset: -6px; @endif">
+                            {{$monthly->date}}
+                        </td>
+                        <?php }
+
+                        } else { ?>
+                        <td class="fw-bold bg-green text-white" style="background-color: #565656">
+                            ---
+                        </td>
+                        <?php } ?>
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
@@ -185,16 +219,17 @@
                 };
             });
         });
+
         //数値ソート（昇順）
-        function compareNumber(a, b)
-        {
+        function compareNumber(a, b) {
             return a.value - b.value;
         }
+
         //数値ソート（降順）
-        function compareNumberDesc(a, b)
-        {
+        function compareNumberDesc(a, b) {
             return b.value - a.value;
         }
+
         //文字列ソート（昇順）
         function compareString(a, b) {
             if (a.value < b.value) {
@@ -204,6 +239,7 @@
             }
             return 0;
         }
+
         //文字列ソート（降順）
         function compareStringDesc(a, b) {
             if (a.value > b.value) {
@@ -213,6 +249,6 @@
             }
             return 0;
         }
-        </script>
+    </script>
 @endsection
 

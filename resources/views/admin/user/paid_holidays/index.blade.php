@@ -31,7 +31,7 @@
             <span>{!! $searchStr !!}</span>
         @endif
         <hr>
-        <table class="table">
+        <table class="table table-striped">
             <tr>
                 <th>残日数</th>
                 <th>付与日</th>

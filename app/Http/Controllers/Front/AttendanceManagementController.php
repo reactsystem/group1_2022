@@ -184,7 +184,7 @@ class AttendanceManagementController extends Controller
             }
             $reqHtml = "";
         }
-        $dt = Carbon::createFromDate($year, $month);
+        $dt = Carbon::parse($year . '-' . $month . '-1 0:00:00');
         CalenderUtil::renderCalendar($dt);
         $cats = RequestType::all();
         $data = MonthlyReport::where("user_id", "=", Auth::id())->where("date", "=", $year . "-" . sprintf("%02d", $month))->first();
@@ -196,7 +196,7 @@ class AttendanceManagementController extends Controller
         $joinYear = intval($joinDate->format('Y'));
         $joinMonth = intval($joinDate->format('m'));
 
-        if ($year > $cYear || $month > $cMonth || $year < $joinYear || $month < $joinMonth) {
+        if ($year < $joinYear || $year > $cYear || ($year <= $joinYear && $month < $joinMonth) || ($year >= $cYear && $month > $cMonth)) {
             $confirmStatus = -1;
         }
         $user = Auth::user();

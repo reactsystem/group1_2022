@@ -141,6 +141,33 @@
         <div class="calender-main">
             @include('front.components.calender')
         </div>
+        <h2 class="mt-5">
+            月報確定状況
+        </h2>
+        <hr>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tr>
+                    <th>
+                        年月
+                    </th>
+                    <th>
+                        確定日時
+                    </th>
+                </tr>
+                @foreach($monthlyReports as $monthlyReport)
+                    <tr>
+                        <td>
+                            {{$monthlyReport->date}}
+                        </td>
+                        <td>
+                            {{$monthlyReport->updated_at->format('Y-m-d H:i:s')}}
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+
+        </div>
     </div>
     <!-- Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">

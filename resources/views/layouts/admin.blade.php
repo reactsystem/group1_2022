@@ -59,7 +59,7 @@
             .sidebar-base {
                 background-color: #222;
                 height: 0;
-                z-index: -1;
+                z-index: -2;
                 opacity: 0.0;
                 transition-duration: 0.3s;
                 pointer-events: none;

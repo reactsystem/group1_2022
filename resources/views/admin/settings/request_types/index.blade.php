@@ -28,7 +28,7 @@
             @endif
         </div>
         <hr>
-        <table class="table">
+        <table class="table table-striped">
             <tr>
                 <th>名称</th>
                 <th>タイプ</th>

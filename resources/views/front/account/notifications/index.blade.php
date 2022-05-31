@@ -27,7 +27,7 @@
             @endif
         </div>
         <hr>
-        <table class="table">
+        <table class="table table-striped">
             <tr>
                 <th>タイトル</th>
                 <th>日付</th>

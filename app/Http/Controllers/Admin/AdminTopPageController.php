@@ -21,7 +21,7 @@ class AdminTopPageController extends Controller
             return redirect('/login');
         }
         $requests = VariousRequest::where('status', 0)->where('related_id', null)->orderByDesc('id')->paginate(3);
-        $data = Attendance::where("attendances.deleted_at", "=", null)->leftJoin('users', 'attendances.user_id', 'users.id')->select("attendances.*", "users.name as name")->orderByDesc('attendances.left_at')->limit(15)->get();
+        $data = Attendance::where("attendances.deleted_at", "=", null)->leftJoin('users', 'attendances.user_id', 'users.id')->select("attendances.*", "users.name as name")->orderByDesc('attendances.created_at')->limit(env('ADMIN_DASHBOARD_ATTENDS', 15))->get();
         $related = [];
         foreach ($requests as $result) {
             $relatedData = VariousRequest::leftJoin('request_types', 'various_requests.type', '=', 'request_types.id')->select("various_requests.*", "request_types.name as name")->where('user_id', Auth::id())->where('related_id', '=', $result->uuid)->orderByDesc('id')->get();
